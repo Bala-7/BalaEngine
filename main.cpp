@@ -9,6 +9,7 @@
 void InitGLFW();
 void InitGLEW();
 GLFWwindow* CreateWindow();
+void key_callback(GLFWwindow* window, int key, int scancode, int action, int mode);
 
 int main()
 {
@@ -16,9 +17,17 @@ int main()
 	GLFWwindow* window = CreateWindow();
 	InitGLEW();
 	
+	glfwSetKeyCallback(window, key_callback);	// Input callback
+
 	while (!glfwWindowShouldClose(window))
 	{
 		glfwPollEvents();
+
+		// Rendering code
+		glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
+		glClear(GL_COLOR_BUFFER_BIT);
+		// \Rendering code\
+
 		glfwSwapBuffers(window);
 	}
 
@@ -60,4 +69,11 @@ GLFWwindow* CreateWindow()
 	glViewport(0, 0, 800, 600);
 
 	return window;
+}
+
+void key_callback(GLFWwindow* window, int key, int scancode, int action, int mode)
+{
+	// When a user presses the escape key, we set the WindowShouldClose property to true, closing the application
+	if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS)
+		glfwSetWindowShouldClose(window, GL_TRUE);
 }
