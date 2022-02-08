@@ -1,0 +1,68 @@
+<?xml version="1.0"?>
+<!DOCTYPE CodeBlocks_project_file>
+<CodeBlocks_project_file>
+	<FileVersion major="1" minor="1"/>
+	<Project>
+		<Option title="03.MemoryPlayback"/>
+		<Option makefile="Makefile"/>
+		<Option makefile_is_custom="0"/>
+		<Option active_target="1"/>
+		<Option compiler="0"/>
+		<Build>
+			<Target title="Debug">
+				<Option output="..\..\bin\win32-gcc\03.MemoryPlayback.exe"/>
+				<Option working_dir="."/>
+				<Option object_output="Debug"/>
+				<Option deps_output=".deps"/>
+				<Option type="1"/>
+				<Option compiler="0"/>
+				<Option projectResourceIncludeDirsRelation="1"/>
+				<Compiler>
+					<Add option="-DWIN32"/>
+					<Add option="-D_DEBUG"/>
+					<Add option="-D_CONSOLE"/>
+					<Add option="-W"/>
+					<Add option="-O0"/>
+					<Add directory="..\..\include"/>
+				</Compiler>
+				<Linker>
+					<Add directory="..\..\lib\win32-gcc"/>
+				</Linker>
+			</Target>
+			<Target title="Release">
+				<Option output="..\..\bin\win32-gcc\03.MemoryPlayback.exe"/>
+				<Option working_dir="."/>
+				<Option object_output="Release"/>
+				<Option deps_output=".deps"/>
+				<Option type="1"/>
+				<Option compiler="0"/>
+				<Option projectResourceIncludeDirsRelation="1"/>
+				<Compiler>
+					<Add option="-DWIN32"/>
+					<Add option="-DNDEBUG"/>
+					<Add option="-D_CONSOLE"/>
+					<Add option="-W"/>
+					<Add option="-g"/>
+					<Add directory="..\..\include"/>
+				</Compiler>
+				<Linker>
+					<Add directory="..\..\lib\win32-gcc"/>
+				</Linker>
+			</Target>
+		</Build>
+		<Compiler>
+			<Add option="-Os"/>
+			<Add option="-O1"/>
+			<Add option="-O"/>
+		</Compiler>
+		<Linker>
+			<Add option="-s"/>
+			<Add library="..\..\lib\win32-gcc\libirrklang.a"/>
+		</Linker>
+		<Unit filename="main.cpp">
+			<Option compilerVar="CPP"/>
+			<Option target="Debug"/>
+			<Option target="Release"/>
+		</Unit>
+	</Project>
+</CodeBlocks_project_file>

@@ -1,0 +1,14 @@
+﻿  Main.cpp
+C:\Users\fdomi\source\repos\BalaEngine\BalaEngine\LightRenderer.h(6,10): warning C4067: símbolos (token) inesperados después de la directiva del preprocesador; se esperaba una nueva línea
+C:\Users\fdomi\source\repos\BalaEngine\BalaEngine\Dependencies\bullet\include\LinearMath\btIDebugDraw.h(169,1): warning C4305: 'argumento': truncamiento de 'double' a 'const btScalar'
+C:\Users\fdomi\source\repos\BalaEngine\BalaEngine\Dependencies\bullet\include\LinearMath\btIDebugDraw.h(170,1): warning C4305: 'argumento': truncamiento de 'double' a 'const btScalar'
+C:\Users\fdomi\source\repos\BalaEngine\BalaEngine\Dependencies\bullet\include\LinearMath\btIDebugDraw.h(171,1): warning C4305: 'argumento': truncamiento de 'double' a 'const btScalar'
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.18362.0\shared\minwindef.h(130,1): warning C4005: 'APIENTRY': redefinición de macro
+C:\Users\fdomi\source\repos\BalaEngine\BalaEngine\Dependencies\glfw-3.3.2.bin.WIN64\include\GLFW\glfw3.h(123): message : vea la definición anterior de 'APIENTRY'
+C:\Users\fdomi\source\repos\BalaEngine\BalaEngine\Main.cpp(139,35): warning C4305: 'argumento': truncamiento de 'double' a 'GLclampf'
+  Generando código
+  2 of 959 functions ( 0.2%) were compiled, the rest were copied from previous compilation.
+    0 functions were new in current compilation
+    9 functions had inline decision re-evaluated but remain unchanged
+  Generación de código finalizada
+  BalaEngine.vcxproj -> C:\Users\fdomi\source\repos\BalaEngine\x64\Release\BalaEngine.exe

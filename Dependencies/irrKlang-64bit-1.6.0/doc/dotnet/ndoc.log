@@ -1,0 +1,296 @@
+Building documentation...
+Initializing...
+Merging XML documentation...
+Building file mapping...
+Loading XSLT files...
+    namespace.xslt
+    namespacehierarchy.xslt
+    type.xslt
+    typehierarchy.xslt
+    allmembers.xslt
+    individualmembers.xslt
+    event.xslt
+    member.xslt
+    memberoverload.xslt
+    property.xslt
+    field.xslt
+    htmlcontents.xslt
+Generating HTML pages...
+IrrKlang.html
+IrrKlangHierarchy.html
+IrrKlang.AudioFormat.html
+IrrKlang.AudioFormatMembers.html
+IrrKlang.AudioFormatConstructor.html
+IrrKlang.AudioFormatFields.html
+IrrKlang.AudioFormat.ChannelCount.html
+IrrKlang.AudioFormat.Format.html
+IrrKlang.AudioFormat.FrameCount.html
+IrrKlang.AudioFormat.SampleRate.html
+IrrKlang.AudioFormatProperties.html
+IrrKlang.AudioFormat.BytesPerSecond.html
+IrrKlang.AudioFormat.FrameSize.html
+IrrKlang.AudioFormat.SampleDataSize.html
+IrrKlang.AudioFormat.SampleSize.html
+IrrKlang.EventForwarder.html
+IrrKlang.EventForwarderMembers.html
+IrrKlang.FileFactoryForwarder.html
+IrrKlang.FileFactoryForwarderMembers.html
+IrrKlang.IAudioRecorder.html
+IrrKlang.IAudioRecorderMembers.html
+IrrKlang.IAudioRecorderConstructor.html
+IrrKlang.IAudioRecorderConstructor1.html
+IrrKlang.IAudioRecorderConstructor2.html
+IrrKlang.IAudioRecorderConstructor3.html
+IrrKlang.IAudioRecorderProperties.html
+IrrKlang.IAudioRecorder.AudioFormat.html
+IrrKlang.IAudioRecorder.IsRecording.html
+IrrKlang.IAudioRecorder.RecordedAudioData.html
+IrrKlang.IAudioRecorderMethods.html
+IrrKlang.IAudioRecorder.AddSoundSourceFromRecordedAudio.html
+IrrKlang.IAudioRecorder.ClearRecordedAudioDataBuffer.html
+IrrKlang.IAudioRecorder.Finalize.html
+IrrKlang.IAudioRecorder.StartRecordingBufferedAudio_overloads.html
+IrrKlang.IAudioRecorder.StartRecordingBufferedAudio_overload_2.html
+IrrKlang.IAudioRecorder.StartRecordingBufferedAudio_overload_1.html
+IrrKlang.IAudioRecorder.StopRecordingAudio.html
+IrrKlang.IFileFactory.html
+IrrKlang.IFileFactoryMembers.html
+IrrKlang.IFileFactoryMethods.html
+IrrKlang.IFileFactory.openFile.html
+IrrKlang.ISound.html
+IrrKlang.ISoundMembers.html
+IrrKlang.ISoundConstructor.html
+IrrKlang.ISoundProperties.html
+IrrKlang.ISound.Finished.html
+IrrKlang.ISound.Looped.html
+IrrKlang.ISound.MaxDistance.html
+IrrKlang.ISound.MinDistance.html
+IrrKlang.ISound.Pan.html
+IrrKlang.ISound.Paused.html
+IrrKlang.ISound.PlaybackSpeed.html
+IrrKlang.ISound.PlayLength.html
+IrrKlang.ISound.PlayPosition.html
+IrrKlang.ISound.Position.html
+IrrKlang.ISound.SoundEffectControl.html
+IrrKlang.ISound.Velocity.html
+IrrKlang.ISound.Volume.html
+IrrKlang.ISoundMethods.html
+IrrKlang.ISound.Dispose.html
+IrrKlang.ISound.Finalize.html
+IrrKlang.ISound.setSoundStopEventReceiver_overloads.html
+IrrKlang.ISound.setSoundStopEventReceiver_overload_1.html
+IrrKlang.ISound.setSoundStopEventReceiver_overload_2.html
+IrrKlang.ISound.Stop.html
+IrrKlang.ISoundDeviceList.html
+IrrKlang.ISoundDeviceListMembers.html
+IrrKlang.ISoundDeviceListConstructor.html
+IrrKlang.ISoundDeviceListConstructor1.html
+IrrKlang.ISoundDeviceListConstructor2.html
+IrrKlang.ISoundDeviceListProperties.html
+IrrKlang.ISoundDeviceList.DeviceCount.html
+IrrKlang.ISoundDeviceListMethods.html
+IrrKlang.ISoundDeviceList.Finalize.html
+IrrKlang.ISoundDeviceList.getDeviceDescription.html
+IrrKlang.ISoundDeviceList.getDeviceID.html
+IrrKlang.ISoundEffectControl.html
+IrrKlang.ISoundEffectControlMembers.html
+IrrKlang.ISoundEffectControlConstructor.html
+IrrKlang.ISoundEffectControlProperties.html
+IrrKlang.ISoundEffectControl.IsChorusSoundEffectEnabled.html
+IrrKlang.ISoundEffectControl.IsCompressorSoundEffectEnabled.html
+IrrKlang.ISoundEffectControl.IsDistortionSoundEffectEnabled.html
+IrrKlang.ISoundEffectControl.IsEchoSoundEffectEnabled.html
+IrrKlang.ISoundEffectControl.IsFlangerSoundEffectEnabled.html
+IrrKlang.ISoundEffectControl.IsGargleSoundEffectEnabled.html
+IrrKlang.ISoundEffectControl.IsI3DL2ReverbSoundEffectEnabled.html
+IrrKlang.ISoundEffectControl.IsParamEqSoundEffectEnabled.html
+IrrKlang.ISoundEffectControl.IsWavesReverbSoundEffectEnabled.html
+IrrKlang.ISoundEffectControlMethods.html
+IrrKlang.ISoundEffectControl.DisableAllEffects.html
+IrrKlang.ISoundEffectControl.DisableChorusSoundEffect.html
+IrrKlang.ISoundEffectControl.DisableCompressorSoundEffect.html
+IrrKlang.ISoundEffectControl.DisableDistortionSoundEffect.html
+IrrKlang.ISoundEffectControl.DisableEchoSoundEffect.html
+IrrKlang.ISoundEffectControl.DisableFlangerSoundEffect.html
+IrrKlang.ISoundEffectControl.DisableGargleSoundEffect.html
+IrrKlang.ISoundEffectControl.DisableI3DL2ReverbSoundEffect.html
+IrrKlang.ISoundEffectControl.DisableParamEqSoundEffect.html
+IrrKlang.ISoundEffectControl.DisableWavesReverbSoundEffect.html
+IrrKlang.ISoundEffectControl.EnableChorusSoundEffect_overloads.html
+IrrKlang.ISoundEffectControl.EnableChorusSoundEffect_overload_2.html
+IrrKlang.ISoundEffectControl.EnableChorusSoundEffect_overload_1.html
+IrrKlang.ISoundEffectControl.EnableCompressorSoundEffect_overloads.html
+IrrKlang.ISoundEffectControl.EnableCompressorSoundEffect_overload_2.html
+IrrKlang.ISoundEffectControl.EnableCompressorSoundEffect_overload_1.html
+IrrKlang.ISoundEffectControl.EnableDistortionSoundEffect_overloads.html
+IrrKlang.ISoundEffectControl.EnableDistortionSoundEffect_overload_2.html
+IrrKlang.ISoundEffectControl.EnableDistortionSoundEffect_overload_1.html
+IrrKlang.ISoundEffectControl.EnableEchoSoundEffect_overloads.html
+IrrKlang.ISoundEffectControl.EnableEchoSoundEffect_overload_2.html
+IrrKlang.ISoundEffectControl.EnableEchoSoundEffect_overload_1.html
+IrrKlang.ISoundEffectControl.EnableFlangerSoundEffect_overloads.html
+IrrKlang.ISoundEffectControl.EnableFlangerSoundEffect_overload_2.html
+IrrKlang.ISoundEffectControl.EnableFlangerSoundEffect_overload_1.html
+IrrKlang.ISoundEffectControl.EnableGargleSoundEffect_overloads.html
+IrrKlang.ISoundEffectControl.EnableGargleSoundEffect_overload_2.html
+IrrKlang.ISoundEffectControl.EnableGargleSoundEffect_overload_1.html
+IrrKlang.ISoundEffectControl.EnableI3DL2ReverbSoundEffect_overloads.html
+IrrKlang.ISoundEffectControl.EnableI3DL2ReverbSoundEffect_overload_2.html
+IrrKlang.ISoundEffectControl.EnableI3DL2ReverbSoundEffect_overload_1.html
+IrrKlang.ISoundEffectControl.EnableParamEqSoundEffect_overloads.html
+IrrKlang.ISoundEffectControl.EnableParamEqSoundEffect_overload_2.html
+IrrKlang.ISoundEffectControl.EnableParamEqSoundEffect_overload_1.html
+IrrKlang.ISoundEffectControl.EnableWavesReverbSoundEffect_overloads.html
+IrrKlang.ISoundEffectControl.EnableWavesReverbSoundEffect_overload_2.html
+IrrKlang.ISoundEffectControl.EnableWavesReverbSoundEffect_overload_1.html
+IrrKlang.ISoundEffectControl.Finalize.html
+IrrKlang.ISoundEngine.html
+IrrKlang.ISoundEngineMembers.html
+IrrKlang.ISoundEngineConstructor.html
+IrrKlang.ISoundEngineConstructor1.html
+IrrKlang.ISoundEngineConstructor2.html
+IrrKlang.ISoundEngineConstructor3.html
+IrrKlang.ISoundEngineConstructor4.html
+IrrKlang.ISoundEngineProperties.html
+IrrKlang.ISoundEngine.Default3DSoundMaxDistance.html
+IrrKlang.ISoundEngine.Default3DSoundMinDistance.html
+IrrKlang.ISoundEngine.IsMultiThreaded.html
+IrrKlang.ISoundEngine.Name.html
+IrrKlang.ISoundEngine.SoundVolume.html
+IrrKlang.ISoundEngineMethods.html
+IrrKlang.ISoundEngine.AddFileFactory.html
+IrrKlang.ISoundEngine.AddSoundSourceAlias.html
+IrrKlang.ISoundEngine.AddSoundSourceFromFile_overloads.html
+IrrKlang.ISoundEngine.AddSoundSourceFromFile_overload_1.html
+IrrKlang.ISoundEngine.AddSoundSourceFromFile_overload_2.html
+IrrKlang.ISoundEngine.AddSoundSourceFromFile_overload_3.html
+IrrKlang.ISoundEngine.AddSoundSourceFromIOStream.html
+IrrKlang.ISoundEngine.AddSoundSourceFromMemory.html
+IrrKlang.ISoundEngine.AddSoundSourceFromPCMData.html
+IrrKlang.ISoundEngine.Finalize.html
+IrrKlang.ISoundEngine.GetSoundSource_overloads.html
+IrrKlang.ISoundEngine.GetSoundSource_overload_2.html
+IrrKlang.ISoundEngine.GetSoundSource_overload_1.html
+IrrKlang.ISoundEngine.internalGetNativeEngine.html
+IrrKlang.ISoundEngine.IsCurrentlyPlaying.html
+IrrKlang.ISoundEngine.LoadPlugins.html
+IrrKlang.ISoundEngine.Play2D_overloads.html
+IrrKlang.ISoundEngine.Play2D_overload_1.html
+IrrKlang.ISoundEngine.Play2D_overload_4.html
+IrrKlang.ISoundEngine.Play2D_overload_3.html
+IrrKlang.ISoundEngine.Play2D_overload_2.html
+IrrKlang.ISoundEngine.Play2D_overload_5.html
+IrrKlang.ISoundEngine.Play2D_overload_6.html
+IrrKlang.ISoundEngine.Play3D_overloads.html
+IrrKlang.ISoundEngine.Play3D_overload_1.html
+IrrKlang.ISoundEngine.Play3D_overload_8.html
+IrrKlang.ISoundEngine.Play3D_overload_7.html
+IrrKlang.ISoundEngine.Play3D_overload_2.html
+IrrKlang.ISoundEngine.Play3D_overload_3.html
+IrrKlang.ISoundEngine.Play3D_overload_4.html
+IrrKlang.ISoundEngine.Play3D_overload_5.html
+IrrKlang.ISoundEngine.Play3D_overload_6.html
+IrrKlang.ISoundEngine.RemoveAllSoundSources.html
+IrrKlang.ISoundEngine.RemoveSoundSource.html
+IrrKlang.ISoundEngine.SetAllSoundsPaused.html
+IrrKlang.ISoundEngine.SetDopplerEffectParameters.html
+IrrKlang.ISoundEngine.SetListenerPosition_overloads.html
+IrrKlang.ISoundEngine.SetListenerPosition_overload_3.html
+IrrKlang.ISoundEngine.SetListenerPosition_overload_4.html
+IrrKlang.ISoundEngine.SetListenerPosition_overload_1.html
+IrrKlang.ISoundEngine.SetListenerPosition_overload_2.html
+IrrKlang.ISoundEngine.SetRolloffFactor.html
+IrrKlang.ISoundEngine.StopAllSounds.html
+IrrKlang.ISoundEngine.Update.html
+IrrKlang.ISoundSource.html
+IrrKlang.ISoundSourceMembers.html
+IrrKlang.ISoundSourceConstructor.html
+IrrKlang.ISoundSourceProperties.html
+IrrKlang.ISoundSource.AudioFormat.html
+IrrKlang.ISoundSource.DefaultMaxDistance.html
+IrrKlang.ISoundSource.DefaultMinDistance.html
+IrrKlang.ISoundSource.DefaultVolume.html
+IrrKlang.ISoundSource.ForcedStreamingThreshold.html
+IrrKlang.ISoundSource.IsSeekingSupported.html
+IrrKlang.ISoundSource.Name.html
+IrrKlang.ISoundSource.PlayLength.html
+IrrKlang.ISoundSource.SampleData.html
+IrrKlang.ISoundSource.StreamMode.html
+IrrKlang.ISoundSourceMethods.html
+IrrKlang.ISoundSource.Dispose.html
+IrrKlang.ISoundSource.Finalize.html
+IrrKlang.ISoundSource.ForceReloadAtNextUse.html
+IrrKlang.ISoundSource.getNativeSoundSource.html
+IrrKlang.ISoundStopEventReceiver.html
+IrrKlang.ISoundStopEventReceiverMembers.html
+IrrKlang.ISoundStopEventReceiverMethods.html
+IrrKlang.ISoundStopEventReceiver.OnSoundStopped.html
+IrrKlang.SampleFormat.html
+IrrKlang.SoundDeviceListType.html
+IrrKlang.SoundEngineOptionFlag.html
+IrrKlang.SoundOutputDriver.html
+IrrKlang.StopEventCause.html
+IrrKlang.StreamForwarder.html
+IrrKlang.StreamForwarderMembers.html
+IrrKlang.StreamMode.html
+IrrKlang.Vector3D.html
+IrrKlang.Vector3DMembers.html
+IrrKlang.Vector3DConstructor.html
+IrrKlang.Vector3DConstructor1.html
+IrrKlang.Vector3DConstructor2.html
+IrrKlang.Vector3DFields.html
+IrrKlang.Vector3D.X.html
+IrrKlang.Vector3D.Y.html
+IrrKlang.Vector3D.Z.html
+IrrKlang.Vector3DProperties.html
+IrrKlang.Vector3D.Length.html
+IrrKlang.Vector3D.LengthSQ.html
+IrrKlang.Vector3DMethods.html
+IrrKlang.Vector3D.CrossProduct.html
+IrrKlang.Vector3D.DotProduct.html
+IrrKlang.Vector3D.Equals.html
+IrrKlang.Vector3D.GetDistanceFrom.html
+IrrKlang.Vector3D.GetDistanceFromSQ.html
+IrrKlang.Vector3D.GetInterpolated.html
+IrrKlang.Vector3D.GetLength.html
+IrrKlang.Vector3D.GetLengthSQ.html
+IrrKlang.Vector3D.Invert.html
+IrrKlang.Vector3D.IsBetweenPoints.html
+IrrKlang.Vector3D.Normalize.html
+IrrKlang.Vector3D.Set_overloads.html
+IrrKlang.Vector3D.Set_overload_1.html
+IrrKlang.Vector3D.Set_overload_2.html
+IrrKlang.Vector3D.SetLength.html
+IrrKlang.Vector3D.ToString.html
+IrrKlang.Vector3DOperators.html
+IrrKlang.Vector3D.op_Addition.html
+IrrKlang.Vector3D.op_Division.html
+IrrKlang.Vector3D.op_Equality.html
+IrrKlang.Vector3D.op_Multiply_overloads.html
+IrrKlang.Vector3D.op_Multiply_overload_2.html
+IrrKlang.Vector3D.op_Multiply_overload_1.html
+IrrKlang.Vector3D.op_Subtraction.html
+Generating HTML content file...
+transform the HHC contents file into html
+Compiling HTML Help file...
+Compiling Html Help file
+Microsoft HTML Help Compiler 4.74.8702
+
+Compiling c:\Development\irrTech\irrKlang\doctemp\netdoc\ndoc_msdn_temp\irrKlang.net.chm
+
+HHC3000: Warning: Invalid syntax: A <PARAM> tag appears outside of an <OBJECT> tag.
+HHC3000: Warning: Invalid syntax: A <PARAM> tag appears outside of an <OBJECT> tag.
+HHC3000: Warning: Invalid syntax: A <PARAM> tag appears outside of an <OBJECT> tag.
+
+Compile time: 0 minutes, 2 seconds
+257	Topics
+1,702	Local links
+1	Internet link
+6	Graphics
+
+
+Created c:\Development\irrTech\irrKlang\doctemp\netdoc\ndoc_msdn_temp\irrKlang.net.chm, 147,150 bytes
+Compression decreased file by 734,302 bytes.
+
+Html Help compile complete
+Done.
