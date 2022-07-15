@@ -13,6 +13,8 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
 void RenderUpdate();
 void RendererInitialization();
 
+const int WINDOW_SIZE_X = 1280;
+const int WINDOW_SIZE_Y = 720;
 
 const char* vertexShaderSource = 
 "#version 330 core\n"
@@ -58,6 +60,8 @@ int main()
 	return 0;
 }
 
+// -- Window and OpenGL initialization
+
 /* Initializes GLFW context to use OpenGL 3.3 with core profile and non-resizable windows. */
 void InitGLFW() 
 {
@@ -80,7 +84,7 @@ void InitGLEW()
 
 GLFWwindow* CreateWindow()
 {
-	GLFWwindow* window = glfwCreateWindow(800, 600, "BalaEngine", nullptr, nullptr);
+	GLFWwindow* window = glfwCreateWindow(WINDOW_SIZE_X, WINDOW_SIZE_Y, "BalaEngine", nullptr, nullptr);
 	if (window == nullptr)
 	{
 		std::cout << "Failed to create GLFW window" << std::endl;
@@ -88,10 +92,12 @@ GLFWwindow* CreateWindow()
 		return nullptr;
 	}
 	glfwMakeContextCurrent(window);
-	glViewport(0, 0, 800, 600);
+	glViewport(0, 0, WINDOW_SIZE_X, WINDOW_SIZE_Y);
 
 	return window;
 }
+
+// -----------------------------------
 
 void key_callback(GLFWwindow* window, int key, int scancode, int action, int mode)
 {
