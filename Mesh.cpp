@@ -28,3 +28,18 @@ void Mesh::setTriData(std::vector<Vertex>& vertices, std::vector<uint32_t>& indi
 	vertices = _vertices;
 	indices = _indices;
 }
+
+void Mesh::setQuadData(std::vector<Vertex>& vertices, std::vector<uint32_t>& indices) 
+{
+	//TODO
+}
+
+void Mesh::setCubeData(std::vector<Vertex>& vertices, std::vector<uint32_t>& indices)
+{
+	//TODO
+}
+
+void Mesh::setSphereData(std::vector<Vertex>& vertices, std::vector<uint32_t>& indices)
+{
+	//TODO
+}

@@ -49,21 +49,19 @@ GLuint ShaderLoader::createShader(GLenum shaderType, std::string source, const c
 }
 
 GLuint ShaderLoader::createProgram(const char* vertexShaderFilename, const char* fragmentShaderFilename) {
-	std::string vertex_shader_code = readShader
-	(vertexShaderFilename);
-	std::string fragment_shader_code = readShader
-	(fragmentShaderFilename);
-	GLuint vertex_shader = createShader(GL_VERTEX_SHADER,
-		vertex_shader_code, “vertex shader”);
-	GLuint fragment_shader = createShader(GL_FRAGMENT_SHADER,
-		fragment_shader_code, “fragment shader”);
+	std::string vertex_shader_code = readShader(vertexShaderFilename);
+	std::string fragment_shader_code = readShader(fragmentShaderFilename);
+	GLuint vertex_shader = createShader(GL_VERTEX_SHADER, vertex_shader_code, "vertex shader");
+	GLuint fragment_shader = createShader(GL_FRAGMENT_SHADER, fragment_shader_code, "fragment shader");
 	int link_result = 0;
+	
 	//create the program handle, attach the shaders and link it
 	GLuint program = glCreateProgram();
 	glAttachShader(program, vertex_shader);
 	glAttachShader(program, fragment_shader);
 	glLinkProgram(program);
 	glGetProgramiv(program, GL_LINK_STATUS, &link_result);
+	
 	//check for link errors
 	if (link_result == GL_FALSE) {
 		int info_log_length = 0;
@@ -71,8 +69,7 @@ GLuint ShaderLoader::createProgram(const char* vertexShaderFilename, const char*
 		std::vector<char> program_log(info_log_length);
 		glGetProgramInfoLog(program, info_log_length, NULL,
 			&program_log[0]);
-		std::cout << “Shader Loader : LINK ERROR” << std::endl
-			<< &program_log[0] << std::endl;
+		std::cout << "Shader Loader : LINK ERROR" << std::endl << &program_log[0] << std::endl;
 		return 0;
 	}
 	return program;

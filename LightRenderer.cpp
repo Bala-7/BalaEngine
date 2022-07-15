@@ -5,7 +5,7 @@ LightRenderer::LightRenderer(MeshType meshType, Camera* camera)
 {
 	this->camera = camera;
 
-	switch (modelType)
+	switch (meshType)
 	{
 		case kTriangle: Mesh::setTriData(vertices, indices); break;
 		case kQuad: Mesh::setQuadData(vertices, indices); break;
@@ -59,7 +59,7 @@ void LightRenderer::draw()
 	GLint viewLocation = glGetUniformLocation(program, "view");
 	glUniformMatrix4fv(viewLocation, 1, GL_FALSE, glm::value_ptr(view));
 	
-	glm::mat4 projectionMatrix = camera->getprojectionMatrix();
+	glm::mat4 projectionMatrix = camera->getProjectionMatrix();
 	GLint projectionLocation = glGetUniformLocation(program, "projection");
 	glUniformMatrix4fv(projectionLocation, 1, GL_FALSE, glm::value_ptr(projectionMatrix));
 
