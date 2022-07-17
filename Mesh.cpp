@@ -33,31 +33,31 @@ void Mesh::setQuadData(std::vector<Vertex>& vertices, std::vector<uint32_t>& ind
 {
 	std::vector<Vertex> _vertices = {
 		{
-			{ 0.0f, 0.0f, 0.0f }, // Position
+			{ -0.5f, -0.5f, 0.0f }, // Position
 			{ 0.0f, 0.0f, 1.0 }, // Normal
 			{ 1.0f, 0.0f, 0.0 }, // Color
-			{ 0.0, 1.0 } // Texture Coordinate
+			{ 0.0, 0.0 } // Texture Coordinate
 		}, // 0
 		{
-			{ 1.0f, 0.0f, 0.0f },
+			{ 0.5f, -0.5f, 0.0f },
 			{ 0.0f, 0.0f, 1.0 },
 			{ 0.0f, 1.0f, 0.0 },
-			{ 0.0, 0.0 }
+			{ 1.0, 0.0 }
 		}, // 1
 		{
-			{ 1.0f, 1.0f, 0.0f },
+			{ 0.5f, 0.5f, 0.0f },
 			{ 0.0f, 0.0f, 1.0 },
 			{ 0.0f, 0.0f, 1.0 },
-			{ 1.0, 0.0 }
+			{ 1.0, 1.0 }
 		}, // 2
 		{
-			{ 0.0f, 1.0f, 0.0f },
+			{ -0.5f, 0.5f, 0.0f },
 			{ 0.0f, 0.0f, 1.0 },
 			{ 0.0f, 0.0f, 1.0 },
-			{ 1.0, 0.0 }
+			{ 0.0, 1.0 }
 		}, // 3
 	};
-	std::vector<uint32_t> _indices = { 0, 1, 3, 3, 1, 2 };
+	std::vector<uint32_t> _indices = { 0, 1, 2, 0, 2, 3 };
 
 	vertices.clear(); indices.clear();
 

@@ -8,9 +8,12 @@
 #include "ShaderLoader.h"
 #include "Camera.h"
 #include "LightRenderer.h"
+#include "TextureLoader.h"
+#include "MeshRenderer.h"
 
 Camera* camera;
 LightRenderer* light;
+MeshRenderer* mesh;
 
 void initGame();
 
@@ -19,7 +22,6 @@ void InitGLEW();
 GLFWwindow* CreateWindow();
 void key_callback(GLFWwindow* window, int key, int scancode, int action, int mode);
 void RenderUpdate();
-void RendererInitialization();
 
 const int WINDOW_SIZE_X = 1280;
 const int WINDOW_SIZE_Y = 720;
@@ -65,17 +67,29 @@ void initGame()
 	// Enable Depth Test, so only pixels in the front are drawn
 	glEnable(GL_DEPTH_TEST);
 
-	// Create the ShaderLoader class, and pass the vertex and fragment shaders to it
+	// Create the ShaderLoader class, and creates shader programs, passing the vertex and fragment shaders to them
 	ShaderLoader shaderLoader;
 	GLuint flatShaderProgram = shaderLoader.createProgram(VERTEX_SHADER_PATH, FRAGMENT_SHADER_PATH);
+	GLuint texturedShaderProgram = shaderLoader.createProgram("Assets/Shaders/TexturedModel.vs", "Assets/Shaders/TexturedModel.fs");
+
+	// Load textures
+	TextureLoader textureLoader;
+	GLuint meshTexture = textureLoader.getTextureID("Assets/Textures/icon.jpg");
 
 	// Create the camera
-	camera = new Camera(45.0f, WINDOW_SIZE_X, WINDOW_SIZE_Y, 0.1f, 100.0f, glm::vec3(0.0f, 4.0f, 6.0f));
+	camera = new Camera(45.0f, WINDOW_SIZE_X, WINDOW_SIZE_Y, 0.1f, 100.0f, glm::vec3(0.0f, 0.0f, 6.0f));
 
 	// Create the light
 	light = new LightRenderer(MeshType::kTriangle, camera);
 	light->setProgram(flatShaderProgram);
 	light->setPosition(glm::vec3(0.0f, 0.0f, 0.0f));
+
+	// Create the mesh
+	mesh = new MeshRenderer(MeshType::kQuad, camera);
+	mesh->setProgram(texturedShaderProgram);
+	mesh->setTexture(meshTexture);
+	mesh->setPosition(glm::vec3(0.0f, 0.0f, 0.0f));
+	mesh->setScale(glm::vec3(3.0f));
 }
 
 // -- Window and OpenGL initialization
@@ -126,15 +140,8 @@ void RenderUpdate()
 	//glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
 	glClearColor(1.0, 1.0, 0.0, 1.0);//clear yellow
 	
-	light->draw();
+	mesh->draw();
 
-	/*
-	// Triangle (old)
-	glUseProgram(shaderProgram);
-	glBindVertexArray(VAO);
-	glDrawArrays(GL_TRIANGLES, 0, 3);
-	glBindVertexArray(0);
-	*/
 }
 
 // -----------------------------------
