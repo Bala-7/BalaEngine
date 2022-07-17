@@ -60,7 +60,7 @@ void LightRenderer::draw()
 	glUniformMatrix4fv(viewLocation, 1, GL_FALSE, glm::value_ptr(view));
 	
 	glm::mat4 projectionMatrix = camera->getProjectionMatrix();
-	GLint projectionLocation = glGetUniformLocation(program, "projection");
+	GLint projectionLocation = glGetUniformLocation(program, "projection"); 
 	glUniformMatrix4fv(projectionLocation, 1, GL_FALSE, glm::value_ptr(projectionMatrix));
 
 	// Draw the object

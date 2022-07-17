@@ -5,6 +5,14 @@
 #include <GLFW/glfw3.h>
 
 #include <iostream>
+#include "ShaderLoader.h"
+#include "Camera.h"
+#include "LightRenderer.h"
+
+Camera* camera;
+LightRenderer* light;
+
+void initGame();
 
 void InitGLFW();
 void InitGLEW();
@@ -16,25 +24,9 @@ void RendererInitialization();
 const int WINDOW_SIZE_X = 1280;
 const int WINDOW_SIZE_Y = 720;
 
-const char* vertexShaderSource = 
-"#version 330 core\n"
-"layout (location = 0) in vec3 aPos;\n"
-"void main()\n"
-"{\n"
-"   gl_Position = vec4(aPos.x, aPos.y, aPos.z, 1.0);\n"
-"}\0";
+const char* VERTEX_SHADER_PATH = "Assets/Shaders/FlatModel.vs";
+const char* FRAGMENT_SHADER_PATH = "Assets/Shaders/FlatModel.fs";
 
-const char* fragmentShaderSource =
-"#version 330 core\n"
-"out vec4 color;\n"
-"void main()\n"
-"{\n"
-"color = vec4(1.0f, 0.5f, 0.2f, 1.0f);\n"
-"}\0";
-
-GLfloat vertices[] = { -0.5f, -0.5f, 0.0f, 0.5f, -0.5f, 0.0f, 0.0f, 0.5f, 0.0f };
-GLuint shaderProgram;
-GLuint VAO;
 
 int main()
 {
@@ -42,8 +34,10 @@ int main()
 	GLFWwindow* window = CreateWindow();
 	InitGLEW();
 	
+	initGame();
+
 	glfwSetKeyCallback(window, key_callback);	// Input callback
-	RendererInitialization();
+	// RendererInitialization();	// Triangle renderer
 	while (!glfwWindowShouldClose(window))
 	{
 		glfwPollEvents();
@@ -57,7 +51,31 @@ int main()
 
 
 	glfwTerminate();
+
+	delete camera;
+	delete light;
+
 	return 0;
+}
+
+// Game
+
+void initGame()
+{
+	// Enable Depth Test, so only pixels in the front are drawn
+	glEnable(GL_DEPTH_TEST);
+
+	// Create the ShaderLoader class, and pass the vertex and fragment shaders to it
+	ShaderLoader shaderLoader;
+	GLuint flatShaderProgram = shaderLoader.createProgram(VERTEX_SHADER_PATH, FRAGMENT_SHADER_PATH);
+
+	// Create the camera
+	camera = new Camera(45.0f, WINDOW_SIZE_X, WINDOW_SIZE_Y, 0.1f, 100.0f, glm::vec3(0.0f, 4.0f, 6.0f));
+
+	// Create the light
+	light = new LightRenderer(MeshType::kTriangle, camera);
+	light->setProgram(flatShaderProgram);
+	light->setPosition(glm::vec3(0.0f, 0.0f, 0.0f));
 }
 
 // -- Window and OpenGL initialization
@@ -99,6 +117,29 @@ GLFWwindow* CreateWindow()
 
 // -----------------------------------
 
+// -- Rendering ----------------------
+
+void RenderUpdate()
+{
+	// Clear color
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	//glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
+	glClearColor(1.0, 1.0, 0.0, 1.0);//clear yellow
+	
+	light->draw();
+
+	/*
+	// Triangle (old)
+	glUseProgram(shaderProgram);
+	glBindVertexArray(VAO);
+	glDrawArrays(GL_TRIANGLES, 0, 3);
+	glBindVertexArray(0);
+	*/
+}
+
+// -----------------------------------
+// -- Input --------------------------
+
 void key_callback(GLFWwindow* window, int key, int scancode, int action, int mode)
 {
 	// When a user presses the escape key, we set the WindowShouldClose property to true, closing the application
@@ -106,91 +147,4 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
 		glfwSetWindowShouldClose(window, GL_TRUE);
 }
 
-void RenderUpdate()
-{
-	// Clear color
-	glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
-	glClear(GL_COLOR_BUFFER_BIT);
-
-	// Triangle
-	glUseProgram(shaderProgram);
-	glBindVertexArray(VAO);
-	glDrawArrays(GL_TRIANGLES, 0, 3);
-	glBindVertexArray(0);
-
-}
-
-void RendererInitialization()
-{
-	// -------- Triangle -----------
-	
-
-	// Creates Vertex Array Object to store calls to VertexAttribute methods
-	glGenVertexArrays(1, &VAO);
-	glBindVertexArray(VAO);
-
-	// Create Vertex Buffer Object to store vertices and send them to the GPU
-	GLuint VBO;
-	glGenBuffers(1, &VBO);	// Generates the buffer
-	glBindBuffer(GL_ARRAY_BUFFER, VBO);	// Binds the buffer as a GL_ARRAY_BUFFER
-	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);	// Fills the buffer with vertex data
-
-	// Vertex Shader
-	GLuint vertexShader;
-	vertexShader = glCreateShader(GL_VERTEX_SHADER);
-
-	glShaderSource(vertexShader, 1, &vertexShaderSource, NULL);
-	glCompileShader(vertexShader);
-
-	GLint success;
-	GLchar infoLog[512];
-	glGetShaderiv(vertexShader, GL_COMPILE_STATUS, &success);
-
-	if (!success)
-	{
-		glGetShaderInfoLog(vertexShader, 512, NULL, infoLog);
-		std::cout << "ERROR::SHADER::VERTEX::COMPILATION_FAILED\n" <<
-			infoLog << std::endl;
-	}
-
-	// Fragment Shader
-	GLuint fragmentShader;
-	fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
-	glShaderSource(fragmentShader, 1, &fragmentShaderSource, NULL);
-	glCompileShader(fragmentShader);
-
-
-	glGetShaderiv(fragmentShader, GL_COMPILE_STATUS, &success);
-
-	if (!success)
-	{
-		glGetShaderInfoLog(fragmentShader, 512, NULL, infoLog);
-		std::cout << "ERROR::SHADER::FRAGMENT::COMPILATION_FAILED\n" <<
-			infoLog << std::endl;
-	}
-
-	// Shader Program (linked version of multiple shaders combined)
-	shaderProgram = glCreateProgram();
-	glAttachShader(shaderProgram, vertexShader);
-	glAttachShader(shaderProgram, fragmentShader);
-	glLinkProgram(shaderProgram);
-	glGetProgramiv(shaderProgram, GL_LINK_STATUS, &success);
-	if (!success) {
-		glGetProgramInfoLog(shaderProgram, 512, NULL, infoLog);
-		std::cout << "ERROR::SHADER::PROGRAM::CREATION_FAILED\n" <<
-			infoLog << std::endl;
-	}
-	glUseProgram(shaderProgram);
-	glDeleteShader(vertexShader);
-	glDeleteShader(fragmentShader);
-
-	// Vertex Attributes
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(GLfloat), (GLvoid*)0);
-	glEnableVertexAttribArray(0);
-
-	//4. Unbind the VAO
-	glBindVertexArray(0);
-
-
-	// ------ Triangle End ---------
-}
+// -----------------------------------

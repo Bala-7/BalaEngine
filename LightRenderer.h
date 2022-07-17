@@ -12,6 +12,7 @@ class LightRenderer
 public:
 	LightRenderer(MeshType meshType, Camera* camera);
 	~LightRenderer();
+	
 	void draw();
 	void setPosition(glm::vec3 _position);
 	void setColor(glm::vec3 _color);
