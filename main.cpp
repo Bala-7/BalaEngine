@@ -10,10 +10,12 @@
 #include "LightRenderer.h"
 #include "TextureLoader.h"
 #include "MeshRenderer.h"
+#include "SpriteRenderer.h"
 
 Camera* camera;
 LightRenderer* light;
 MeshRenderer* mesh;
+SpriteRenderer* sprite;
 
 void initGame();
 
@@ -28,6 +30,9 @@ const int WINDOW_SIZE_Y = 720;
 
 const char* VERTEX_SHADER_PATH = "Assets/Shaders/FlatModel.vs";
 const char* FRAGMENT_SHADER_PATH = "Assets/Shaders/FlatModel.fs";
+
+const char* SPRITE_VERTEX_SHADER_PATH = "Assets/Shaders/SpriteShader.vs";
+const char* SPRITE_FRAGMENT_SHADER_PATH = "Assets/Shaders/SpriteShader.fs";
 
 
 int main()
@@ -68,7 +73,7 @@ void initGame()
 	glEnable(GL_DEPTH_TEST);
 
 	// Create the ShaderLoader class, and creates shader programs, passing the vertex and fragment shaders to them
-	ShaderLoader shaderLoader;
+	/*ShaderLoader shaderLoader;
 	GLuint flatShaderProgram = shaderLoader.createProgram(VERTEX_SHADER_PATH, FRAGMENT_SHADER_PATH);
 	GLuint texturedShaderProgram = shaderLoader.createProgram("Assets/Shaders/TexturedModel.vs", "Assets/Shaders/TexturedModel.fs");
 
@@ -82,14 +87,33 @@ void initGame()
 	// Create the light
 	light = new LightRenderer(MeshType::kTriangle, camera);
 	light->setProgram(flatShaderProgram);
-	light->setPosition(glm::vec3(0.0f, 0.0f, 0.0f));
+	light->setPosition(glm::vec3(0.0f, 0.0f, 0.0f));*/
 
 	// Create the mesh
-	mesh = new MeshRenderer(MeshType::kQuad, camera);
+	/*mesh = new MeshRenderer(MeshType::kQuad, camera);
 	mesh->setProgram(texturedShaderProgram);
 	mesh->setTexture(meshTexture);
 	mesh->setPosition(glm::vec3(0.0f, 0.0f, 0.0f));
-	mesh->setScale(glm::vec3(3.0f));
+	mesh->setScale(glm::vec3(3.0f));*/
+
+
+	camera = new Camera(45.0f, WINDOW_SIZE_X, WINDOW_SIZE_Y, 0.1f, 100.0f, glm::vec3(0.0f, 0.0f, 6.0f));
+	glm::mat4 projection = glm::ortho(0.0f, 800.0f, 600.0f, 0.0f, -1.0f, 1.0f);
+	ShaderLoader shaderLoader;
+	GLuint spriteShaderProgram = shaderLoader.createProgram(SPRITE_VERTEX_SHADER_PATH, SPRITE_FRAGMENT_SHADER_PATH);
+	GLuint texturedShaderProgram = shaderLoader.createProgram("Assets/Shaders/TexturedModel.vs", "Assets/Shaders/TexturedModel.fs");
+
+	// Load textures
+	TextureLoader textureLoader;
+	GLuint meshTexture = textureLoader.getTextureID("Assets/Textures/icon.jpg");
+
+	sprite = new SpriteRenderer(camera);
+	sprite->setProgram(texturedShaderProgram);
+	sprite->setTexture(meshTexture);
+	sprite->setPosition(glm::vec3(0.0f, 0.0f, 0.0f));
+	sprite->setScale(glm::vec3(1.0f));
+
+	
 }
 
 // -- Window and OpenGL initialization
@@ -100,7 +124,10 @@ void InitGLFW()
 	glfwInit();
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
+	// Core profile = No backwards compatibility
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+	// Allow forward compatibility
+	glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
 	glfwWindowHint(GLFW_RESIZABLE, GL_FALSE);
 }
 
@@ -140,8 +167,8 @@ void RenderUpdate()
 	//glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
 	glClearColor(1.0, 1.0, 0.0, 1.0);//clear yellow
 	
-	mesh->draw();
-
+	//mesh->draw();
+	sprite->draw();
 }
 
 // -----------------------------------
