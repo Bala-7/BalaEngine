@@ -16,6 +16,7 @@ Camera* camera;
 LightRenderer* light;
 MeshRenderer* mesh;
 SpriteRenderer* sprite;
+SpriteRenderer* sprite2;
 
 void initGame();
 
@@ -105,7 +106,8 @@ void initGame()
 
 	// Load textures
 	TextureLoader textureLoader;
-	GLuint meshTexture = textureLoader.getTextureID("Assets/Textures/icon.jpg");
+	//GLuint meshTexture = textureLoader.getTextureID("Assets/Textures/Character.png");
+	GLuint meshTexture = textureLoader.getTextureID("Assets/Textures/PokemonBlue_Player_Spritesheet.png");
 
 	sprite = new SpriteRenderer(camera);
 	sprite->setProgram(texturedShaderProgram);
@@ -113,7 +115,12 @@ void initGame()
 	sprite->setPosition(glm::vec3(0.0f, 0.0f, 0.0f));
 	sprite->setScale(glm::vec3(1.0f));
 
-	
+	sprite2 = new SpriteRenderer(camera);
+	sprite2->setProgram(texturedShaderProgram);
+	sprite2->setTexture(meshTexture);
+	sprite2->setPosition(glm::vec3(-1.0f, 0.0f, 0.0f));
+	sprite2->setScale(glm::vec3(0.5f));
+
 }
 
 // -- Window and OpenGL initialization
@@ -169,6 +176,7 @@ void RenderUpdate()
 	
 	//mesh->draw();
 	sprite->draw();
+	sprite2->draw();
 }
 
 // -----------------------------------

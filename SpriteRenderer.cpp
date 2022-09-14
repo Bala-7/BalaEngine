@@ -47,13 +47,13 @@ void SpriteRenderer::setQuadData(std::vector<Vertex>& vertices, std::vector<uint
 			{ 0.5f, -0.5f, 0.0f },
 			{ 0.0f, 0.0f, 1.0 },
 			{ 0.0f, 1.0f, 0.0 },
-			{ 1.0, 0.0 }
+			{ 0.1, 0.0 }
 		}, // 1
 		{
 			{ 0.5f, 0.5f, 0.0f },
 			{ 0.0f, 0.0f, 1.0 },
 			{ 0.0f, 0.0f, 1.0 },
-			{ 1.0, 1.0 }
+			{ 0.1, 1.0 }
 		}, // 2
 		{
 			{ -0.5f, 0.5f, 0.0f },
@@ -91,7 +91,28 @@ void SpriteRenderer::draw()
 
 	// Bind the texture object
 	glBindTexture(GL_TEXTURE_2D, texture);
+	/*int spriteWidth = 16;
+	int spriteHeight = 16;
+	int texWidth = 160;
+	int texHeight = 16;
+	int tex;
 
+	const float tw = float(spriteWidth) / texWidth;
+	const float th = float(spriteHeight) / texHeight;
+
+	const int numPerRow = texWidth / spriteWidth;
+
+	const float tx = (frameIndex % numPerRow) * tw;
+	const float ty = (frameIndex / numPerRow + 1) * th;
+
+	const float texVertices[] =
+	{
+		tx, ty,
+		tx + tw, ty,
+		tx + tw, ty + th,
+		tx, ty + th
+	};*/
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 	// Bind the VAO and draw object
 	glBindVertexArray(vao);
 	glDrawElements(GL_TRIANGLES, indices.size(), GL_UNSIGNED_INT, 0);
