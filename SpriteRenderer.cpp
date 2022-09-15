@@ -34,6 +34,10 @@ SpriteRenderer::SpriteRenderer(Camera* _camera)
 	glBindVertexArray(0);
 }
 
+SpriteRenderer::~SpriteRenderer()
+{
+}
+
 void SpriteRenderer::setQuadData(std::vector<Vertex>& vertices, std::vector<uint32_t>& indices)
 {
 	std::vector<Vertex> _vertices = {
