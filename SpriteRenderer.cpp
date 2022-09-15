@@ -91,27 +91,7 @@ void SpriteRenderer::draw()
 
 	// Bind the texture object
 	glBindTexture(GL_TEXTURE_2D, texture);
-	/*int spriteWidth = 16;
-	int spriteHeight = 16;
-	int texWidth = 160;
-	int texHeight = 16;
-	int tex;
-
-	const float tw = float(spriteWidth) / texWidth;
-	const float th = float(spriteHeight) / texHeight;
-
-	const int numPerRow = texWidth / spriteWidth;
-
-	const float tx = (frameIndex % numPerRow) * tw;
-	const float ty = (frameIndex / numPerRow + 1) * th;
-
-	const float texVertices[] =
-	{
-		tx, ty,
-		tx + tw, ty,
-		tx + tw, ty + th,
-		tx, ty + th
-	};*/
+	
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 	// Bind the VAO and draw object
 	glBindVertexArray(vao);
@@ -127,6 +107,15 @@ void SpriteRenderer::setTexture(GLuint textureID)
 	texture = textureID;
 }
 
+void SpriteRenderer::setSpriteSheet(GLuint _textureID, int _spriteWidth, int _spriteHeight, int _sheetCountWidth, int _sheetCountHeight)
+{
+	texture = _textureID;
+	spriteWidth = _spriteWidth;
+	spriteHeight = _spriteHeight;
+	sheetCountWidth = _sheetCountWidth;
+	sheetCountHeight = _sheetCountHeight;
+}
+
 void SpriteRenderer::setScale(glm::vec3 _scale)
 {
 	this->scale = _scale;
@@ -140,4 +129,24 @@ void SpriteRenderer::setPosition(glm::vec3 _position)
 void SpriteRenderer::setProgram(GLuint _program)
 {
 	this->program = _program;
+}
+
+void SpriteRenderer::setSprite(int index)
+{
+	int cellX = (index % sheetCountWidth);
+	int cellY = (index / sheetCountWidth);
+
+	float texX = (float) cellX / sheetCountWidth;
+	float texY = (float) cellY / sheetCountHeight;
+
+	float dX = 1.0f / sheetCountWidth;
+	float dY = 1.0f / sheetCountHeight;
+
+	vertices[0].texCoords = { texX, texY};
+	vertices[1].texCoords = { texX + dX, texY };
+	vertices[2].texCoords = { texX + dX, texY + dY };
+	vertices[3].texCoords = { texX, texY + dY };
+
+	glBindBuffer(GL_ARRAY_BUFFER, vbo);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(Vertex) * vertices.size(), &vertices[0], GL_STATIC_DRAW);
 }

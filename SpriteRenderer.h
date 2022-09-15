@@ -20,6 +20,8 @@ public:
 	void setScale(glm::vec3 _scale);
 	void setProgram(GLuint _program);
 	void setTexture(GLuint _textureID);
+	void setSprite(int index);
+	void setSpriteSheet(GLuint _textureID, int spriteWidth, int spriteHeight, int sheetCountWidth, int sheetCountHeight);
 
 private:
 	std::vector<Vertex>vertices;
@@ -28,5 +30,8 @@ private:
 	Camera* camera;
 	glm::vec3 position, scale;
 	GLuint vao, vbo, ebo, texture, program;
+
+	int spriteWidth, spriteHeight;
+	int sheetCountWidth, sheetCountHeight;	// Number of horizontal and vertical sprites
 };
 
