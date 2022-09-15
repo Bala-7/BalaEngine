@@ -15,7 +15,7 @@ GLuint TextureLoader::getTextureID(std::string texFileName)
 	int width, height, channels;
 
 	stbi_set_flip_vertically_on_load(true);
-	stbi_uc* image = stbi_load(texFileName.c_str(), &width, &height, &channels, STBI_rgb);
+	stbi_uc* image = stbi_load(texFileName.c_str(), &width, &height, &channels, STBI_rgb_alpha);
 
 	// Generate and bind the texture
 	GLuint mtexture;
@@ -27,11 +27,11 @@ GLuint TextureLoader::getTextureID(std::string texFileName)
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
 
 	// Set texture filtering
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST_MIPMAP_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 
 	// Create the texture
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, image);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, image);
 
 	// Generate mipmap
 	glGenerateMipmap(GL_TEXTURE_2D);

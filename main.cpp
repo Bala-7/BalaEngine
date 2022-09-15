@@ -72,6 +72,8 @@ void initGame()
 {
 	// Enable Depth Test, so only pixels in the front are drawn
 	glEnable(GL_DEPTH_TEST);
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
 	// Create the ShaderLoader class, and creates shader programs, passing the vertex and fragment shaders to them
 	/*ShaderLoader shaderLoader;
