@@ -1,6 +1,6 @@
 #include "TextureLoader.h"
 #define STB_IMAGE_IMPLEMENTATION
-#include "Dependencies/stb-master/stb_image.h"
+#include "stb_image.h"
 
 TextureLoader::TextureLoader() 
 {

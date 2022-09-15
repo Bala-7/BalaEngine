@@ -1,5 +1,5 @@
 #include "SpriteRenderer.h"
-#include "Dependencies/glm/glm/glm.hpp"
+#include "glm/glm.hpp"
 
 SpriteRenderer::SpriteRenderer(Camera* _camera)
 {

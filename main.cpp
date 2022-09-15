@@ -5,14 +5,13 @@
 //#include <GLFW/glfw3.h>
 
 #include <iostream>
-#include "ShaderLoader.h"
-#include "Camera.h"
-#include "LightRenderer.h"
-#include "TextureLoader.h"
-#include "MeshRenderer.h"
-#include "SpriteRenderer.h"
-#include "RenderEngine.h"
-
+#include "Code/Engine/Rendering/ShaderLoader.h"
+#include "Code/Engine/Rendering/Camera.h"
+#include "Code/Engine/Rendering/LightRenderer.h"
+#include "Code/Engine/Rendering/TextureLoader.h"
+#include "Code/Engine/Rendering/MeshRenderer.h"
+#include "Code/Engine/Rendering/SpriteRenderer.h"
+#include "Code/Engine/Rendering/RenderEngine.h"
 
 void key_callback(GLFWwindow* window, int key, int scancode, int action, int mode);
 

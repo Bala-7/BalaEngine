@@ -1,9 +1,8 @@
 #pragma once
 
 #include <GL/glew.h>
-#include "Dependencies/glm/glm/glm.hpp"
-#include "Dependencies/glm/glm/gtc/matrix_transform.hpp"
-
+#include "glm/glm.hpp"
+#include "glm/gtc/matrix_transform.hpp"
 
 class Camera
 {

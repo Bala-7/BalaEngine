@@ -1,6 +1,6 @@
 #pragma once
 #include <vector>
-#include "Dependencies/glm/glm/glm.hpp"
+#include "glm/glm.hpp"
 
 enum MeshType {
 	kTriangle = 0,

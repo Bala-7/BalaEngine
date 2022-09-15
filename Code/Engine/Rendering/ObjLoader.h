@@ -1,7 +1,7 @@
 #pragma once
 #include <vector>
 #include <GL/glew.h>
-#include "Dependencies/glm/glm/glm.hpp"
+#include "glm/glm.hpp"
 
 class ObjLoader
 {

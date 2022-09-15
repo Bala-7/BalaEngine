@@ -13,66 +13,78 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="Archivos de encabezado\Engine">
+      <UniqueIdentifier>{7804258f-5b48-4125-9bd5-5e897aec6a44}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Archivos de encabezado\Engine\Rendering">
+      <UniqueIdentifier>{6e1240e2-7473-4ba5-86f5-a4d40ecafcfc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Archivos de origen\Engine">
+      <UniqueIdentifier>{8074f622-3589-4187-8c79-b65fb4b1250d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Archivos de origen\Engine\Rendering">
+      <UniqueIdentifier>{18eceede-0a3c-4983-b39f-308db8eef077}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
       <Filter>Archivos de origen</Filter>
     </ClCompile>
-    <ClCompile Include="Mesh.cpp">
-      <Filter>Archivos de origen</Filter>
+    <ClCompile Include="Code\Engine\Rendering\Camera.cpp">
+      <Filter>Archivos de origen\Engine\Rendering</Filter>
     </ClCompile>
-    <ClCompile Include="Camera.cpp">
-      <Filter>Archivos de origen</Filter>
+    <ClCompile Include="Code\Engine\Rendering\LightRenderer.cpp">
+      <Filter>Archivos de origen\Engine\Rendering</Filter>
     </ClCompile>
-    <ClCompile Include="ShaderLoader.cpp">
-      <Filter>Archivos de origen</Filter>
+    <ClCompile Include="Code\Engine\Rendering\Mesh.cpp">
+      <Filter>Archivos de origen\Engine\Rendering</Filter>
     </ClCompile>
-    <ClCompile Include="LightRenderer.cpp">
-      <Filter>Archivos de origen</Filter>
+    <ClCompile Include="Code\Engine\Rendering\MeshRenderer.cpp">
+      <Filter>Archivos de origen\Engine\Rendering</Filter>
     </ClCompile>
-    <ClCompile Include="MeshRenderer.cpp">
-      <Filter>Archivos de origen</Filter>
+    <ClCompile Include="Code\Engine\Rendering\ObjLoader.cpp">
+      <Filter>Archivos de origen\Engine\Rendering</Filter>
     </ClCompile>
-    <ClCompile Include="TextureLoader.cpp">
-      <Filter>Archivos de origen</Filter>
+    <ClCompile Include="Code\Engine\Rendering\RenderEngine.cpp">
+      <Filter>Archivos de origen\Engine\Rendering</Filter>
     </ClCompile>
-    <ClCompile Include="ObjLoader.cpp">
-      <Filter>Archivos de origen</Filter>
+    <ClCompile Include="Code\Engine\Rendering\ShaderLoader.cpp">
+      <Filter>Archivos de origen\Engine\Rendering</Filter>
     </ClCompile>
-    <ClCompile Include="SpriteRenderer.cpp">
-      <Filter>Archivos de origen</Filter>
+    <ClCompile Include="Code\Engine\Rendering\SpriteRenderer.cpp">
+      <Filter>Archivos de origen\Engine\Rendering</Filter>
     </ClCompile>
-    <ClCompile Include="RenderEngine.cpp">
-      <Filter>Archivos de origen</Filter>
+    <ClCompile Include="Code\Engine\Rendering\TextureLoader.cpp">
+      <Filter>Archivos de origen\Engine\Rendering</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Mesh.h">
-      <Filter>Archivos de encabezado</Filter>
+    <ClInclude Include="Code\Engine\Rendering\Camera.h">
+      <Filter>Archivos de encabezado\Engine\Rendering</Filter>
     </ClInclude>
-    <ClInclude Include="Camera.h">
-      <Filter>Archivos de encabezado</Filter>
+    <ClInclude Include="Code\Engine\Rendering\LightRenderer.h">
+      <Filter>Archivos de encabezado\Engine\Rendering</Filter>
     </ClInclude>
-    <ClInclude Include="ShaderLoader.h">
-      <Filter>Archivos de encabezado</Filter>
+    <ClInclude Include="Code\Engine\Rendering\Mesh.h">
+      <Filter>Archivos de encabezado\Engine\Rendering</Filter>
     </ClInclude>
-    <ClInclude Include="LightRenderer.h">
-      <Filter>Archivos de encabezado</Filter>
+    <ClInclude Include="Code\Engine\Rendering\MeshRenderer.h">
+      <Filter>Archivos de encabezado\Engine\Rendering</Filter>
     </ClInclude>
-    <ClInclude Include="MeshRenderer.h">
-      <Filter>Archivos de encabezado</Filter>
+    <ClInclude Include="Code\Engine\Rendering\ObjLoader.h">
+      <Filter>Archivos de encabezado\Engine\Rendering</Filter>
     </ClInclude>
-    <ClInclude Include="TextureLoader.h">
-      <Filter>Archivos de encabezado</Filter>
+    <ClInclude Include="Code\Engine\Rendering\RenderEngine.h">
+      <Filter>Archivos de encabezado\Engine\Rendering</Filter>
     </ClInclude>
-    <ClInclude Include="ObjLoader.h">
-      <Filter>Archivos de encabezado</Filter>
+    <ClInclude Include="Code\Engine\Rendering\ShaderLoader.h">
+      <Filter>Archivos de encabezado\Engine\Rendering</Filter>
     </ClInclude>
-    <ClInclude Include="SpriteRenderer.h">
-      <Filter>Archivos de encabezado</Filter>
+    <ClInclude Include="Code\Engine\Rendering\SpriteRenderer.h">
+      <Filter>Archivos de encabezado\Engine\Rendering</Filter>
     </ClInclude>
-    <ClInclude Include="RenderEngine.h">
-      <Filter>Archivos de encabezado</Filter>
+    <ClInclude Include="Code\Engine\Rendering\TextureLoader.h">
+      <Filter>Archivos de encabezado\Engine\Rendering</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

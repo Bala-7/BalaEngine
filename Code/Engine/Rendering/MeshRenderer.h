@@ -3,9 +3,9 @@
 #include "Camera.h"
 #include "LightRenderer.h"
 #include <GL/glew.h>
-#include "Dependencies/glm/glm/glm.hpp"
-#include "Dependencies/glm/glm/gtc/matrix_transform.hpp"
-#include "Dependencies/glm/glm/gtc/type_ptr.hpp"
+#include "glm/glm.hpp"
+#include "glm/gtc/matrix_transform.hpp"
+#include "glm/gtc/type_ptr.hpp"
 
 class MeshRenderer
 {

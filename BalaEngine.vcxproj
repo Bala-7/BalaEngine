@@ -19,27 +19,27 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Camera.cpp" />
-    <ClCompile Include="LightRenderer.cpp" />
+    <ClCompile Include="Code\Engine\Rendering\Camera.cpp" />
+    <ClCompile Include="Code\Engine\Rendering\LightRenderer.cpp" />
+    <ClCompile Include="Code\Engine\Rendering\Mesh.cpp" />
+    <ClCompile Include="Code\Engine\Rendering\MeshRenderer.cpp" />
+    <ClCompile Include="Code\Engine\Rendering\ObjLoader.cpp" />
+    <ClCompile Include="Code\Engine\Rendering\RenderEngine.cpp" />
+    <ClCompile Include="Code\Engine\Rendering\ShaderLoader.cpp" />
+    <ClCompile Include="Code\Engine\Rendering\SpriteRenderer.cpp" />
+    <ClCompile Include="Code\Engine\Rendering\TextureLoader.cpp" />
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="Mesh.cpp" />
-    <ClCompile Include="MeshRenderer.cpp" />
-    <ClCompile Include="ObjLoader.cpp" />
-    <ClCompile Include="RenderEngine.cpp" />
-    <ClCompile Include="ShaderLoader.cpp" />
-    <ClCompile Include="SpriteRenderer.cpp" />
-    <ClCompile Include="TextureLoader.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Camera.h" />
-    <ClInclude Include="LightRenderer.h" />
-    <ClInclude Include="Mesh.h" />
-    <ClInclude Include="MeshRenderer.h" />
-    <ClInclude Include="ObjLoader.h" />
-    <ClInclude Include="RenderEngine.h" />
-    <ClInclude Include="ShaderLoader.h" />
-    <ClInclude Include="SpriteRenderer.h" />
-    <ClInclude Include="TextureLoader.h" />
+    <ClInclude Include="Code\Engine\Rendering\Camera.h" />
+    <ClInclude Include="Code\Engine\Rendering\LightRenderer.h" />
+    <ClInclude Include="Code\Engine\Rendering\Mesh.h" />
+    <ClInclude Include="Code\Engine\Rendering\MeshRenderer.h" />
+    <ClInclude Include="Code\Engine\Rendering\ObjLoader.h" />
+    <ClInclude Include="Code\Engine\Rendering\RenderEngine.h" />
+    <ClInclude Include="Code\Engine\Rendering\ShaderLoader.h" />
+    <ClInclude Include="Code\Engine\Rendering\SpriteRenderer.h" />
+    <ClInclude Include="Code\Engine\Rendering\TextureLoader.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
@@ -110,7 +110,7 @@
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(ProjectDir)Dependencies\glew-2.1.0\include;$(ProjectDir)Dependencies\glfw-3.3.2.bin.WIN64\include; $(ProjectDir)Dependencies\stb-master;$(ProjectDir)Dependencies\bullet\include;$(ProjectDir)Dependencies\freetype\include;$(ProjectDir)Dependencies\irrKlang-64bit-1.6.0\include;$(ProjectDir)Dependencies\assimp\include;</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)Dependencies\glew-2.1.0\include;$(ProjectDir)Dependencies\glfw-3.3.2.bin.WIN64\include;$(ProjectDir)Dependencies\stb-master;$(ProjectDir)Dependencies\bullet\include;$(ProjectDir)Dependencies\freetype\include;$(ProjectDir)Dependencies\irrKlang-64bit-1.6.0\include;$(ProjectDir)Dependencies\assimp\include;$(ProjectDir)Dependencies\glm</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>_MBCS;%(PreprocessorDefinitions);_CRT_SECURE_NO_WARNINGS</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
     </ClCompile>
