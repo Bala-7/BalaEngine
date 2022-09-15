@@ -6,14 +6,16 @@
 #include "glm/glm.hpp"
 #include "glm/gtc/matrix_transform.hpp"
 #include "glm/gtc/type_ptr.hpp"
+#include "Engine/Core/Component.h"
 
-class SpriteRenderer
+class SpriteRenderer : public Component
 {
 public:
 	SpriteRenderer(Camera* _camera);
 	~SpriteRenderer();
 	
-	void setQuadData(std::vector<Vertex>& vertices, std::vector<uint32_t>& indices);
+	void Update() override;
+	
 
 	void draw();
 	void setPosition(glm::vec3 _position);
@@ -24,6 +26,8 @@ public:
 	void setSpriteSheet(GLuint _textureID, int spriteWidth, int spriteHeight, int sheetCountWidth, int sheetCountHeight);
 
 private:
+	void setQuadData(std::vector<Vertex>& vertices, std::vector<uint32_t>& indices);
+
 	std::vector<Vertex>vertices;
 	std::vector<GLuint>indices;
 	glm::mat4 modelMatrix;

@@ -25,6 +25,12 @@
     <Filter Include="Archivos de origen\Engine\Rendering">
       <UniqueIdentifier>{18eceede-0a3c-4983-b39f-308db8eef077}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Archivos de encabezado\Engine\Core">
+      <UniqueIdentifier>{c135dbfe-1651-4f4e-af9a-8764c6cfa7a0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Archivos de origen\Engine\Core">
+      <UniqueIdentifier>{7b213300-02a6-49e6-bd2e-0f68dcc2bc70}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -57,6 +63,15 @@
     <ClCompile Include="Code\Engine\Rendering\TextureLoader.cpp">
       <Filter>Archivos de origen\Engine\Rendering</Filter>
     </ClCompile>
+    <ClCompile Include="Code\Engine\Core\Component.cpp">
+      <Filter>Archivos de origen\Engine\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="Code\Engine\Core\GameObject.cpp">
+      <Filter>Archivos de origen\Engine\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="Code\Engine\Core\Transform.cpp">
+      <Filter>Archivos de origen\Engine\Core</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Code\Engine\Rendering\Camera.h">
@@ -85,6 +100,15 @@
     </ClInclude>
     <ClInclude Include="Code\Engine\Rendering\TextureLoader.h">
       <Filter>Archivos de encabezado\Engine\Rendering</Filter>
+    </ClInclude>
+    <ClInclude Include="Code\Engine\Core\Component.h">
+      <Filter>Archivos de encabezado\Engine\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Code\Engine\Core\GameObject.h">
+      <Filter>Archivos de encabezado\Engine\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Code\Engine\Core\Transform.h">
+      <Filter>Archivos de encabezado\Engine\Core</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

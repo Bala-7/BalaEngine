@@ -12,6 +12,8 @@
 #include "MeshRenderer.h"
 #include "SpriteRenderer.h"
 
+#include "Engine/Core/GameObject.h"
+
 class RenderEngine
 {
 public:
@@ -44,5 +46,8 @@ private:
 	MeshRenderer* mesh;
 	SpriteRenderer* sprite;
 	SpriteRenderer* sprite2;
+	GameObject* go;
+	GameObject* go2;
+	
 };
 

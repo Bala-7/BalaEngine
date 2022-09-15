@@ -19,6 +19,9 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Code\Engine\Core\Component.cpp" />
+    <ClCompile Include="Code\Engine\Core\GameObject.cpp" />
+    <ClCompile Include="Code\Engine\Core\Transform.cpp" />
     <ClCompile Include="Code\Engine\Rendering\Camera.cpp" />
     <ClCompile Include="Code\Engine\Rendering\LightRenderer.cpp" />
     <ClCompile Include="Code\Engine\Rendering\Mesh.cpp" />
@@ -31,6 +34,9 @@
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Code\Engine\Core\Component.h" />
+    <ClInclude Include="Code\Engine\Core\GameObject.h" />
+    <ClInclude Include="Code\Engine\Core\Transform.h" />
     <ClInclude Include="Code\Engine\Rendering\Camera.h" />
     <ClInclude Include="Code\Engine\Rendering\LightRenderer.h" />
     <ClInclude Include="Code\Engine\Rendering\Mesh.h" />
@@ -110,7 +116,7 @@
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(ProjectDir)Dependencies\glew-2.1.0\include;$(ProjectDir)Dependencies\glfw-3.3.2.bin.WIN64\include;$(ProjectDir)Dependencies\stb-master;$(ProjectDir)Dependencies\bullet\include;$(ProjectDir)Dependencies\freetype\include;$(ProjectDir)Dependencies\irrKlang-64bit-1.6.0\include;$(ProjectDir)Dependencies\assimp\include;$(ProjectDir)Dependencies\glm</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)Dependencies\glew-2.1.0\include;$(ProjectDir)Dependencies\glfw-3.3.2.bin.WIN64\include;$(ProjectDir)Dependencies\stb-master;$(ProjectDir)Dependencies\bullet\include;$(ProjectDir)Dependencies\freetype\include;$(ProjectDir)Dependencies\irrKlang-64bit-1.6.0\include;$(ProjectDir)Dependencies\assimp\include;$(ProjectDir)Dependencies\glm;$(ProjectDir)Code\</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>_MBCS;%(PreprocessorDefinitions);_CRT_SECURE_NO_WARNINGS</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
     </ClCompile>
