@@ -1,4 +1,2 @@
-﻿  SpriteRenderer.cpp
-C:\Users\fdomi\source\repos\BalaEngine\BalaEngine\Code\Engine\Rendering\LightRenderer.h(7,10): warning C4067: unexpected tokens following preprocessor directive - expected a newline
-C:\Users\fdomi\source\repos\BalaEngine\BalaEngine\Code\Engine\Rendering\SpriteRenderer.cpp(107,65): warning C4267: 'argument': conversion from 'size_t' to 'GLsizei', possible loss of data
+﻿  main.cpp
   BalaEngine.vcxproj -> C:\Users\fdomi\source\repos\BalaEngine\x64\Debug\BalaEngine.exe

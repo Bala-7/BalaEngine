@@ -5,10 +5,15 @@
 class Transform : public Component
 {
 public:
+	glm::vec3 position, scale;
+
 	Transform();
 	Transform(glm::vec3 _position, glm::vec3 scale);
 
+	void OnComponentAdded() override;
+
+	
 private:
-	glm::vec3 position, scale;
+	
 };
 

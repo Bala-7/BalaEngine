@@ -1,12 +1,14 @@
 #include "SpriteRenderer.h"
 #include "glm/glm.hpp"
+#include "RenderEngine.h"
 
-SpriteRenderer::SpriteRenderer(Camera* _camera)
+SpriteRenderer::SpriteRenderer()
 {
-	camera = _camera;
+	camera = RenderEngine::GetInstance()->GetCamera();
+
 	scale = glm::vec3(1.0f, 1.0f, 1.0f);
 	position = glm::vec3(0.0, 0.0, 0.0);
-
+	
 	setQuadData(vertices, indices);
 
 	// Generate and bind VAO, VBO and EBO
@@ -32,6 +34,7 @@ SpriteRenderer::SpriteRenderer(Camera* _camera)
 	// Unbind Buffers and vertexArray
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 	glBindVertexArray(0);
+	
 }
 
 SpriteRenderer::~SpriteRenderer()
@@ -41,6 +44,13 @@ SpriteRenderer::~SpriteRenderer()
 void SpriteRenderer::Update()
 {
 	draw();
+}
+
+void SpriteRenderer::OnComponentAdded()
+{
+	RenderEngine::GetInstance()->AddSpriteToRenderList(this);
+	setPosition(gameObject->transform->position);
+	setScale(gameObject->transform->scale);
 }
 
 void SpriteRenderer::setQuadData(std::vector<Vertex>& vertices, std::vector<uint32_t>& indices)
@@ -82,6 +92,10 @@ void SpriteRenderer::setQuadData(std::vector<Vertex>& vertices, std::vector<uint
 
 void SpriteRenderer::draw()
 {
+	// Get position and scale from Transform component
+	setPosition(gameObject->transform->position);
+	setScale(gameObject->transform->scale);
+
 	// Set the model matrix
 	glm::mat4 translationMatrix = glm::translate(glm::mat4(1.0f), position);
 	glm::mat4 scaleMatrix = glm::scale(glm::mat4(1.0f), scale);
@@ -116,13 +130,16 @@ void SpriteRenderer::setTexture(GLuint textureID)
 	texture = textureID;
 }
 
-void SpriteRenderer::setSpriteSheet(GLuint _textureID, int _spriteWidth, int _spriteHeight, int _sheetCountWidth, int _sheetCountHeight)
+void SpriteRenderer::setSpriteSheet(const char* fileName, int _spriteWidth, int _spriteHeight, int _sheetCountWidth, int _sheetCountHeight)
 {
-	texture = _textureID;
+
+	texture = RenderEngine::GetInstance()->GetTextureID(fileName);
+	program = RenderEngine::GetInstance()->GetShaderProgram();
 	spriteWidth = _spriteWidth;
 	spriteHeight = _spriteHeight;
 	sheetCountWidth = _sheetCountWidth;
 	sheetCountHeight = _sheetCountHeight;
+	
 }
 
 void SpriteRenderer::setScale(glm::vec3 _scale)

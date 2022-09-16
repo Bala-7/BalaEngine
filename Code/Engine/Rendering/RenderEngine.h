@@ -1,22 +1,33 @@
 #pragma once
+#ifndef RENDERENGINE_H
+#define RENDERENGINE_H
+
 #define GLEW_STATIC
 #include<GL/glew.h>
 // GLFW
 #include <GLFW/glfw3.h>
 
 #include <iostream>
+#include <list>
+#include "Mesh.h"
 #include "ShaderLoader.h"
 #include "Camera.h"
-#include "LightRenderer.h"
 #include "TextureLoader.h"
-#include "MeshRenderer.h"
 #include "SpriteRenderer.h"
-
 #include "Engine/Core/GameObject.h"
+
 
 class RenderEngine
 {
 public:
+	static RenderEngine* GetInstance() { 
+		if (!p_Instance)
+		{
+			p_Instance = new RenderEngine();
+		}
+		return p_Instance; 
+	};
+
 	RenderEngine();
 	~RenderEngine();
 
@@ -26,8 +37,14 @@ public:
 
 	bool ShouldClose();
 	GLFWwindow* GetWindow();
+	Camera* GetCamera();
+	GLuint GetTextureID(const char* fileName);
+	GLuint GetShaderProgram();
+	void AddSpriteToRenderList(SpriteRenderer* spriteRenderer);
 
 private:
+	static RenderEngine* p_Instance;
+
 	void InitGLFW();
 	void InitGLEW();
 	void InitGame();
@@ -42,12 +59,18 @@ private:
 	GLFWwindow* window;
 
 	Camera* camera;
-	LightRenderer* light;
-	MeshRenderer* mesh;
-	SpriteRenderer* sprite;
+	//MeshRenderer* mesh;
+	/*SpriteRenderer* sprite;
 	SpriteRenderer* sprite2;
 	GameObject* go;
-	GameObject* go2;
+	GameObject* go2;*/
 	
+	const char* TEXTURES_PATH = "Assets/Textures/";
+	TextureLoader textureLoader;
+	ShaderLoader shaderLoader;
+	GLuint shaderProgram;
+	std::list<SpriteRenderer*> spritesRenderList;
+
 };
 
+#endif

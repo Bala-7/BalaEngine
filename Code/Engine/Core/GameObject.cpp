@@ -13,6 +13,8 @@ GameObject::~GameObject()
 void GameObject::AddComponent(Component* newComponent)
 {
 	components.push_back(newComponent);
+	newComponent->SetGameObject(this);
+	newComponent->OnComponentAdded();
 }
 
 void GameObject::Update()

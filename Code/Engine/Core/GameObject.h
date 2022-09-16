@@ -1,7 +1,7 @@
 #pragma once
 #include <list>
-#include "Component.h"
-#include "Transform.h"
+#include "Engine/Core/Component.h"
+#include "Engine/Core/Transform.h"
 
 class GameObject
 {
@@ -12,8 +12,9 @@ public:
 	void AddComponent(Component* newComponent);
 	void Update();
 
-protected:
 	Transform* transform;
+protected:
+	
 
 private:
 	std::list<Component*> components;

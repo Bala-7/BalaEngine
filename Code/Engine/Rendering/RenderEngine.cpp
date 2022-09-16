@@ -2,7 +2,10 @@
 
 RenderEngine::RenderEngine()
 {
+	p_Instance = this;
 }
+
+RenderEngine* RenderEngine::p_Instance;
 
 RenderEngine::~RenderEngine()
 {
@@ -28,8 +31,13 @@ void RenderEngine::Update()
 	//sprite->draw();
 	//sprite2->draw();
 
-	go->Update();
-	go2->Update();
+	for (auto const& sprite : spritesRenderList)
+	{
+		sprite->Update();
+	}
+
+	//go->Update();
+	//go2->Update();
 }
 
 void RenderEngine::Terminate()
@@ -37,9 +45,8 @@ void RenderEngine::Terminate()
 	glfwTerminate();
 
 	delete camera;
-	delete light;
-	delete sprite;
-	delete sprite2;
+	
+	
 }
 
 bool RenderEngine::ShouldClose()
@@ -50,6 +57,30 @@ bool RenderEngine::ShouldClose()
 GLFWwindow* RenderEngine::GetWindow()
 {
 	return window;
+}
+
+Camera* RenderEngine::GetCamera()
+{
+	return camera;
+}
+
+
+
+GLuint RenderEngine::GetTextureID(const char* fileName)
+{
+	char* s = new char[strlen(TEXTURES_PATH) + strlen(fileName)];
+	strcpy(s, TEXTURES_PATH); strcat(s, fileName);
+	return textureLoader.getTextureID(s);
+}
+
+GLuint RenderEngine::GetShaderProgram()
+{
+	return shaderProgram;
+}
+
+void RenderEngine::AddSpriteToRenderList(SpriteRenderer* spriteRenderer)
+{
+	spritesRenderList.push_back(spriteRenderer);
 }
 
 void RenderEngine::InitGLFW()
@@ -84,26 +115,22 @@ void RenderEngine::InitGame()
 	camera = new Camera(45.0f, WINDOW_SIZE_X, WINDOW_SIZE_Y, 0.1f, 100.0f, glm::vec3(0.0f, 0.0f, 6.0f));
 	glm::mat4 projection = glm::ortho(0.0f, (float) WINDOW_SIZE_X, (float) WINDOW_SIZE_Y, 0.0f, -1.0f, 1.0f);
 	ShaderLoader shaderLoader;
-	GLuint texturedShaderProgram = shaderLoader.createProgram("Assets/Shaders/TexturedModel.vs", "Assets/Shaders/TexturedModel.fs");
+	shaderProgram = shaderLoader.createProgram(VERTEX_SHADER_PATH, FRAGMENT_SHADER_PATH);
 
 	// Load textures
 	TextureLoader textureLoader;
-	GLuint rpgCharacterSpritesheet = textureLoader.getTextureID("Assets/Textures/Character.png");
-	GLuint pokemonSpritesheet = textureLoader.getTextureID("Assets/Textures/PokemonBlue_Player_Spritesheet.png");
-
+	
 	
 
-	sprite = new SpriteRenderer(camera);
-	sprite->setProgram(texturedShaderProgram);
-	sprite->setSpriteSheet(rpgCharacterSpritesheet, 32, 32, 3, 4);
+	/*sprite = new SpriteRenderer();
+	sprite->setProgram(shaderProgram);
+	sprite->setSpriteSheet("Character.png", 32, 32, 3, 4);
 	sprite->setSprite(10);
-	sprite->setPosition(glm::vec3(0.0f, 0.0f, 0.0f));
-	sprite->setScale(glm::vec3(1.0f));
 
-	sprite2 = new SpriteRenderer(camera);
-	sprite2->setProgram(texturedShaderProgram);
+	sprite2 = new SpriteRenderer();
+	sprite2->setProgram(shaderProgram);
 	//sprite2->setTexture(meshTexture);
-	sprite2->setSpriteSheet(pokemonSpritesheet, 16, 16, 10, 1);
+	sprite2->setSpriteSheet("PokemonBlue_Player_Spritesheet.png", 16, 16, 10, 1);
 	sprite2->setSprite(1);
 	sprite2->setPosition(glm::vec3(-1.0f, 0.0f, 0.0f));
 	sprite2->setScale(glm::vec3(1.0f));
@@ -112,7 +139,7 @@ void RenderEngine::InitGame()
 	go->AddComponent(sprite);
 
 	go2 = new GameObject();
-	go2->AddComponent(sprite2);
+	go2->AddComponent(sprite2);*/
 }
 
 GLFWwindow* RenderEngine::CreateWindow()

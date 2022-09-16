@@ -11,3 +11,8 @@ Transform::Transform(glm::vec3 _position, glm::vec3 _scale)
 	position = _position;
 	scale = _scale;
 }
+
+void Transform::OnComponentAdded()
+{
+	
+}
