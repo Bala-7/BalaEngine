@@ -72,6 +72,9 @@
     <ClCompile Include="Code\Engine\Core\Transform.cpp">
       <Filter>Archivos de origen\Engine\Core</Filter>
     </ClCompile>
+    <ClCompile Include="Code\Engine\Rendering\SpriteLayer.cpp">
+      <Filter>Archivos de origen\Engine\Rendering</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Code\Engine\Rendering\Camera.h">
@@ -109,6 +112,9 @@
     </ClInclude>
     <ClInclude Include="Code\Engine\Core\Transform.h">
       <Filter>Archivos de encabezado\Engine\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Code\Engine\Rendering\SpriteLayer.h">
+      <Filter>Archivos de encabezado\Engine\Rendering</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

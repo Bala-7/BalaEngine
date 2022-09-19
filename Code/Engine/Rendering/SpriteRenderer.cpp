@@ -8,7 +8,8 @@ SpriteRenderer::SpriteRenderer()
 
 	scale = glm::vec3(1.0f, 1.0f, 1.0f);
 	position = glm::vec3(0.0, 0.0, 0.0);
-	
+	layer = 0;
+
 	setQuadData(vertices, indices);
 
 	// Generate and bind VAO, VBO and EBO
@@ -140,6 +141,16 @@ void SpriteRenderer::setSpriteSheet(const char* fileName, int _spriteWidth, int 
 	sheetCountWidth = _sheetCountWidth;
 	sheetCountHeight = _sheetCountHeight;
 	
+}
+
+void SpriteRenderer::setLayer(int newLayer)
+{
+	this->layer = newLayer;
+}
+
+int SpriteRenderer::GetLayer()
+{
+	return layer;
 }
 
 void SpriteRenderer::setScale(glm::vec3 _scale)

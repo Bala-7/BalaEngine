@@ -3,6 +3,12 @@
 RenderEngine::RenderEngine()
 {
 	p_Instance = this;
+
+	for (int i = 0; i < LAYER_MAX; ++i)
+	{
+		SpriteLayer* newLayer = new SpriteLayer();
+		layerList.push_back(newLayer);
+	}
 }
 
 RenderEngine* RenderEngine::p_Instance;
@@ -31,10 +37,11 @@ void RenderEngine::Update()
 	//sprite->draw();
 	//sprite2->draw();
 
-	for (auto const& sprite : spritesRenderList)
+	for (int i = LAYER_MAX - 1; i >= 0; --i)
 	{
-		sprite->Update();
+		layerList[i]->Update();
 	}
+	
 
 	//go->Update();
 	//go2->Update();
@@ -80,7 +87,8 @@ GLuint RenderEngine::GetShaderProgram()
 
 void RenderEngine::AddSpriteToRenderList(SpriteRenderer* spriteRenderer)
 {
-	spritesRenderList.push_back(spriteRenderer);
+	layerList[spriteRenderer->GetLayer()]->GetRenderList()->push_back(spriteRenderer);
+	//spritesRenderList.push_back(spriteRenderer);
 }
 
 void RenderEngine::InitGLFW()

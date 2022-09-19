@@ -8,14 +8,14 @@
 #include <GLFW/glfw3.h>
 
 #include <iostream>
-#include <list>
+#include <vector>
 #include "Mesh.h"
 #include "ShaderLoader.h"
 #include "Camera.h"
 #include "TextureLoader.h"
 #include "SpriteRenderer.h"
 #include "Engine/Core/GameObject.h"
-
+#include "Engine/Rendering/SpriteLayer.h"
 
 class RenderEngine
 {
@@ -43,6 +43,7 @@ public:
 	void AddSpriteToRenderList(SpriteRenderer* spriteRenderer);
 
 private:
+
 	static RenderEngine* p_Instance;
 
 	void InitGLFW();
@@ -55,6 +56,8 @@ private:
 
 	const char* VERTEX_SHADER_PATH = "Assets/Shaders/TexturedModel.vs";
 	const char* FRAGMENT_SHADER_PATH = "Assets/Shaders/TexturedModel.fs";
+
+	const int LAYER_MAX = 10;
 
 	GLFWwindow* window;
 
@@ -69,7 +72,7 @@ private:
 	TextureLoader textureLoader;
 	ShaderLoader shaderLoader;
 	GLuint shaderProgram;
-	std::list<SpriteRenderer*> spritesRenderList;
+	std::vector<SpriteLayer*> layerList;
 
 };
 

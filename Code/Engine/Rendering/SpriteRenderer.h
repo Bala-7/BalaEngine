@@ -29,6 +29,8 @@ public:
 	void setTexture(GLuint _textureID);
 	void setSprite(int index);
 	void setSpriteSheet(const char* fileName, int spriteWidth, int spriteHeight, int sheetCountWidth, int sheetCountHeight);
+	void setLayer(int newLayer);
+	int GetLayer();
 
 private:
 	void setQuadData(std::vector<Vertex>& vertices, std::vector<uint32_t>& indices);
@@ -41,7 +43,7 @@ private:
 	glm::vec3 position, scale;
 	GLuint vao, vbo, ebo, texture, program;
 
-
+	int layer;
 	int spriteWidth, spriteHeight;
 	int sheetCountWidth, sheetCountHeight;	// Number of horizontal and vertical sprites
 };
