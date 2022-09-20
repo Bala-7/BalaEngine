@@ -31,6 +31,12 @@
     <Filter Include="Archivos de origen\Engine\Core">
       <UniqueIdentifier>{7b213300-02a6-49e6-bd2e-0f68dcc2bc70}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Archivos de encabezado\Engine\Gameplay">
+      <UniqueIdentifier>{8834163d-f183-4251-a536-7aadb1fd9226}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Archivos de origen\Engine\Gameplay">
+      <UniqueIdentifier>{d7c47fae-ed8c-4537-b5fd-965512246048}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -75,6 +81,9 @@
     <ClCompile Include="Code\Engine\Rendering\SpriteLayer.cpp">
       <Filter>Archivos de origen\Engine\Rendering</Filter>
     </ClCompile>
+    <ClCompile Include="Code\Engine\Gameplay\GameplayEngine.cpp">
+      <Filter>Archivos de origen\Engine\Gameplay</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Code\Engine\Rendering\Camera.h">
@@ -115,6 +124,9 @@
     </ClInclude>
     <ClInclude Include="Code\Engine\Rendering\SpriteLayer.h">
       <Filter>Archivos de encabezado\Engine\Rendering</Filter>
+    </ClInclude>
+    <ClInclude Include="Code\Engine\Gameplay\GameplayEngine.h">
+      <Filter>Archivos de encabezado\Engine\Gameplay</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

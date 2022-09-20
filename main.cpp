@@ -7,15 +7,20 @@
 #include <iostream>
 #include "Code/Engine/Rendering/RenderEngine.h"
 #include "Code/Engine/Core/GameObject.h"
+#include "Code/Engine/Gameplay/GameplayEngine.h"
 
 void key_callback(GLFWwindow* window, int key, int scancode, int action, int mode);
 
 RenderEngine* renderEngine;
+GameplayEngine* gameplayEngine;
 
 int main()
 {
 	renderEngine = new RenderEngine();
 	renderEngine->Initialize();
+
+	gameplayEngine = new GameplayEngine();
+	gameplayEngine->Initialize();
 
 	GLFWwindow* window = renderEngine->GetWindow();
 	
@@ -25,7 +30,7 @@ int main()
 	sr->setSprite(1);
 	sr->setLayer(1);
 	go->AddComponent(sr);
-	go->transform->position = glm::vec3(0.0f, 0.0f, 0.0f);
+	go->transform->position = glm::vec3(-0.25f, 0.0f, 0.0f);
 
 	GameObject* go2 = new GameObject();
 	SpriteRenderer* sr2 = new SpriteRenderer();
@@ -33,7 +38,7 @@ int main()
 	sr2->setSprite(10);
 	sr2->setLayer(0);
 	go2->AddComponent(sr2);
-	go2->transform->position = glm::vec3(0.0f, 0.0f, 0.0f);
+	go2->transform->position = glm::vec3(0.25f, 0.0f, 0.0f);
 
 
 
@@ -43,9 +48,21 @@ int main()
 	{
 		glfwPollEvents();
 
-		// Rendering code
+		// Physics code
+		// TODO
+		// \Physics code\
+
+		// Game Logic code
+		gameplayEngine->Update();
+		// \Game Logic code\
+
+		// Scene Rendering code
 		renderEngine->Update();
-		// \Rendering code\
+		// \Scene Rendering code\
+
+		// GUI Rendering code
+		// TODO
+		// \GUI Rendering code
 
 		glfwSwapBuffers(window);
 	}

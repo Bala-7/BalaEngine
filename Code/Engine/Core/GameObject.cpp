@@ -1,9 +1,11 @@
 #include "GameObject.h"
+#include "Engine/Gameplay/GameplayEngine.h"
 
 GameObject::GameObject()
 {
 	transform = new Transform();
 	AddComponent(transform);
+	GameplayEngine::GetInstance()->AddGameObject(this);
 }
 
 GameObject::~GameObject()
@@ -21,7 +23,8 @@ void GameObject::Update()
 {
 	for (auto const& component : components)
 	{
-		component->Update();
+		if(component->GetType() != Component::ComponentType::SPRITE_RENDERER)
+			component->Update();
 	}
 }
 
