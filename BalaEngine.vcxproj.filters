@@ -37,6 +37,12 @@
     <Filter Include="Archivos de origen\Engine\Gameplay">
       <UniqueIdentifier>{d7c47fae-ed8c-4537-b5fd-965512246048}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Archivos de origen\Engine\Debug">
+      <UniqueIdentifier>{de57dcf9-0d0b-4a5c-b9fe-0b8f03f8ea9d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Archivos de encabezado\Engine\Debug">
+      <UniqueIdentifier>{e253bf44-183d-4248-ac53-5cee667dd165}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -84,6 +90,9 @@
     <ClCompile Include="Code\Engine\Gameplay\GameplayEngine.cpp">
       <Filter>Archivos de origen\Engine\Gameplay</Filter>
     </ClCompile>
+    <ClCompile Include="Code\Engine\Debug\Debug.cpp">
+      <Filter>Archivos de origen\Engine\Debug</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Code\Engine\Rendering\Camera.h">
@@ -127,6 +136,9 @@
     </ClInclude>
     <ClInclude Include="Code\Engine\Gameplay\GameplayEngine.h">
       <Filter>Archivos de encabezado\Engine\Gameplay</Filter>
+    </ClInclude>
+    <ClInclude Include="Code\Engine\Debug\Debug.h">
+      <Filter>Archivos de encabezado\Engine\Debug</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

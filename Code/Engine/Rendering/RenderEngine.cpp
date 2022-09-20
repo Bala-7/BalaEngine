@@ -24,6 +24,8 @@ void RenderEngine::Initialize()
 	InitGLEW();
 
 	InitGame();
+
+	Debug::Log("Render Engine initialized!");
 }
 
 void RenderEngine::Update()
@@ -125,29 +127,6 @@ void RenderEngine::InitGame()
 	ShaderLoader shaderLoader;
 	shaderProgram = shaderLoader.createProgram(VERTEX_SHADER_PATH, FRAGMENT_SHADER_PATH);
 
-	// Load textures
-	TextureLoader textureLoader;
-	
-	
-
-	/*sprite = new SpriteRenderer();
-	sprite->setProgram(shaderProgram);
-	sprite->setSpriteSheet("Character.png", 32, 32, 3, 4);
-	sprite->setSprite(10);
-
-	sprite2 = new SpriteRenderer();
-	sprite2->setProgram(shaderProgram);
-	//sprite2->setTexture(meshTexture);
-	sprite2->setSpriteSheet("PokemonBlue_Player_Spritesheet.png", 16, 16, 10, 1);
-	sprite2->setSprite(1);
-	sprite2->setPosition(glm::vec3(-1.0f, 0.0f, 0.0f));
-	sprite2->setScale(glm::vec3(1.0f));
-
-	go = new GameObject();
-	go->AddComponent(sprite);
-
-	go2 = new GameObject();
-	go2->AddComponent(sprite2);*/
 }
 
 GLFWwindow* RenderEngine::CreateWindow()

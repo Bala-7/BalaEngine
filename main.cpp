@@ -8,6 +8,7 @@
 #include "Code/Engine/Rendering/RenderEngine.h"
 #include "Code/Engine/Core/GameObject.h"
 #include "Code/Engine/Gameplay/GameplayEngine.h"
+#include "Code/Engine/Debug/Debug.h"
 
 void key_callback(GLFWwindow* window, int key, int scancode, int action, int mode);
 
@@ -21,6 +22,9 @@ int main()
 
 	gameplayEngine = new GameplayEngine();
 	gameplayEngine->Initialize();
+
+	
+	
 
 	GLFWwindow* window = renderEngine->GetWindow();
 	

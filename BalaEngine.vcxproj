@@ -22,6 +22,7 @@
     <ClCompile Include="Code\Engine\Core\Component.cpp" />
     <ClCompile Include="Code\Engine\Core\GameObject.cpp" />
     <ClCompile Include="Code\Engine\Core\Transform.cpp" />
+    <ClCompile Include="Code\Engine\Debug\Debug.cpp" />
     <ClCompile Include="Code\Engine\Gameplay\GameplayEngine.cpp" />
     <ClCompile Include="Code\Engine\Rendering\Camera.cpp" />
     <ClCompile Include="Code\Engine\Rendering\LightRenderer.cpp" />
@@ -39,6 +40,7 @@
     <ClInclude Include="Code\Engine\Core\Component.h" />
     <ClInclude Include="Code\Engine\Core\GameObject.h" />
     <ClInclude Include="Code\Engine\Core\Transform.h" />
+    <ClInclude Include="Code\Engine\Debug\Debug.h" />
     <ClInclude Include="Code\Engine\Gameplay\GameplayEngine.h" />
     <ClInclude Include="Code\Engine\Rendering\Camera.h" />
     <ClInclude Include="Code\Engine\Rendering\LightRenderer.h" />

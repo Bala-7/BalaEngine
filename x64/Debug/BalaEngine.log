@@ -1,2 +1,4 @@
-﻿  GameObject.cpp
+﻿  Debug.cpp
+  main.cpp
+  Generating Code...
   BalaEngine.vcxproj -> C:\Users\fdomi\source\repos\BalaEngine\x64\Debug\BalaEngine.exe

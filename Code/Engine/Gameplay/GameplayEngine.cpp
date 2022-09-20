@@ -13,6 +13,7 @@ GameplayEngine::~GameplayEngine()
 
 void GameplayEngine::Initialize()
 {
+	Debug::Log("Gameplay Engine initialized!");
 }
 
 void GameplayEngine::Update()
