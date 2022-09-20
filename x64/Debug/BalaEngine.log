@@ -1,4 +1,2 @@
-﻿  RenderEngine.cpp
-C:\Users\fdomi\source\repos\BalaEngine\BalaEngine\Code\Engine\Rendering\RenderEngine.cpp(123,44): warning C4244: 'argument': conversion from 'const int' to 'GLfloat', possible loss of data
-C:\Users\fdomi\source\repos\BalaEngine\BalaEngine\Code\Engine\Rendering\RenderEngine.cpp(123,29): warning C4244: 'argument': conversion from 'const int' to 'GLfloat', possible loss of data
+﻿  main.cpp
   BalaEngine.vcxproj -> C:\Users\fdomi\source\repos\BalaEngine\x64\Debug\BalaEngine.exe

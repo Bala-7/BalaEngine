@@ -16,6 +16,7 @@
 class SpriteRenderer : public Component
 {
 public:
+	
 	SpriteRenderer();
 	~SpriteRenderer();
 	

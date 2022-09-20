@@ -4,6 +4,7 @@
 
 SpriteRenderer::SpriteRenderer()
 {
+	componentType = ComponentType::SPRITE_RENDERER;
 	camera = RenderEngine::GetInstance()->GetCamera();
 
 	scale = glm::vec3(1.0f, 1.0f, 1.0f);

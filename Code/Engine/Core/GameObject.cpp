@@ -24,3 +24,15 @@ void GameObject::Update()
 		component->Update();
 	}
 }
+
+Component* GameObject::GetComponent(Component::ComponentType type)
+{
+	for (auto const& component : components)
+	{
+		if (component->GetType() == type)
+			return component;
+	}
+
+	return NULL;
+}
+
