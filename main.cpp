@@ -9,6 +9,7 @@
 #include "Code/Engine/Core/GameObject.h"
 #include "Code/Engine/Gameplay/GameplayEngine.h"
 #include "Code/Engine/Debug/Debug.h"
+#include "Engine/Core/Time.h"
 
 void key_callback(GLFWwindow* window, int key, int scancode, int action, int mode);
 
@@ -22,9 +23,6 @@ int main()
 
 	gameplayEngine = new GameplayEngine();
 	gameplayEngine->Initialize();
-
-	
-	
 
 	GLFWwindow* window = renderEngine->GetWindow();
 	
@@ -60,9 +58,13 @@ int main()
 		gameplayEngine->Update();
 		// \Game Logic code\
 
+		Time::StartFrame();
 		// Scene Rendering code
 		renderEngine->Update();
 		// \Scene Rendering code\
+		
+		Time::EndFrame();
+		//Debug::Log(std::to_string(Time::GetDeltaTime().count()));
 
 		// GUI Rendering code
 		// TODO

@@ -25,6 +25,27 @@ void Debug::LogError(const char* message)
 	Color(7);
 }
 
+void Debug::Log(std::string message)
+{
+	Color(7);
+	std::cout << message << "\n";
+	Color(7);
+}
+
+void Debug::LogWarning(std::string message)
+{
+	Color(6);
+	std::cout << message << "\n";
+	Color(7);
+}
+
+void Debug::LogError(std::string message)
+{
+	Color(4);
+	std::cout << message << "\n";
+	Color(7);
+}
+
 //COLORS LIST
 //1: Blue
 //2: Green

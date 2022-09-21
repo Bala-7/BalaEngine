@@ -1,4 +1,5 @@
 #include "GameplayEngine.h"
+#include "Engine/Debug/Debug.h"
 
 GameplayEngine* GameplayEngine::p_Instance;
 

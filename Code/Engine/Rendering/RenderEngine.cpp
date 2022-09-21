@@ -1,4 +1,5 @@
 #include "RenderEngine.h"
+#include "Engine/Debug/Debug.h"
 
 RenderEngine::RenderEngine()
 {

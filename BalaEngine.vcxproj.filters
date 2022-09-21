@@ -93,6 +93,9 @@
     <ClCompile Include="Code\Engine\Debug\Debug.cpp">
       <Filter>Archivos de origen\Engine\Debug</Filter>
     </ClCompile>
+    <ClCompile Include="Code\Engine\Core\Time.cpp">
+      <Filter>Archivos de origen\Engine\Core</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Code\Engine\Rendering\Camera.h">
@@ -139,6 +142,9 @@
     </ClInclude>
     <ClInclude Include="Code\Engine\Debug\Debug.h">
       <Filter>Archivos de encabezado\Engine\Debug</Filter>
+    </ClInclude>
+    <ClInclude Include="Code\Engine\Core\Time.h">
+      <Filter>Archivos de encabezado\Engine\Core</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
