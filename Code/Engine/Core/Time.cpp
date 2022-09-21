@@ -2,6 +2,7 @@
 
 std::chrono::milliseconds Time::frameStartMilliseconds;
 std::chrono::milliseconds Time::frameEndMilliseconds;
+std::chrono::milliseconds Time::deltaTimeMilliseconds;
 
 void Time::StartFrame()
 {
