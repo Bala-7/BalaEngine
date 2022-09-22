@@ -12,7 +12,8 @@ public:
 	enum class ComponentType
 	{
 		TRANSFORM,
-		SPRITE_RENDERER
+		SPRITE_RENDERER,
+		UITEXT_RENDERER
 	};
 
 	ComponentType GetType();

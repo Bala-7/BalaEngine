@@ -1,45 +1,9 @@
-﻿  Time.cpp
-LINK : warning LNK4098: defaultlib 'LIBCMT' conflicts with use of other libs; use /NODEFAULTLIB:library
-LINK : warning LNK4286: symbol '__glewBindBuffer' defined in 'glew32s.lib(glew.obj)' is imported by 'LightRenderer.obj'
-LINK : warning LNK4286: symbol '__glewBindBuffer' defined in 'glew32s.lib(glew.obj)' is imported by 'MeshRenderer.obj'
-LINK : warning LNK4286: symbol '__glewBindBuffer' defined in 'glew32s.lib(glew.obj)' is imported by 'SpriteRenderer.obj'
-LINK : warning LNK4286: symbol '__glewBufferData' defined in 'glew32s.lib(glew.obj)' is imported by 'LightRenderer.obj'
-LINK : warning LNK4286: symbol '__glewBufferData' defined in 'glew32s.lib(glew.obj)' is imported by 'MeshRenderer.obj'
-LINK : warning LNK4217: symbol '__glewBufferData' defined in 'glew32s.lib(glew.obj)' is imported by 'SpriteRenderer.obj' in function '"int `public: __cdecl SpriteRenderer::SpriteRenderer(void)'::`1'::dtor$0" (?dtor$0@?0???0SpriteRenderer@@QEAA@XZ@4HA)'
-LINK : warning LNK4286: symbol '__glewGenBuffers' defined in 'glew32s.lib(glew.obj)' is imported by 'LightRenderer.obj'
-LINK : warning LNK4286: symbol '__glewGenBuffers' defined in 'glew32s.lib(glew.obj)' is imported by 'MeshRenderer.obj'
-LINK : warning LNK4217: symbol '__glewGenBuffers' defined in 'glew32s.lib(glew.obj)' is imported by 'SpriteRenderer.obj' in function '"public: class std::vector<struct Vertex,class std::allocator<struct Vertex> > & __cdecl std::vector<struct Vertex,class std::allocator<struct Vertex> >::operator=(class std::vector<struct Vertex,class std::allocator<struct Vertex> > const &)" (??4?$vector@UVertex@@V?$allocator@UVertex@@@std@@@std@@QEAAAEAV01@AEBV01@@Z)'
-LINK : warning LNK4286: symbol '__glewEnableVertexAttribArray' defined in 'glew32s.lib(glew.obj)' is imported by 'LightRenderer.obj'
-LINK : warning LNK4286: symbol '__glewEnableVertexAttribArray' defined in 'glew32s.lib(glew.obj)' is imported by 'MeshRenderer.obj'
-LINK : warning LNK4286: symbol '__glewEnableVertexAttribArray' defined in 'glew32s.lib(glew.obj)' is imported by 'SpriteRenderer.obj'
-LINK : warning LNK4286: symbol '__glewGetUniformLocation' defined in 'glew32s.lib(glew.obj)' is imported by 'LightRenderer.obj'
-LINK : warning LNK4286: symbol '__glewGetUniformLocation' defined in 'glew32s.lib(glew.obj)' is imported by 'MeshRenderer.obj'
-LINK : warning LNK4217: symbol '__glewGetUniformLocation' defined in 'glew32s.lib(glew.obj)' is imported by 'SpriteRenderer.obj' in function '"private: void __cdecl std::vector<struct Vertex,class std::allocator<struct Vertex> >::_Assign_range<struct Vertex *>(struct Vertex *,struct Vertex *,struct std::forward_iterator_tag)" (??$_Assign_range@PEAUVertex@@@?$vector@UVertex@@V?$allocator@UVertex@@@std@@@std@@AEAAXPEAUVertex@@0Uforward_iterator_tag@1@@Z)'
-LINK : warning LNK4286: symbol '__glewUniformMatrix4fv' defined in 'glew32s.lib(glew.obj)' is imported by 'LightRenderer.obj'
-LINK : warning LNK4286: symbol '__glewUniformMatrix4fv' defined in 'glew32s.lib(glew.obj)' is imported by 'MeshRenderer.obj'
-LINK : warning LNK4286: symbol '__glewUniformMatrix4fv' defined in 'glew32s.lib(glew.obj)' is imported by 'SpriteRenderer.obj'
-LINK : warning LNK4286: symbol '__glewUseProgram' defined in 'glew32s.lib(glew.obj)' is imported by 'LightRenderer.obj'
-LINK : warning LNK4286: symbol '__glewUseProgram' defined in 'glew32s.lib(glew.obj)' is imported by 'MeshRenderer.obj'
-LINK : warning LNK4217: symbol '__glewUseProgram' defined in 'glew32s.lib(glew.obj)' is imported by 'SpriteRenderer.obj' in function '"public: __cdecl SpriteRenderer::SpriteRenderer(void)" (??0SpriteRenderer@@QEAA@XZ)'
-LINK : warning LNK4286: symbol '__glewVertexAttribPointer' defined in 'glew32s.lib(glew.obj)' is imported by 'LightRenderer.obj'
-LINK : warning LNK4286: symbol '__glewVertexAttribPointer' defined in 'glew32s.lib(glew.obj)' is imported by 'MeshRenderer.obj'
-LINK : warning LNK4217: symbol '__glewVertexAttribPointer' defined in 'glew32s.lib(glew.obj)' is imported by 'SpriteRenderer.obj' in function '"private: void __cdecl std::vector<struct Vertex,class std::allocator<struct Vertex> >::_Buy_nonzero(unsigned __int64)" (?_Buy_nonzero@?$vector@UVertex@@V?$allocator@UVertex@@@std@@@std@@AEAAX_K@Z)'
-LINK : warning LNK4286: symbol '__glewBindVertexArray' defined in 'glew32s.lib(glew.obj)' is imported by 'LightRenderer.obj'
-LINK : warning LNK4286: symbol '__glewBindVertexArray' defined in 'glew32s.lib(glew.obj)' is imported by 'MeshRenderer.obj'
-LINK : warning LNK4217: symbol '__glewBindVertexArray' defined in 'glew32s.lib(glew.obj)' is imported by 'SpriteRenderer.obj' in function '"private: unsigned __int64 __cdecl std::vector<struct Vertex,class std::allocator<struct Vertex> >::_Calculate_growth(unsigned __int64)const " (?_Calculate_growth@?$vector@UVertex@@V?$allocator@UVertex@@@std@@@std@@AEBA_K_K@Z)'
-LINK : warning LNK4286: symbol '__glewGenVertexArrays' defined in 'glew32s.lib(glew.obj)' is imported by 'LightRenderer.obj'
-LINK : warning LNK4286: symbol '__glewGenVertexArrays' defined in 'glew32s.lib(glew.obj)' is imported by 'MeshRenderer.obj'
-LINK : warning LNK4217: symbol '__glewGenVertexArrays' defined in 'glew32s.lib(glew.obj)' is imported by 'SpriteRenderer.obj' in function '"public: __cdecl SpriteRenderer::SpriteRenderer(void)" (??0SpriteRenderer@@QEAA@XZ)'
-LINK : warning LNK4286: symbol '__glewAttachShader' defined in 'glew32s.lib(glew.obj)' is imported by 'ShaderLoader.obj'
-LINK : warning LNK4286: symbol '__glewCompileShader' defined in 'glew32s.lib(glew.obj)' is imported by 'ShaderLoader.obj'
-LINK : warning LNK4286: symbol '__glewCreateProgram' defined in 'glew32s.lib(glew.obj)' is imported by 'ShaderLoader.obj'
-LINK : warning LNK4286: symbol '__glewCreateShader' defined in 'glew32s.lib(glew.obj)' is imported by 'ShaderLoader.obj'
-LINK : warning LNK4286: symbol '__glewGetProgramInfoLog' defined in 'glew32s.lib(glew.obj)' is imported by 'ShaderLoader.obj'
-LINK : warning LNK4286: symbol '__glewGetProgramiv' defined in 'glew32s.lib(glew.obj)' is imported by 'ShaderLoader.obj'
-LINK : warning LNK4286: symbol '__glewGetShaderInfoLog' defined in 'glew32s.lib(glew.obj)' is imported by 'ShaderLoader.obj'
-LINK : warning LNK4286: symbol '__glewGetShaderiv' defined in 'glew32s.lib(glew.obj)' is imported by 'ShaderLoader.obj'
-LINK : warning LNK4286: symbol '__glewLinkProgram' defined in 'glew32s.lib(glew.obj)' is imported by 'ShaderLoader.obj'
-LINK : warning LNK4286: symbol '__glewShaderSource' defined in 'glew32s.lib(glew.obj)' is imported by 'ShaderLoader.obj'
-LINK : warning LNK4286: symbol '__glewGenerateMipmap' defined in 'glew32s.lib(glew.obj)' is imported by 'TextureLoader.obj'
-glew32s.lib(glew.obj) : warning LNK4099: PDB 'vc120.pdb' was not found with 'glew32s.lib(glew.obj)' or at 'C:\Users\fdomi\source\repos\BalaEngine\x64\Debug\vc120.pdb'; linking object as if no debug info
+﻿  Debug.cpp
+  GameplayEngine.cpp
+  RenderEngine.cpp
+C:\Users\fdomi\source\repos\BalaEngine\BalaEngine\Code\Engine\Rendering\RenderEngine.cpp(143,44): warning C4244: 'argument': conversion from 'const int' to 'GLfloat', possible loss of data
+C:\Users\fdomi\source\repos\BalaEngine\BalaEngine\Code\Engine\Rendering\RenderEngine.cpp(143,29): warning C4244: 'argument': conversion from 'const int' to 'GLfloat', possible loss of data
+  main.cpp
+  Generating Code...
+C:\Users\fdomi\source\repos\BalaEngine\BalaEngine\Code\Engine\Rendering\RenderEngine.cpp(216,26): warning C4838: conversion from 'FT_Pos' to 'unsigned int' requires a narrowing conversion
   BalaEngine.vcxproj -> C:\Users\fdomi\source\repos\BalaEngine\x64\Debug\BalaEngine.exe

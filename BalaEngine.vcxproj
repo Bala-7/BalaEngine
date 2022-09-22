@@ -35,6 +35,7 @@
     <ClCompile Include="Code\Engine\Rendering\SpriteLayer.cpp" />
     <ClCompile Include="Code\Engine\Rendering\SpriteRenderer.cpp" />
     <ClCompile Include="Code\Engine\Rendering\TextureLoader.cpp" />
+    <ClCompile Include="Code\Engine\Rendering\UITextRenderer.cpp" />
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -54,6 +55,7 @@
     <ClInclude Include="Code\Engine\Rendering\SpriteLayer.h" />
     <ClInclude Include="Code\Engine\Rendering\SpriteRenderer.h" />
     <ClInclude Include="Code\Engine\Rendering\TextureLoader.h" />
+    <ClInclude Include="Code\Engine\Rendering\UITextRenderer.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>

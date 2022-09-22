@@ -26,6 +26,8 @@ void RenderEngine::Initialize()
 
 	InitGame();
 
+	LoadFont("Assets/Fonts/FredokaOne-Regular.ttf");
+
 	Debug::Log("Render Engine initialized!");
 }
 
@@ -36,18 +38,19 @@ void RenderEngine::Update()
 	//glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
 	glClearColor(1.0, 1.0, 0.0, 1.0);//clear yellow
 
-	//mesh->draw();
-	//sprite->draw();
-	//sprite2->draw();
-
 	for (int i = LAYER_MAX - 1; i >= 0; --i)
 	{
 		layerList[i]->Update();
 	}
-	
+}
 
-	//go->Update();
-	//go2->Update();
+void RenderEngine::UpdateUI()
+{
+
+	for (int i = 0; i < uiRenderers.size(); ++i)
+	{
+		uiRenderers[i]->Update();
+	}
 }
 
 void RenderEngine::Terminate()
@@ -88,10 +91,24 @@ GLuint RenderEngine::GetShaderProgram()
 	return shaderProgram;
 }
 
+GLuint RenderEngine::GetTextShaderProgram()
+{
+	return textShaderProgram;
+}
+
+std::map<char, RenderEngine::Character> RenderEngine::GetCharacterList()
+{
+	return Characters;
+}
+
 void RenderEngine::AddSpriteToRenderList(SpriteRenderer* spriteRenderer)
 {
 	layerList[spriteRenderer->GetLayer()]->GetRenderList()->push_back(spriteRenderer);
-	//spritesRenderList.push_back(spriteRenderer);
+}
+
+void RenderEngine::AddTextToUI(UITextRenderer* textRenderer)
+{
+	uiRenderers.push_back(textRenderer);
 }
 
 void RenderEngine::InitGLFW()
@@ -127,7 +144,7 @@ void RenderEngine::InitGame()
 	glm::mat4 projection = glm::ortho(0.0f, (float) WINDOW_SIZE_X, (float) WINDOW_SIZE_Y, 0.0f, -1.0f, 1.0f);
 	ShaderLoader shaderLoader;
 	shaderProgram = shaderLoader.createProgram(VERTEX_SHADER_PATH, FRAGMENT_SHADER_PATH);
-
+	textShaderProgram = shaderLoader.createProgram(VERTEX_SHADER_PATH_TEXT, FRAGMENT_SHADER_PATH_TEXT);
 }
 
 GLFWwindow* RenderEngine::CreateWindow()
@@ -143,4 +160,67 @@ GLFWwindow* RenderEngine::CreateWindow()
 	glViewport(0, 0, WINDOW_SIZE_X, WINDOW_SIZE_Y);
 
 	return window;
+}
+
+void RenderEngine::LoadFont(const char* path)
+{
+	if (FT_Init_FreeType(&ft))
+	{
+		Debug::LogError("ERROR::FREETYPE: Could not init FreeType Library");
+		return;
+	}
+
+	if (FT_New_Face(ft, path, 0, &ftFace))
+	{
+		Debug::LogError("ERROR::FREETYPE: Failed to load font");
+		return;
+	}
+
+	FT_Set_Pixel_Sizes(ftFace, 0, 48);
+
+	glPixelStorei(GL_UNPACK_ALIGNMENT, 1); // disable byte-alignment restriction
+
+	for (unsigned char c = 0; c < 128; c++)
+	{
+		// load character glyph 
+		if (FT_Load_Char(ftFace, c, FT_LOAD_RENDER))
+		{
+			std::cout << "ERROR::FREETYTPE: Failed to load Glyph" << std::endl;
+			continue;
+		}
+		// generate texture
+		unsigned int texture;
+		glGenTextures(1, &texture);
+		glBindTexture(GL_TEXTURE_2D, texture);
+		glTexImage2D(
+			GL_TEXTURE_2D,
+			0,
+			GL_RED,
+			ftFace->glyph->bitmap.width,
+			ftFace->glyph->bitmap.rows,
+			0,
+			GL_RED,
+			GL_UNSIGNED_BYTE,
+			ftFace->glyph->bitmap.buffer
+		);
+		// set texture options
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+		// now store character for later use
+		Character character = {
+			texture,
+			glm::ivec2(ftFace->glyph->bitmap.width, ftFace->glyph->bitmap.rows),
+			glm::ivec2(ftFace->glyph->bitmap_left, ftFace->glyph->bitmap_top),
+			ftFace->glyph->advance.x
+		};
+		Characters.insert(std::pair<char, Character>(c, character));
+	}
+	glBindTexture(GL_TEXTURE_2D, 0);
+
+	FT_Done_Face(ftFace);
+	FT_Done_FreeType(ft);
+
+	Debug::Log("Font loaded!");
 }

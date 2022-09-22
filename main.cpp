@@ -10,6 +10,7 @@
 #include "Code/Engine/Gameplay/GameplayEngine.h"
 #include "Code/Engine/Debug/Debug.h"
 #include "Engine/Core/Time.h"
+#include "Engine/Rendering/UITextRenderer.h"
 
 void key_callback(GLFWwindow* window, int key, int scancode, int action, int mode);
 
@@ -43,6 +44,22 @@ int main()
 	go2->transform->position = glm::vec3(0.5f, 0.0f, 0.0f);
 
 
+	GameObject* textGO = new GameObject();
+	UITextRenderer* textRenderer = new UITextRenderer();
+	textRenderer->setText("This is sample text");
+	textRenderer->setPosition(glm::vec2(450.0f, 240.0f));
+	textRenderer->setScale(0.85f);
+	textRenderer->setColor(glm::vec3(0.3f, 0.7f, 0.9f));
+	textGO->AddComponent(textRenderer);
+
+	GameObject* fpsTextGO = new GameObject();
+	UITextRenderer* fpsTR = new UITextRenderer();
+	fpsTR->setText("This is sample text");
+	fpsTR->setPosition(glm::vec2(450.0f, 240.0f));
+	fpsTR->setScale(0.85f);
+	fpsTR->setColor(glm::vec3(0.3f, 0.7f, 0.9f));
+	fpsTextGO->AddComponent(textRenderer);
+
 
 	glfwSetKeyCallback(window, key_callback);	// Input callback
 	// RendererInitialization();	// Triangle renderer
@@ -67,7 +84,7 @@ int main()
 		//Debug::Log(std::to_string(Time::GetDeltaTime().count()));
 
 		// GUI Rendering code
-		// TODO
+		renderEngine->UpdateUI();
 		// \GUI Rendering code
 
 		glfwSwapBuffers(window);

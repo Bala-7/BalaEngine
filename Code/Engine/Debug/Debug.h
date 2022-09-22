@@ -1,5 +1,6 @@
 #pragma once
 #include <string>
+#include "Engine/Rendering/UITextRenderer.h"
 
 class Debug
 {

@@ -7,7 +7,10 @@
 // GLFW
 #include <GLFW/glfw3.h>
 
+#include <ft2build.h>
+#include FT_FREETYPE_H
 #include <iostream>
+#include <map>
 #include <vector>
 #include "Mesh.h"
 #include "ShaderLoader.h"
@@ -16,10 +19,18 @@
 #include "SpriteRenderer.h"
 #include "Engine/Core/GameObject.h"
 #include "Engine/Rendering/SpriteLayer.h"
+#include "Engine/Rendering/UITextRenderer.h"
 
 class RenderEngine
 {
 public:
+	struct Character {
+		unsigned int TextureID;  // ID handle of the glyph texture
+		glm::ivec2   Size;       // Size of glyph
+		glm::ivec2   Bearing;    // Offset from baseline to left/top of glyph
+		unsigned int Advance;    // Offset to advance to next glyph
+	};
+
 	static RenderEngine* GetInstance() { 
 		if (!p_Instance)
 		{
@@ -33,6 +44,7 @@ public:
 
 	void Initialize();
 	void Update();
+	void UpdateUI();
 	void Terminate();
 
 	bool ShouldClose();
@@ -40,7 +52,10 @@ public:
 	Camera* GetCamera();
 	GLuint GetTextureID(const char* fileName);
 	GLuint GetShaderProgram();
+	GLuint GetTextShaderProgram();
+	std::map<char, Character> GetCharacterList();
 	void AddSpriteToRenderList(SpriteRenderer* spriteRenderer);
+	void AddTextToUI(UITextRenderer* textRenderer);
 
 private:
 
@@ -51,28 +66,37 @@ private:
 	void InitGame();
 	GLFWwindow* CreateWindow();
 	
+	void LoadFont(const char* path);
+
 	const int WINDOW_SIZE_X = 1280;
 	const int WINDOW_SIZE_Y = 720;
 
 	const char* VERTEX_SHADER_PATH = "Assets/Shaders/TexturedModel.vs";
 	const char* FRAGMENT_SHADER_PATH = "Assets/Shaders/TexturedModel.fs";
 
+	const char* VERTEX_SHADER_PATH_TEXT = "Assets/Shaders/text.vs";
+	const char* FRAGMENT_SHADER_PATH_TEXT = "Assets/Shaders/text.fs";
+
 	const int LAYER_MAX = 10;
 
 	GLFWwindow* window;
 
 	Camera* camera;
-	//MeshRenderer* mesh;
-	/*SpriteRenderer* sprite;
-	SpriteRenderer* sprite2;
-	GameObject* go;
-	GameObject* go2;*/
+
 	
 	const char* TEXTURES_PATH = "Assets/Textures/";
 	TextureLoader textureLoader;
 	ShaderLoader shaderLoader;
 	GLuint shaderProgram;
+	GLuint textShaderProgram;
 	std::vector<SpriteLayer*> layerList;
+
+	std::vector<UITextRenderer*> uiRenderers;
+	
+	// Fonts
+	std::map<char, Character> Characters;
+	FT_Library ft;
+	FT_Face ftFace;
 
 };
 
