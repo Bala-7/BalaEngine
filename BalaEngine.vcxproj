@@ -24,6 +24,7 @@
     <ClCompile Include="Code\Engine\Core\Time.cpp" />
     <ClCompile Include="Code\Engine\Core\Transform.cpp" />
     <ClCompile Include="Code\Engine\Debug\Debug.cpp" />
+    <ClCompile Include="Code\Engine\Debug\FPSCounter.cpp" />
     <ClCompile Include="Code\Engine\Gameplay\GameplayEngine.cpp" />
     <ClCompile Include="Code\Engine\Rendering\Camera.cpp" />
     <ClCompile Include="Code\Engine\Rendering\LightRenderer.cpp" />
@@ -44,6 +45,7 @@
     <ClInclude Include="Code\Engine\Core\Time.h" />
     <ClInclude Include="Code\Engine\Core\Transform.h" />
     <ClInclude Include="Code\Engine\Debug\Debug.h" />
+    <ClInclude Include="Code\Engine\Debug\FPSCounter.h" />
     <ClInclude Include="Code\Engine\Gameplay\GameplayEngine.h" />
     <ClInclude Include="Code\Engine\Rendering\Camera.h" />
     <ClInclude Include="Code\Engine\Rendering\LightRenderer.h" />

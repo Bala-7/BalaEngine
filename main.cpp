@@ -11,6 +11,12 @@
 #include "Code/Engine/Debug/Debug.h"
 #include "Engine/Core/Time.h"
 #include "Engine/Rendering/UITextRenderer.h"
+#include "Engine/Debug/FPSCounter.h"
+#ifdef _WIN32
+#include <Windows.h>
+#else
+#include <unistd.h>
+#endif
 
 void key_callback(GLFWwindow* window, int key, int scancode, int action, int mode);
 
@@ -54,17 +60,21 @@ int main()
 
 	GameObject* fpsTextGO = new GameObject();
 	UITextRenderer* fpsTR = new UITextRenderer();
-	fpsTR->setText("This is sample text");
-	fpsTR->setPosition(glm::vec2(450.0f, 240.0f));
-	fpsTR->setScale(0.85f);
-	fpsTR->setColor(glm::vec3(0.3f, 0.7f, 0.9f));
-	fpsTextGO->AddComponent(textRenderer);
+	fpsTR->setText("FPS: ");
+	fpsTR->setPosition(glm::vec2(5.0f, 695.0f));
+	fpsTR->setScale(0.45f);
+	fpsTR->setColor(glm::vec3(1.0f, 0.0f, 0.0f));
+	fpsTR->setDebug(true);
+	fpsTextGO->AddComponent(fpsTR);
+	FPSCounter* counter = new FPSCounter(fpsTR);
+	fpsTextGO->AddComponent(counter);
 
 
 	glfwSetKeyCallback(window, key_callback);	// Input callback
 	// RendererInitialization();	// Triangle renderer
 	while (!renderEngine->ShouldClose())
 	{
+		Time::StartLoop();
 		glfwPollEvents();
 
 		// Physics code
@@ -75,18 +85,21 @@ int main()
 		gameplayEngine->Update();
 		// \Game Logic code\
 
-		Time::StartFrame();
+		
 		// Scene Rendering code
 		renderEngine->Update();
 		// \Scene Rendering code\
-		
-		Time::EndFrame();
-		//Debug::Log(std::to_string(Time::GetDeltaTime().count()));
-
+			
 		// GUI Rendering code
 		renderEngine->UpdateUI();
+		renderEngine->UpdateDebug();
 		// \GUI Rendering code
-
+		
+		float lastLoopTimeMS = Time::GetLastLoopTime();
+		float targetFrameTime = (1.0f / renderEngine->GetTargetFPS()) * 1000;
+		if (lastLoopTimeMS < targetFrameTime)
+			Sleep(targetFrameTime - lastLoopTimeMS);
+		Time::EndLoop();
 		glfwSwapBuffers(window);
 	}
 

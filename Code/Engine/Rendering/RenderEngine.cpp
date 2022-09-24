@@ -1,9 +1,11 @@
 #include "RenderEngine.h"
 #include "Engine/Debug/Debug.h"
+#include "Engine/Core/Time.h"
 
 RenderEngine::RenderEngine()
 {
 	p_Instance = this;
+	renderDelayMilliseconds = (1.0f / MAX_FPS);
 
 	for (int i = 0; i < LAYER_MAX; ++i)
 	{
@@ -26,7 +28,7 @@ void RenderEngine::Initialize()
 
 	InitGame();
 
-	LoadFont("Assets/Fonts/FredokaOne-Regular.ttf");
+	LoadFont("Assets/Fonts/Arial.ttf");
 
 	Debug::Log("Render Engine initialized!");
 }
@@ -46,10 +48,17 @@ void RenderEngine::Update()
 
 void RenderEngine::UpdateUI()
 {
-
 	for (int i = 0; i < uiRenderers.size(); ++i)
 	{
 		uiRenderers[i]->Update();
+	}
+}
+
+void RenderEngine::UpdateDebug()
+{
+	for (int i = 0; i < uiDebugRenderers.size(); ++i)
+	{
+		uiDebugRenderers[i]->Update();
 	}
 }
 
@@ -58,8 +67,6 @@ void RenderEngine::Terminate()
 	glfwTerminate();
 
 	delete camera;
-	
-	
 }
 
 bool RenderEngine::ShouldClose()
@@ -76,8 +83,6 @@ Camera* RenderEngine::GetCamera()
 {
 	return camera;
 }
-
-
 
 GLuint RenderEngine::GetTextureID(const char* fileName)
 {
@@ -109,6 +114,22 @@ void RenderEngine::AddSpriteToRenderList(SpriteRenderer* spriteRenderer)
 void RenderEngine::AddTextToUI(UITextRenderer* textRenderer)
 {
 	uiRenderers.push_back(textRenderer);
+}
+
+void RenderEngine::AddTextToDebugUI(UITextRenderer* textRenderer)
+{
+	uiDebugRenderers.push_back(textRenderer);
+}
+
+int RenderEngine::GetTargetFPS()
+{
+	return MAX_FPS;
+}
+
+int RenderEngine::GetCurrentFPS()
+{
+	float lastFrameTimeSeconds = Time::GetLastLoopTime() / 1000;
+	return (lastFrameTimeSeconds > 0) ? 1 / lastFrameTimeSeconds : 1000;
 }
 
 void RenderEngine::InitGLFW()

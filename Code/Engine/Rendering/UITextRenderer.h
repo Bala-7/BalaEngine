@@ -17,6 +17,7 @@ public:
 	void setColor(glm::vec3 _color);
 	void setProgram(GLuint _program);
 	void setText(std::string _text);
+	void setDebug(bool _debug);
 
 private:
 	void draw();
@@ -27,5 +28,6 @@ private:
 	glm::vec2 position;
 	float scale;
 	glm::vec3 color;
+	bool debug = false;
 };
 

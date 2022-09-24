@@ -99,6 +99,9 @@
     <ClCompile Include="Code\Engine\Rendering\UITextRenderer.cpp">
       <Filter>Archivos de origen\Engine\Rendering</Filter>
     </ClCompile>
+    <ClCompile Include="Code\Engine\Debug\FPSCounter.cpp">
+      <Filter>Archivos de origen\Engine\Debug</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Code\Engine\Rendering\Camera.h">
@@ -151,6 +154,9 @@
     </ClInclude>
     <ClInclude Include="Code\Engine\Rendering\UITextRenderer.h">
       <Filter>Archivos de encabezado\Engine\Rendering</Filter>
+    </ClInclude>
+    <ClInclude Include="Code\Engine\Debug\FPSCounter.h">
+      <Filter>Archivos de encabezado\Engine\Debug</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

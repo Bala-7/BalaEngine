@@ -1,9 +1,6 @@
-﻿  Debug.cpp
-  GameplayEngine.cpp
-  RenderEngine.cpp
-C:\Users\fdomi\source\repos\BalaEngine\BalaEngine\Code\Engine\Rendering\RenderEngine.cpp(143,44): warning C4244: 'argument': conversion from 'const int' to 'GLfloat', possible loss of data
-C:\Users\fdomi\source\repos\BalaEngine\BalaEngine\Code\Engine\Rendering\RenderEngine.cpp(143,29): warning C4244: 'argument': conversion from 'const int' to 'GLfloat', possible loss of data
-  main.cpp
-  Generating Code...
-C:\Users\fdomi\source\repos\BalaEngine\BalaEngine\Code\Engine\Rendering\RenderEngine.cpp(216,26): warning C4838: conversion from 'FT_Pos' to 'unsigned int' requires a narrowing conversion
+﻿  RenderEngine.cpp
+C:\Users\fdomi\source\repos\BalaEngine\BalaEngine\Code\Engine\Rendering\RenderEngine.cpp(132,31): warning C4244: 'return': conversion from 'float' to 'int', possible loss of data
+C:\Users\fdomi\source\repos\BalaEngine\BalaEngine\Code\Engine\Rendering\RenderEngine.cpp(164,44): warning C4244: 'argument': conversion from 'const int' to 'GLfloat', possible loss of data
+C:\Users\fdomi\source\repos\BalaEngine\BalaEngine\Code\Engine\Rendering\RenderEngine.cpp(164,29): warning C4244: 'argument': conversion from 'const int' to 'GLfloat', possible loss of data
+C:\Users\fdomi\source\repos\BalaEngine\BalaEngine\Code\Engine\Rendering\RenderEngine.cpp(237,26): warning C4838: conversion from 'FT_Pos' to 'unsigned int' requires a narrowing conversion
   BalaEngine.vcxproj -> C:\Users\fdomi\source\repos\BalaEngine\x64\Debug\BalaEngine.exe

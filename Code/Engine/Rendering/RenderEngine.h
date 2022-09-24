@@ -45,9 +45,11 @@ public:
 	void Initialize();
 	void Update();
 	void UpdateUI();
+	void UpdateDebug();
 	void Terminate();
 
 	bool ShouldClose();
+
 	GLFWwindow* GetWindow();
 	Camera* GetCamera();
 	GLuint GetTextureID(const char* fileName);
@@ -56,6 +58,10 @@ public:
 	std::map<char, Character> GetCharacterList();
 	void AddSpriteToRenderList(SpriteRenderer* spriteRenderer);
 	void AddTextToUI(UITextRenderer* textRenderer);
+	void AddTextToDebugUI(UITextRenderer* textRenderer);
+
+	int GetTargetFPS();
+	int GetCurrentFPS();
 
 private:
 
@@ -67,6 +73,10 @@ private:
 	GLFWwindow* CreateWindow();
 	
 	void LoadFont(const char* path);
+
+	const int MAX_FPS = 60;
+	float renderDelayMilliseconds;
+	float timeSinceLastFrame;
 
 	const int WINDOW_SIZE_X = 1280;
 	const int WINDOW_SIZE_Y = 720;
@@ -92,7 +102,8 @@ private:
 	std::vector<SpriteLayer*> layerList;
 
 	std::vector<UITextRenderer*> uiRenderers;
-	
+	std::vector<UITextRenderer*> uiDebugRenderers;
+
 	// Fonts
 	std::map<char, Character> Characters;
 	FT_Library ft;

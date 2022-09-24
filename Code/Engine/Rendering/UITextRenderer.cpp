@@ -26,7 +26,10 @@ void UITextRenderer::Update()
 
 void UITextRenderer::OnComponentAdded()
 {
-	RenderEngine::GetInstance()->AddTextToUI(this);
+	if(debug)
+		RenderEngine::GetInstance()->AddTextToDebugUI(this);
+	else
+		RenderEngine::GetInstance()->AddTextToUI(this);
 }
 
 void UITextRenderer::setPosition(glm::vec2 _position)
@@ -52,6 +55,11 @@ void UITextRenderer::setProgram(GLuint _program)
 void UITextRenderer::setText(std::string _text)
 {
 	text = _text;
+}
+
+void UITextRenderer::setDebug(bool _debug)
+{
+	debug = _debug;
 }
 
 void UITextRenderer::draw()
