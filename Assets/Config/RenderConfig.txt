@@ -1,0 +1,12 @@
+RESOLUTION_X = 1280
+RESOLUTION_Y = 720
+FPS_MAX = 60
+
+FONTS_PATH = Assets/Fonts/
+SHADERS_PATH = Assets/Shaders/
+
+VERTEX_SHADER_PATH = Assets/Shaders/TexturedModel.vs
+FRAGMENT_SHADER_PATH = Assets/Shaders/TexturedModel.fs
+
+VERTEX_SHADER_TEXT_PATH = Assets/Shaders/text.vs
+FRAGMENT_SHADER_TEXT_PATH = Assets/Shaders/text.fs

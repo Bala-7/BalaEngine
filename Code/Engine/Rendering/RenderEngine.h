@@ -10,6 +10,7 @@
 #include <ft2build.h>
 #include FT_FREETYPE_H
 #include <iostream>
+#include <string>
 #include <map>
 #include <vector>
 #include "Mesh.h"
@@ -24,6 +25,23 @@
 class RenderEngine
 {
 public:
+	struct Config
+	{
+		std::map<std::string, std::string> configValues;
+		int WINDOW_SIZE_X;
+		int WINDOW_SIZE_Y;
+		int FPS_MAX;
+
+		std::string FONTS_PATH;
+		std::string SHADERS_PATH;
+
+		std::string VERTEX_SHADER_PATH;
+		std::string FRAGMENT_SHADER_PATH;
+
+		std::string VERTEX_SHADER_TEXT_PATH;
+		std::string FRAGMENT_SHADER_TEXT_PATH;
+	};
+
 	struct Character {
 		unsigned int TextureID;  // ID handle of the glyph texture
 		glm::ivec2   Size;       // Size of glyph
@@ -73,19 +91,15 @@ private:
 	GLFWwindow* CreateWindow();
 	
 	void LoadFont(const char* path);
+	void LoadConfigFile();
 
-	const int MAX_FPS = 60;
+	void ParseValue(std::string name, std::string value);
+	void InitializeConfigValues();
+
+	Config config;
+	//const int MAX_FPS = 60;
 	float renderDelayMilliseconds;
 	float timeSinceLastFrame;
-
-	const int WINDOW_SIZE_X = 1280;
-	const int WINDOW_SIZE_Y = 720;
-
-	const char* VERTEX_SHADER_PATH = "Assets/Shaders/TexturedModel.vs";
-	const char* FRAGMENT_SHADER_PATH = "Assets/Shaders/TexturedModel.fs";
-
-	const char* VERTEX_SHADER_PATH_TEXT = "Assets/Shaders/text.vs";
-	const char* FRAGMENT_SHADER_PATH_TEXT = "Assets/Shaders/text.fs";
 
 	const int LAYER_MAX = 10;
 
@@ -108,7 +122,6 @@ private:
 	std::map<char, Character> Characters;
 	FT_Library ft;
 	FT_Face ftFace;
-
 };
 
 #endif

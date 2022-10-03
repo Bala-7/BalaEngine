@@ -1,11 +1,13 @@
 #include "RenderEngine.h"
 #include "Engine/Debug/Debug.h"
 #include "Engine/Core/Time.h"
+#include <fstream>
+#include <algorithm>
 
 RenderEngine::RenderEngine()
 {
 	p_Instance = this;
-	renderDelayMilliseconds = (1.0f / MAX_FPS);
+	renderDelayMilliseconds = (1.0f / config.FPS_MAX);
 
 	for (int i = 0; i < LAYER_MAX; ++i)
 	{
@@ -22,6 +24,9 @@ RenderEngine::~RenderEngine()
 
 void RenderEngine::Initialize()
 {
+	LoadConfigFile();
+	InitializeConfigValues();
+
 	InitGLFW();
 	window = CreateWindow();
 	InitGLEW();
@@ -123,7 +128,7 @@ void RenderEngine::AddTextToDebugUI(UITextRenderer* textRenderer)
 
 int RenderEngine::GetTargetFPS()
 {
-	return MAX_FPS;
+	return config.FPS_MAX;
 }
 
 int RenderEngine::GetCurrentFPS()
@@ -161,16 +166,16 @@ void RenderEngine::InitGame()
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-	camera = new Camera(45.0f, WINDOW_SIZE_X, WINDOW_SIZE_Y, 0.1f, 100.0f, glm::vec3(0.0f, 0.0f, 6.0f));
-	glm::mat4 projection = glm::ortho(0.0f, (float) WINDOW_SIZE_X, (float) WINDOW_SIZE_Y, 0.0f, -1.0f, 1.0f);
+	camera = new Camera(45.0f, config.WINDOW_SIZE_X, config.WINDOW_SIZE_Y, 0.1f, 100.0f, glm::vec3(0.0f, 0.0f, 6.0f));
+	glm::mat4 projection = glm::ortho(0.0f, (float) config.WINDOW_SIZE_X, (float) config.WINDOW_SIZE_Y, 0.0f, -1.0f, 1.0f);
 	ShaderLoader shaderLoader;
-	shaderProgram = shaderLoader.createProgram(VERTEX_SHADER_PATH, FRAGMENT_SHADER_PATH);
-	textShaderProgram = shaderLoader.createProgram(VERTEX_SHADER_PATH_TEXT, FRAGMENT_SHADER_PATH_TEXT);
+	shaderProgram = shaderLoader.createProgram(config.VERTEX_SHADER_PATH.c_str(), config.FRAGMENT_SHADER_PATH.c_str());
+	textShaderProgram = shaderLoader.createProgram(config.VERTEX_SHADER_TEXT_PATH.c_str(), config.FRAGMENT_SHADER_TEXT_PATH.c_str());
 }
 
 GLFWwindow* RenderEngine::CreateWindow()
 {
-	GLFWwindow* window = glfwCreateWindow(WINDOW_SIZE_X, WINDOW_SIZE_Y, "BalaEngine", nullptr, nullptr);
+	GLFWwindow* window = glfwCreateWindow(config.WINDOW_SIZE_X, config.WINDOW_SIZE_Y, "BalaEngine", nullptr, nullptr);
 	if (window == nullptr)
 	{
 		std::cout << "Failed to create GLFW window" << std::endl;
@@ -178,7 +183,7 @@ GLFWwindow* RenderEngine::CreateWindow()
 		return nullptr;
 	}
 	glfwMakeContextCurrent(window);
-	glViewport(0, 0, WINDOW_SIZE_X, WINDOW_SIZE_Y);
+	glViewport(0, 0, config.WINDOW_SIZE_X, config.WINDOW_SIZE_Y);
 
 	return window;
 }
@@ -245,3 +250,54 @@ void RenderEngine::LoadFont(const char* path)
 
 	Debug::Log("Font loaded!");
 }
+
+void RenderEngine::LoadConfigFile()
+{
+	// std::ifstream is RAII, i.e. no need to call close
+	std::ifstream cFile("Assets/Config/RenderConfig.txt");
+	if (cFile.is_open())
+	{
+		std::string line;
+		while (getline(cFile, line))
+		{
+			line.erase(std::remove_if(line.begin(), line.end(), isspace), line.end());
+			if (line.empty() || line[0] == '#')
+			{
+				continue;
+			}
+			
+			auto delimiterPos = line.find("=");
+			auto name = line.substr(0, delimiterPos);
+
+			auto value = line.substr(delimiterPos + 1);
+			ParseValue(name, value);
+		}
+	}
+	else
+	{
+		
+	}
+}
+
+void RenderEngine::ParseValue(std::string name, std::string value)
+{
+	config.configValues[name] = value;
+}
+
+void RenderEngine::InitializeConfigValues()
+{
+	config.FPS_MAX = std::stoi(config.configValues["FPS_MAX"]);
+	config.WINDOW_SIZE_X = std::stoi(config.configValues["RESOLUTION_X"]);
+	config.WINDOW_SIZE_Y = std::stoi(config.configValues["RESOLUTION_Y"]);
+
+	config.FONTS_PATH = config.configValues["FONTS_PATH"];
+	config.SHADERS_PATH = config.configValues["SHADERS_PATH"];
+
+	config.VERTEX_SHADER_PATH = config.configValues["VERTEX_SHADER_PATH"];
+	config.FRAGMENT_SHADER_PATH = config.configValues["FRAGMENT_SHADER_PATH"];
+
+	config.VERTEX_SHADER_TEXT_PATH = config.configValues["VERTEX_SHADER_TEXT_PATH"];
+	config.FRAGMENT_SHADER_TEXT_PATH = config.configValues["FRAGMENT_SHADER_TEXT_PATH"];
+}
+
+

@@ -1,6 +1,11 @@
 ﻿  RenderEngine.cpp
-C:\Users\fdomi\source\repos\BalaEngine\BalaEngine\Code\Engine\Rendering\RenderEngine.cpp(132,31): warning C4244: 'return': conversion from 'float' to 'int', possible loss of data
-C:\Users\fdomi\source\repos\BalaEngine\BalaEngine\Code\Engine\Rendering\RenderEngine.cpp(164,44): warning C4244: 'argument': conversion from 'const int' to 'GLfloat', possible loss of data
-C:\Users\fdomi\source\repos\BalaEngine\BalaEngine\Code\Engine\Rendering\RenderEngine.cpp(164,29): warning C4244: 'argument': conversion from 'const int' to 'GLfloat', possible loss of data
-C:\Users\fdomi\source\repos\BalaEngine\BalaEngine\Code\Engine\Rendering\RenderEngine.cpp(237,26): warning C4838: conversion from 'FT_Pos' to 'unsigned int' requires a narrowing conversion
+C:\Users\fdomi\source\repos\BalaEngine\BalaEngine\Code\Engine\Rendering\RenderEngine.cpp(137,31): warning C4244: 'return': conversion from 'float' to 'int', possible loss of data
+C:\Users\fdomi\source\repos\BalaEngine\BalaEngine\Code\Engine\Rendering\RenderEngine.cpp(169,57): warning C4244: 'argument': conversion from 'int' to 'GLfloat', possible loss of data
+C:\Users\fdomi\source\repos\BalaEngine\BalaEngine\Code\Engine\Rendering\RenderEngine.cpp(169,35): warning C4244: 'argument': conversion from 'int' to 'GLfloat', possible loss of data
+  main.cpp
+C:\Users\fdomi\source\repos\BalaEngine\BalaEngine\Code\Engine\Rendering\RenderEngine.cpp(242,26): warning C4838: conversion from 'FT_Pos' to 'unsigned int' requires a narrowing conversion
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.18362.0\shared\minwindef.h(130,1): warning C4005: 'APIENTRY': macro redefinition
+C:\Users\fdomi\source\repos\BalaEngine\BalaEngine\Dependencies\glfw-3.3.2.bin.WIN64\include\GLFW\glfw3.h(123): message : see previous definition of 'APIENTRY'
+  Generating Code...
+C:\Users\fdomi\source\repos\BalaEngine\BalaEngine\main.cpp(101,26): warning C4244: 'argument': conversion from 'float' to 'DWORD', possible loss of data
   BalaEngine.vcxproj -> C:\Users\fdomi\source\repos\BalaEngine\x64\Debug\BalaEngine.exe
