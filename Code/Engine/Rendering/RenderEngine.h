@@ -78,6 +78,7 @@ public:
 	void AddTextToUI(UITextRenderer* textRenderer);
 	void AddTextToDebugUI(UITextRenderer* textRenderer);
 
+	Config GetConfiguration();
 	int GetTargetFPS();
 	int GetCurrentFPS();
 

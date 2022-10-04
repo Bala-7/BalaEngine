@@ -8,6 +8,7 @@ class Camera
 {
 public:
 	Camera(GLfloat FOV, GLfloat width, GLfloat height, GLfloat nearPlane, GLfloat farPlane, glm::vec3 camPos);
+	Camera(GLfloat zoom, GLfloat nearPlane, GLfloat farPlane, glm::vec3 camPos);
 	~Camera();
 
 	glm::mat4 getViewMatrix();

@@ -37,17 +37,19 @@ int main()
 	SpriteRenderer* sr = new SpriteRenderer();
 	sr->setSpriteSheet("PokemonBlue_Player_Spritesheet.png", 16, 16, 10, 1);
 	sr->setSprite(1);
-	sr->setLayer(1);
+	sr->setLayer(0);
+	go->transform->position = glm::vec3(0.0f, 0.0f, 0.0f);
 	go->AddComponent(sr);
-	go->transform->position = glm::vec3(-0.5f, 0.0f, 0.0f);
+	
 
 	GameObject* go2 = new GameObject();
 	SpriteRenderer* sr2 = new SpriteRenderer();
 	sr2->setSpriteSheet("Character.png", 32, 32, 3, 4);
 	sr2->setSprite(10);
-	sr2->setLayer(0);
-	go2->AddComponent(sr2);
+	sr2->setLayer(1);
 	go2->transform->position = glm::vec3(0.5f, 0.0f, 0.0f);
+	go2->AddComponent(sr2);
+	
 
 
 	GameObject* textGO = new GameObject();

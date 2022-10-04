@@ -147,6 +147,7 @@ void SpriteRenderer::setSpriteSheet(const char* fileName, int _spriteWidth, int 
 void SpriteRenderer::setLayer(int newLayer)
 {
 	this->layer = newLayer;
+	this->position = glm::vec3(position.x, position.y, -newLayer);
 }
 
 int SpriteRenderer::GetLayer()
@@ -161,7 +162,7 @@ void SpriteRenderer::setScale(glm::vec3 _scale)
 
 void SpriteRenderer::setPosition(glm::vec3 _position)
 {
-	this->position = _position;
+	this->position = glm::vec3(_position.x, _position.y, -layer);
 }
 
 void SpriteRenderer::setProgram(GLuint _program)
