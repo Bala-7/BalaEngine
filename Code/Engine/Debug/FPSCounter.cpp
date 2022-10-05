@@ -10,7 +10,7 @@ FPSCounter::FPSCounter(UITextRenderer* _text)
 
 void FPSCounter::Update()
 {
-	currentTime += Time::GetDeltaTimeMS().count();
+	currentTime += Time::GetLastFrameTime() * 1000.0f;
 	if (currentTime >= updateRateMS)
 	{
 		currentTime = 0;

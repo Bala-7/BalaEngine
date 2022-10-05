@@ -138,7 +138,7 @@ int RenderEngine::GetTargetFPS()
 
 int RenderEngine::GetCurrentFPS()
 {
-	float lastFrameTimeSeconds = Time::GetLastLoopTime() / 1000;
+	float lastFrameTimeSeconds = Time::GetLastFrameTime();
 	return (lastFrameTimeSeconds > 0) ? 1 / lastFrameTimeSeconds : 1000;
 }
 

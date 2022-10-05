@@ -1,52 +1,36 @@
 #include "Time.h"
 
-std::chrono::milliseconds Time::loopStartMilliseconds;
-std::chrono::milliseconds Time::loopEndMilliseconds;
+float Time::lastFrameTime;
+std::chrono::microseconds Time::deltaTimeMicroseconds;
 
-std::chrono::milliseconds Time::loopPrevStartMilliseconds;
-std::chrono::milliseconds Time::loopPrevEndMilliseconds;
-
-
-std::chrono::milliseconds Time::deltaTimeMilliseconds;
-
-std::chrono::milliseconds Time::Now()
+std::chrono::microseconds Time::Now()
 {
-	return TimePointToMilliseconds(Clock::now());
-}
-
-
-void Time::StartLoop()
-{
-	loopPrevStartMilliseconds = loopStartMilliseconds;
-	loopStartMilliseconds = TimePointToMilliseconds(Clock::now());
-}
-
-void Time::EndLoop()
-{
-	loopPrevEndMilliseconds = loopEndMilliseconds;
-	loopEndMilliseconds = TimePointToMilliseconds(Clock::now());
-	deltaTimeMilliseconds = loopEndMilliseconds - loopStartMilliseconds;
+	return TimePointToMicroseconds(Clock::now());
 }
 
 
 float Time::GetDeltaTime()
 {
-	return deltaTimeMilliseconds.count() / 1000.0f;
+	return deltaTimeMicroseconds.count() / 1000.0f;
 }
 
-std::chrono::milliseconds Time::GetDeltaTimeMS()
+std::chrono::microseconds Time::GetDeltaTimeMS()
 {
-	return deltaTimeMilliseconds;
+	return deltaTimeMicroseconds;
+}
+
+float Time::GetLastFrameTime()
+{
+	return lastFrameTime;
+}
+
+void Time::SetLastFrameTime(float newLastFrameTime)
+{
+	lastFrameTime = newLastFrameTime;
 }
 
 
-float Time::GetLastLoopTime()
+std::chrono::microseconds Time::TimePointToMicroseconds(std::chrono::time_point<Clock> timePoint)
 {
-	return loopEndMilliseconds.count() - loopPrevStartMilliseconds.count();
-}
-
-
-std::chrono::milliseconds Time::TimePointToMilliseconds(std::chrono::time_point<Clock> timePoint)
-{
-	return std::chrono::time_point_cast<std::chrono::milliseconds>(timePoint).time_since_epoch();
+	return std::chrono::time_point_cast<std::chrono::microseconds>(timePoint).time_since_epoch();
 }

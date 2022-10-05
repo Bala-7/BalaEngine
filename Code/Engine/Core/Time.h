@@ -7,28 +7,19 @@ class Time
 {
 public:
 
-	static std::chrono::milliseconds Now();
-
-	static void StartLoop();
-	static void EndLoop();
-
+	static std::chrono::microseconds Now();
 
 	static float GetDeltaTime();
-	static std::chrono::milliseconds GetDeltaTimeMS();
-	static std::chrono::milliseconds GetLastFrameEnd();
-	static float GetLastLoopTime();
+	static std::chrono::microseconds GetDeltaTimeMS();
+
 	static float GetLastFrameTime();
+	static void SetLastFrameTime(float newLastFrameTime);
 
 private:
 
-	static std::chrono::milliseconds loopStartMilliseconds;
-	static std::chrono::milliseconds loopEndMilliseconds;
+	static float lastFrameTime;
+	static std::chrono::microseconds deltaTimeMicroseconds;
 
-	static std::chrono::milliseconds loopPrevStartMilliseconds;
-	static std::chrono::milliseconds loopPrevEndMilliseconds;
-
-	static std::chrono::milliseconds deltaTimeMilliseconds;
-
-	static std::chrono::milliseconds TimePointToMilliseconds(std::chrono::time_point<Clock> timePoint);
+	static std::chrono::microseconds TimePointToMicroseconds(std::chrono::time_point<Clock> timePoint);
 };
 

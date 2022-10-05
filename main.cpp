@@ -74,19 +74,36 @@ int main()
 
 	glfwSetKeyCallback(window, key_callback);	// Input callback
 	// RendererInitialization();	// Triangle renderer
+
+	auto currentTime = Time::Now();
+	float t = 0.0f;
+	const float dt = 1.0f / renderEngine->GetTargetFPS();
+	float accumulator = 0.0f;
+
 	while (!renderEngine->ShouldClose())
 	{
-		Time::StartLoop();
+		auto newTime = Time::Now();
+		float frameTime = (newTime.count() - currentTime.count()) / 1000000.0f;
+		Time::SetLastFrameTime(frameTime);
+		currentTime = newTime;
+		
+		accumulator += frameTime;
+
 		glfwPollEvents();
 
-		// Physics code
-		// TODO
-		// \Physics code\
+		while (accumulator >= dt) 
+		{
+			// Physics code
+			// TODO
+			// \Physics code\
 
-		// Game Logic code
-		gameplayEngine->Update();
-		// \Game Logic code\
+			// Game Logic code
+			gameplayEngine->Update();
+			// \Game Logic code\
 
+			accumulator -= dt;
+			t += dt;
+		}
 		
 		// Scene Rendering code
 		renderEngine->Update();
@@ -96,12 +113,7 @@ int main()
 		renderEngine->UpdateUI();
 		renderEngine->UpdateDebug();
 		// \GUI Rendering code
-		
-		float lastLoopTimeMS = Time::GetLastLoopTime();
-		float targetFrameTime = (1.0f / renderEngine->GetTargetFPS()) * 1000;
-		if (lastLoopTimeMS < targetFrameTime)
-			Sleep(targetFrameTime - lastLoopTimeMS);
-		Time::EndLoop();
+
 		glfwSwapBuffers(window);
 	}
 
