@@ -1,4 +1,0 @@
-﻿  main.cpp
-C:\Program Files (x86)\Windows Kits\10\Include\10.0.18362.0\shared\minwindef.h(130,1): warning C4005: 'APIENTRY': macro redefinition
-C:\Users\fdomi\source\repos\BalaEngine\BalaEngine\Dependencies\glfw-3.3.2.bin.WIN64\include\GLFW\glfw3.h(123): message : see previous definition of 'APIENTRY'
-  BalaEngine.vcxproj -> C:\Users\fdomi\source\repos\BalaEngine\x64\Debug\BalaEngine.exe
