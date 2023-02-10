@@ -44,6 +44,7 @@ void RenderEngine::Update()
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	//glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
 	glClearColor(1.0, 1.0, 0.0, 1.0);//clear yellow
+	//glClearColor(0.0, 0.0, 0.0, 1.0);//clear black
 
 	for (int i = LAYER_MAX - 1; i >= 0; --i)
 	{

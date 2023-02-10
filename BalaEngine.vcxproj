@@ -30,8 +30,10 @@
     <ClCompile Include="Code\Engine\Rendering\LightRenderer.cpp" />
     <ClCompile Include="Code\Engine\Rendering\Mesh.cpp" />
     <ClCompile Include="Code\Engine\Rendering\MeshRenderer.cpp" />
+    <ClCompile Include="Code\Engine\Rendering\Model.cpp" />
     <ClCompile Include="Code\Engine\Rendering\ObjLoader.cpp" />
     <ClCompile Include="Code\Engine\Rendering\RenderEngine.cpp" />
+    <ClCompile Include="Code\Engine\Rendering\Shader.cpp" />
     <ClCompile Include="Code\Engine\Rendering\ShaderLoader.cpp" />
     <ClCompile Include="Code\Engine\Rendering\SpriteLayer.cpp" />
     <ClCompile Include="Code\Engine\Rendering\SpriteRenderer.cpp" />
@@ -51,8 +53,10 @@
     <ClInclude Include="Code\Engine\Rendering\LightRenderer.h" />
     <ClInclude Include="Code\Engine\Rendering\Mesh.h" />
     <ClInclude Include="Code\Engine\Rendering\MeshRenderer.h" />
+    <ClInclude Include="Code\Engine\Rendering\Model.h" />
     <ClInclude Include="Code\Engine\Rendering\ObjLoader.h" />
     <ClInclude Include="Code\Engine\Rendering\RenderEngine.h" />
+    <ClInclude Include="Code\Engine\Rendering\Shader.h" />
     <ClInclude Include="Code\Engine\Rendering\ShaderLoader.h" />
     <ClInclude Include="Code\Engine\Rendering\SpriteLayer.h" />
     <ClInclude Include="Code\Engine\Rendering\SpriteRenderer.h" />

@@ -102,6 +102,12 @@
     <ClCompile Include="Code\Engine\Debug\FPSCounter.cpp">
       <Filter>Archivos de origen\Engine\Debug</Filter>
     </ClCompile>
+    <ClCompile Include="Code\Engine\Rendering\Shader.cpp">
+      <Filter>Archivos de origen\Engine\Rendering</Filter>
+    </ClCompile>
+    <ClCompile Include="Code\Engine\Rendering\Model.cpp">
+      <Filter>Archivos de origen\Engine\Rendering</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Code\Engine\Rendering\Camera.h">
@@ -157,6 +163,12 @@
     </ClInclude>
     <ClInclude Include="Code\Engine\Debug\FPSCounter.h">
       <Filter>Archivos de encabezado\Engine\Debug</Filter>
+    </ClInclude>
+    <ClInclude Include="Code\Engine\Rendering\Shader.h">
+      <Filter>Archivos de encabezado\Engine\Rendering</Filter>
+    </ClInclude>
+    <ClInclude Include="Code\Engine\Rendering\Model.h">
+      <Filter>Archivos de encabezado\Engine\Rendering</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

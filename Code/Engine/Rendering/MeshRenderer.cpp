@@ -1,8 +1,10 @@
 #include "MeshRenderer.h"
+#include "Engine/Core/GameObject.h"
+#include "Engine/Rendering/RenderEngine.h"
 
-MeshRenderer::MeshRenderer(MeshType modelType, Camera* _camera) 
+MeshRenderer::MeshRenderer(MeshType modelType) 
 {
-	camera = _camera;
+	camera = RenderEngine::GetInstance()->GetCamera();
 	scale = glm::vec3(1.0f, 1.0f, 1.0f);
 	position = glm::vec3(0.0, 0.0, 0.0);
 
@@ -47,13 +49,35 @@ MeshRenderer::~MeshRenderer()
 {
 }
 
+void MeshRenderer::Update()
+{
+	draw();
+}
+
+void MeshRenderer::OnComponentAdded()
+{
+	//RenderEngine::GetInstance()->AddSpriteToRenderList(this);
+	setPosition(gameObject->transform->position);
+	setScale(gameObject->transform->scale);
+	setRotation(gameObject->transform->rotation);
+}
+
 void MeshRenderer::draw() 
 {
+	// Get position and scale from Transform component
+	setPosition(gameObject->transform->position);
+	setScale(gameObject->transform->scale);
+	setRotation(gameObject->transform->rotation);
+
 	// Set the model matrix
 	glm::mat4 translationMatrix = glm::translate(glm::mat4(1.0f), position);
 	glm::mat4 scaleMatrix = glm::scale(glm::mat4(1.0f), scale);
+	glm::mat4 rotateMatrix = 
+		glm::rotate(glm::mat4(1.0f), glm::radians(rotation.x), glm::vec3(1.0, 0.0, 0.0)) *
+		glm::rotate(glm::mat4(1.0f), glm::radians(rotation.y), glm::vec3(0.0, 1.0, 0.0)) *
+		glm::rotate(glm::mat4(1.0f), glm::radians(rotation.z), glm::vec3(0.0, 0.0, 1.0));
 	modelMatrix = glm::mat4(1.0f);
-	modelMatrix = translationMatrix * scaleMatrix;
+	modelMatrix = translationMatrix * rotateMatrix * scaleMatrix;
 
 	// vp matrix is the multiplied view and projection amtrices
 	glm::mat4 vp = camera->getProjectionMatrix() * camera->getViewMatrix();
@@ -90,6 +114,11 @@ void MeshRenderer::setScale(glm::vec3 _scale)
 void MeshRenderer::setPosition(glm::vec3 _position) 
 {
 	this->position = _position;
+}
+
+void MeshRenderer::setRotation(glm::vec3 _rotation)
+{
+	this->rotation = _rotation;
 }
 
 void MeshRenderer::setProgram(GLuint _program) 

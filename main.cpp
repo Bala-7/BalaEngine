@@ -6,12 +6,15 @@
 
 #include <iostream>
 #include "Code/Engine/Rendering/RenderEngine.h"
+#include "Engine/Rendering/MeshRenderer.h"
 #include "Code/Engine/Core/GameObject.h"
 #include "Code/Engine/Gameplay/GameplayEngine.h"
 #include "Code/Engine/Debug/Debug.h"
 #include "Engine/Core/Time.h"
 #include "Engine/Rendering/UITextRenderer.h"
 #include "Engine/Debug/FPSCounter.h"
+#include "Engine/Rendering/Model.h"
+
 #ifdef _WIN32
 #include <Windows.h>
 #else
@@ -19,6 +22,9 @@
 #endif
 
 void key_callback(GLFWwindow* window, int key, int scancode, int action, int mode);
+
+void CreateCube3D();
+void CreateSprites2D();
 
 RenderEngine* renderEngine;
 GameplayEngine* gameplayEngine;
@@ -33,44 +39,20 @@ int main()
 
 	GLFWwindow* window = renderEngine->GetWindow();
 	
+	/*Shader ourShader("Assets/Shaders/TexturedModel.vs", "Assets/Shaders/TexturedModel.fs");
+
+	Model ourModel("resources/objects/backpack/backpack.obj");*/
+
+	//CreateCube3D();
+	CreateSprites2D();
 	GameObject* go = new GameObject();
-	SpriteRenderer* sr = new SpriteRenderer();
-	sr->setSpriteSheet("PokemonBlue_Player_Spritesheet.png", 16, 16, 10, 1);
-	sr->setSprite(1);
-	sr->setLayer(0);
-	go->transform->position = glm::vec3(0.0f, 0.0f, 0.0f);
-	go->AddComponent(sr);
-	
-
-	GameObject* go2 = new GameObject();
-	SpriteRenderer* sr2 = new SpriteRenderer();
-	sr2->setSpriteSheet("Character.png", 32, 32, 3, 4);
-	sr2->setSprite(10);
-	sr2->setLayer(1);
-	go2->transform->position = glm::vec3(0.5f, 0.0f, 0.0f);
-	go2->AddComponent(sr2);
-	
-
-
-	GameObject* textGO = new GameObject();
-	UITextRenderer* textRenderer = new UITextRenderer();
-	textRenderer->setText("This is sample text");
-	textRenderer->setPosition(glm::vec2(450.0f, 240.0f));
-	textRenderer->setScale(0.85f);
-	textRenderer->setColor(glm::vec3(0.3f, 0.7f, 0.9f));
-	textGO->AddComponent(textRenderer);
-
-	GameObject* fpsTextGO = new GameObject();
-	UITextRenderer* fpsTR = new UITextRenderer();
-	fpsTR->setText("FPS: ");
-	fpsTR->setPosition(glm::vec2(5.0f, 695.0f));
-	fpsTR->setScale(0.45f);
-	fpsTR->setColor(glm::vec3(1.0f, 0.0f, 0.0f));
-	fpsTR->setDebug(true);
-	fpsTextGO->AddComponent(fpsTR);
-	FPSCounter* counter = new FPSCounter(fpsTR);
-	fpsTextGO->AddComponent(counter);
-
+	MeshRenderer* mr = new MeshRenderer(MeshType::kCube);
+	mr->setTexture(RenderEngine::GetInstance()->GetTextureID("Concrete.jpg"));
+	mr->setProgram(RenderEngine::GetInstance()->GetShaderProgram());
+	go->transform->position = glm::vec3(0.0f, 0.0f, 3.0f);
+	go->transform->scale = glm::vec3(3.0f, 3.0f, 3.0f);
+	go->transform->rotation = glm::vec3(30.0f, 30.0f, 0.0f);
+	go->AddComponent(mr);
 
 	glfwSetKeyCallback(window, key_callback);	// Input callback
 	// RendererInitialization();	// Triangle renderer
@@ -80,6 +62,7 @@ int main()
 	const float dt = 1.0f / renderEngine->GetTargetFPS();
 	float accumulator = 0.0f;
 
+	float rotation = 0;
 	while (!renderEngine->ShouldClose())
 	{
 		auto newTime = Time::Now();
@@ -91,6 +74,7 @@ int main()
 
 		glfwPollEvents();
 
+		
 		while (accumulator >= dt) 
 		{
 			// Physics code
@@ -99,19 +83,26 @@ int main()
 
 			// Game Logic code
 			gameplayEngine->Update();
+			
 			// \Game Logic code\
+
+			go->transform->rotation = glm::vec3(30.0f, rotation, 0.0f);
+			rotation += 10.0f * dt;
 
 			accumulator -= dt;
 			t += dt;
 		}
 		
 		// Scene Rendering code
-		renderEngine->Update();
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+		glClearColor(0.0, 0.0, 0.0, 1.0);//clear yellow
+		mr->draw();
+		//renderEngine->Update();
 		// \Scene Rendering code\
 			
 		// GUI Rendering code
-		renderEngine->UpdateUI();
-		renderEngine->UpdateDebug();
+		//renderEngine->UpdateUI();
+		//renderEngine->UpdateDebug();
 		// \GUI Rendering code
 
 		glfwSwapBuffers(window);
@@ -135,3 +126,54 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
 }
 
 // -----------------------------------
+
+void CreateCube3D()
+{
+	GameObject* go = new GameObject();
+	MeshRenderer* mr = new MeshRenderer(MeshType::kCube);
+	mr->setTexture(RenderEngine::GetInstance()->GetTextureID("Assets/Textures/Concrete.jpg"));
+	mr->setProgram(RenderEngine::GetInstance()->GetShaderProgram());
+	go->transform->position = glm::vec3(0.0f, 0.0f, 0.0f);
+	go->AddComponent(mr);
+}
+
+void CreateSprites2D()
+{
+	GameObject* go = new GameObject();
+	SpriteRenderer* sr = new SpriteRenderer();
+	sr->setSpriteSheet("PokemonBlue_Player_Spritesheet.png", 16, 16, 10, 1);
+	sr->setSprite(1);
+	sr->setLayer(0);
+	go->transform->position = glm::vec3(0.0f, 0.0f, 0.0f);
+	go->AddComponent(sr);
+
+
+	GameObject* go2 = new GameObject();
+	SpriteRenderer* sr2 = new SpriteRenderer();
+	sr2->setSpriteSheet("Character.png", 32, 32, 3, 4);
+	sr2->setSprite(10);
+	sr2->setLayer(1);
+	go2->transform->position = glm::vec3(0.5f, 0.0f, 0.0f);
+	go2->AddComponent(sr2);
+
+
+
+	GameObject* textGO = new GameObject();
+	UITextRenderer* textRenderer = new UITextRenderer();
+	textRenderer->setText("This is sample text");
+	textRenderer->setPosition(glm::vec2(450.0f, 240.0f));
+	textRenderer->setScale(0.85f);
+	textRenderer->setColor(glm::vec3(0.3f, 0.7f, 0.9f));
+	textGO->AddComponent(textRenderer);
+
+	GameObject* fpsTextGO = new GameObject();
+	UITextRenderer* fpsTR = new UITextRenderer();
+	fpsTR->setText("FPS: ");
+	fpsTR->setPosition(glm::vec2(5.0f, 695.0f));
+	fpsTR->setScale(0.45f);
+	fpsTR->setColor(glm::vec3(1.0f, 0.0f, 0.0f));
+	fpsTR->setDebug(true);
+	fpsTextGO->AddComponent(fpsTR);
+	FPSCounter* counter = new FPSCounter(fpsTR);
+	fpsTextGO->AddComponent(counter);
+}

@@ -36,7 +36,6 @@ SpriteRenderer::SpriteRenderer()
 	// Unbind Buffers and vertexArray
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 	glBindVertexArray(0);
-	
 }
 
 SpriteRenderer::~SpriteRenderer()
