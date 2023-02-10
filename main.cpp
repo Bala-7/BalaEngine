@@ -15,6 +15,10 @@
 #include "Engine/Debug/FPSCounter.h"
 #include "Engine/Rendering/Model.h"
 
+#include "imgui.h"
+#include "imgui_impl_glfw.h"
+#include "imgui_impl_opengl3.h"
+
 #ifdef _WIN32
 #include <Windows.h>
 #else
@@ -39,6 +43,15 @@ int main()
 
 	GLFWwindow* window = renderEngine->GetWindow();
 	
+	// IMGUI
+	IMGUI_CHECKVERSION();
+	ImGui::CreateContext();
+	ImGuiIO& io = ImGui::GetIO(); (void)io;
+	ImGui::StyleColorsDark();
+	ImGui_ImplGlfw_InitForOpenGL(window, true);
+	ImGui_ImplOpenGL3_Init("#version 450");
+	// \IMGUI
+
 	/*Shader ourShader("Assets/Shaders/TexturedModel.vs", "Assets/Shaders/TexturedModel.fs");
 
 	Model ourModel("resources/objects/backpack/backpack.obj");*/
@@ -63,6 +76,9 @@ int main()
 	float accumulator = 0.0f;
 
 	float rotation = 0;
+	bool drawCube = true;
+	float rotationSpeed = 10.0f;
+
 	while (!renderEngine->ShouldClose())
 	{
 		auto newTime = Time::Now();
@@ -87,7 +103,7 @@ int main()
 			// \Game Logic code\
 
 			go->transform->rotation = glm::vec3(30.0f, rotation, 0.0f);
-			rotation += 10.0f * dt;
+			rotation += rotationSpeed * dt;
 
 			accumulator -= dt;
 			t += dt;
@@ -96,7 +112,24 @@ int main()
 		// Scene Rendering code
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		glClearColor(0.0, 0.0, 0.0, 1.0);//clear yellow
-		mr->draw();
+		if(drawCube)
+			mr->draw();
+
+		// ImGui render
+		ImGui_ImplOpenGL3_NewFrame();
+		ImGui_ImplGlfw_NewFrame();
+		ImGui::NewFrame();
+
+		ImGui::Begin("ImGui Editor Window");
+		ImGui::Text("Edit object parameters");
+		ImGui::Checkbox("Draw Cube", &drawCube);
+		ImGui::SliderFloat("Rotation Speed", &rotationSpeed, 0.0f, 20.0f);
+		ImGui::End();
+
+		ImGui::Render();
+		ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+		// \ImGui render
+
 		//renderEngine->Update();
 		// \Scene Rendering code\
 			
@@ -108,6 +141,9 @@ int main()
 		glfwSwapBuffers(window);
 	}
 
+	ImGui_ImplOpenGL3_Shutdown();
+	ImGui_ImplGlfw_Shutdown();
+	ImGui::DestroyContext();
 
 	renderEngine->Terminate();
 

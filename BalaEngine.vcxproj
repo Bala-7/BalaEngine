@@ -39,6 +39,13 @@
     <ClCompile Include="Code\Engine\Rendering\SpriteRenderer.cpp" />
     <ClCompile Include="Code\Engine\Rendering\TextureLoader.cpp" />
     <ClCompile Include="Code\Engine\Rendering\UITextRenderer.cpp" />
+    <ClCompile Include="Dependencies\imgui\imgui.cpp" />
+    <ClCompile Include="Dependencies\imgui\imgui_demo.cpp" />
+    <ClCompile Include="Dependencies\imgui\imgui_draw.cpp" />
+    <ClCompile Include="Dependencies\imgui\imgui_impl_glfw.cpp" />
+    <ClCompile Include="Dependencies\imgui\imgui_impl_opengl3.cpp" />
+    <ClCompile Include="Dependencies\imgui\imgui_tables.cpp" />
+    <ClCompile Include="Dependencies\imgui\imgui_widgets.cpp" />
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -62,6 +69,15 @@
     <ClInclude Include="Code\Engine\Rendering\SpriteRenderer.h" />
     <ClInclude Include="Code\Engine\Rendering\TextureLoader.h" />
     <ClInclude Include="Code\Engine\Rendering\UITextRenderer.h" />
+    <ClInclude Include="Dependencies\imgui\imconfig.h" />
+    <ClInclude Include="Dependencies\imgui\imgui.h" />
+    <ClInclude Include="Dependencies\imgui\imgui_impl_glfw.h" />
+    <ClInclude Include="Dependencies\imgui\imgui_impl_opengl3.h" />
+    <ClInclude Include="Dependencies\imgui\imgui_impl_opengl3_loader.h" />
+    <ClInclude Include="Dependencies\imgui\imgui_internal.h" />
+    <ClInclude Include="Dependencies\imgui\imstb_rectpack.h" />
+    <ClInclude Include="Dependencies\imgui\imstb_textedit.h" />
+    <ClInclude Include="Dependencies\imgui\imstb_truetype.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
@@ -132,7 +148,7 @@
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(ProjectDir)Dependencies\glew-2.1.0\include;$(ProjectDir)Dependencies\glfw-3.3.2.bin.WIN64\include;$(ProjectDir)Dependencies\stb-master;$(ProjectDir)Dependencies\bullet\include;$(ProjectDir)Dependencies\freetype\include;$(ProjectDir)Dependencies\irrKlang-64bit-1.6.0\include;$(ProjectDir)Dependencies\assimp\include;$(ProjectDir)Dependencies\glm;$(ProjectDir)Code\</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)Dependencies\glew-2.1.0\include;$(ProjectDir)Dependencies\glfw-3.3.2.bin.WIN64\include;$(ProjectDir)Dependencies\stb-master;$(ProjectDir)Dependencies\bullet\include;$(ProjectDir)Dependencies\freetype\include;$(ProjectDir)Dependencies\irrKlang-64bit-1.6.0\include;$(ProjectDir)Dependencies\assimp\include;$(ProjectDir)Dependencies\glm;$(ProjectDir)Code\;$(ProjectDir)Dependencies\imgui</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>_MBCS;%(PreprocessorDefinitions);_CRT_SECURE_NO_WARNINGS</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
     </ClCompile>
@@ -165,7 +181,7 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(ProjectDir)Dependencies\glew-2.1.0\include;$(ProjectDir)Dependencies\glfw-3.3.2.bin.WIN64\include;$(ProjectDir)Dependencies\stb-master;$(ProjectDir)Dependencies\bullet\include;$(ProjectDir)Dependencies\freetype\include;$(ProjectDir)Dependencies\irrKlang-64bit-1.6.0\include;</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)Dependencies\glew-2.1.0\include;$(ProjectDir)Dependencies\glfw-3.3.2.bin.WIN64\include;$(ProjectDir)Dependencies\stb-master;$(ProjectDir)Dependencies\bullet\include;$(ProjectDir)Dependencies\freetype\include;$(ProjectDir)Dependencies\irrKlang-64bit-1.6.0\include;;$(ProjectDir)Dependencies\imgui</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>_MBCS;%(PreprocessorDefinitions);</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
     </ClCompile>

@@ -43,6 +43,18 @@
     <Filter Include="Archivos de encabezado\Engine\Debug">
       <UniqueIdentifier>{e253bf44-183d-4248-ac53-5cee667dd165}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Archivos de origen\Editor">
+      <UniqueIdentifier>{d8258b13-dc7c-4d64-8e85-92dfba8e97f0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Archivos de origen\Editor\imgui">
+      <UniqueIdentifier>{e1e5ae06-7ae3-41b3-8602-fa9094bfde81}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Archivos de encabezado\Editor">
+      <UniqueIdentifier>{732da668-e6b7-469b-a158-29478ee1e0e3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Archivos de encabezado\Editor\imgui">
+      <UniqueIdentifier>{54ad5589-10f7-4254-88ad-0f63bdc149e3}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -108,6 +120,27 @@
     <ClCompile Include="Code\Engine\Rendering\Model.cpp">
       <Filter>Archivos de origen\Engine\Rendering</Filter>
     </ClCompile>
+    <ClCompile Include="Dependencies\imgui\imgui.cpp">
+      <Filter>Archivos de origen\Editor\imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="Dependencies\imgui\imgui_demo.cpp">
+      <Filter>Archivos de origen\Editor\imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="Dependencies\imgui\imgui_draw.cpp">
+      <Filter>Archivos de origen\Editor\imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="Dependencies\imgui\imgui_impl_glfw.cpp">
+      <Filter>Archivos de origen\Editor\imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="Dependencies\imgui\imgui_impl_opengl3.cpp">
+      <Filter>Archivos de origen\Editor\imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="Dependencies\imgui\imgui_tables.cpp">
+      <Filter>Archivos de origen\Editor\imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="Dependencies\imgui\imgui_widgets.cpp">
+      <Filter>Archivos de origen\Editor\imgui</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Code\Engine\Rendering\Camera.h">
@@ -169,6 +202,33 @@
     </ClInclude>
     <ClInclude Include="Code\Engine\Rendering\Model.h">
       <Filter>Archivos de encabezado\Engine\Rendering</Filter>
+    </ClInclude>
+    <ClInclude Include="Dependencies\imgui\imconfig.h">
+      <Filter>Archivos de encabezado\Editor\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="Dependencies\imgui\imgui.h">
+      <Filter>Archivos de encabezado\Editor\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="Dependencies\imgui\imgui_impl_glfw.h">
+      <Filter>Archivos de encabezado\Editor\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="Dependencies\imgui\imgui_impl_opengl3.h">
+      <Filter>Archivos de encabezado\Editor\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="Dependencies\imgui\imgui_internal.h">
+      <Filter>Archivos de encabezado\Editor\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="Dependencies\imgui\imstb_rectpack.h">
+      <Filter>Archivos de encabezado\Editor\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="Dependencies\imgui\imstb_textedit.h">
+      <Filter>Archivos de encabezado\Editor\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="Dependencies\imgui\imstb_truetype.h">
+      <Filter>Archivos de encabezado\Editor\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="Dependencies\imgui\imgui_impl_opengl3_loader.h">
+      <Filter>Archivos de encabezado\Editor\imgui</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
