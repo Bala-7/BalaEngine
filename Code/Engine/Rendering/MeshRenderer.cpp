@@ -84,10 +84,11 @@ void MeshRenderer::draw()
 
 	// Send the data to the shader program
 	glUseProgram(this->program);
-	GLint vpLoc = glGetUniformLocation(program, "vp");
-	glUniformMatrix4fv(vpLoc, 1, GL_FALSE, glm::value_ptr(vp));
-	GLint modelLoc = glGetUniformLocation(program, "model");
-	glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(modelMatrix));
+
+	shader->setMat4("vp", vp);
+	shader->setMat4("model", modelMatrix);
+	shader->setVec3("objectColor", glm::vec3(1.0f, 1.0f, 1.0f));
+	shader->setVec3("lightColor", RenderEngine::GetInstance()->GetEnvironmentLight());
 
 	// Bind the texture object
 	glBindTexture(GL_TEXTURE_2D, texture);
@@ -124,4 +125,5 @@ void MeshRenderer::setRotation(glm::vec3 _rotation)
 void MeshRenderer::setProgram(GLuint _program) 
 {
 	this->program = _program;
+	shader = new Shader(_program);
 }

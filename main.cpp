@@ -62,6 +62,8 @@ int main()
 	MeshRenderer* mr = new MeshRenderer(MeshType::kCube);
 	mr->setTexture(RenderEngine::GetInstance()->GetTextureID("Concrete.jpg"));
 	mr->setProgram(RenderEngine::GetInstance()->GetShaderProgram());
+	mr->shader->setVec3("objectColor", glm::vec3(1.0f, 1.0f, 1.0f));
+	mr->shader->setVec3("lightColor", glm::vec3(1.0f, 1.0f, 1.0f));
 	go->transform->position = glm::vec3(0.0f, 0.0f, 3.0f);
 	go->transform->scale = glm::vec3(3.0f, 3.0f, 3.0f);
 	go->transform->rotation = glm::vec3(30.0f, 30.0f, 0.0f);
@@ -78,6 +80,8 @@ int main()
 	float rotation = 0;
 	bool drawCube = true;
 	float rotationSpeed = 10.0f;
+	float color[4] = { 1.0f, 1.0f, 1.0f, 1.0f };
+
 
 	while (!renderEngine->ShouldClose())
 	{
@@ -114,6 +118,7 @@ int main()
 		glClearColor(0.0, 0.0, 0.0, 1.0);//clear yellow
 		if(drawCube)
 			mr->draw();
+	
 
 		// ImGui render
 		ImGui_ImplOpenGL3_NewFrame();
@@ -124,6 +129,7 @@ int main()
 		ImGui::Text("Edit object parameters");
 		ImGui::Checkbox("Draw Cube", &drawCube);
 		ImGui::SliderFloat("Rotation Speed", &rotationSpeed, 0.0f, 20.0f);
+		ImGui::ColorEdit4("Light Color", color);
 		ImGui::End();
 
 		ImGui::Render();
@@ -137,7 +143,7 @@ int main()
 		//renderEngine->UpdateUI();
 		//renderEngine->UpdateDebug();
 		// \GUI Rendering code
-
+		renderEngine->SetEnvironmentLight(glm::vec3(color[0], color[1], color[2]));
 		glfwSwapBuffers(window);
 	}
 

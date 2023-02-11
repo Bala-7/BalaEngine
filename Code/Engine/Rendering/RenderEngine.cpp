@@ -143,6 +143,16 @@ int RenderEngine::GetCurrentFPS()
 	return (lastFrameTimeSeconds > 0) ? 1 / lastFrameTimeSeconds : 1000;
 }
 
+glm::vec3 RenderEngine::GetEnvironmentLight()
+{
+	return environmentLight;
+}
+
+void RenderEngine::SetEnvironmentLight(glm::vec3 value)
+{
+	environmentLight = value;
+}
+
 void RenderEngine::InitGLFW()
 {
 	glfwInit();

@@ -7,6 +7,7 @@
 #include "glm/gtc/matrix_transform.hpp"
 #include "glm/gtc/type_ptr.hpp"
 #include "Engine/Core/Component.h"
+#include "Engine/Rendering/Shader.h"
 
 class MeshRenderer : public Component
 {
@@ -25,8 +26,9 @@ public:
 	void setProgram(GLuint _program);
 	void setTexture(GLuint _textureID);
 
-
+	Shader* shader;
 private:
+
 	std::vector<Vertex>vertices;
 	std::vector<GLuint>indices;
 	glm::mat4 modelMatrix;

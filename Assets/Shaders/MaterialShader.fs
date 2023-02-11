@@ -8,6 +8,7 @@ struct Material {
 }; 
   
 uniform Material material;
+uniform vec3 lightColor;
 
 in vec2 TexCoord;
 
@@ -15,7 +16,7 @@ out vec4 color;
 
 
 void main(){
-// ambient
+	// ambient
     vec3 ambient = lightColor * material.ambient;
   	
     // diffuse 
@@ -28,7 +29,7 @@ void main(){
     vec3 viewDir = normalize(viewPos - FragPos);
     vec3 reflectDir = reflect(-lightDir, norm);  
     float spec = pow(max(dot(viewDir, reflectDir), 0.0), material.shininess);
-    vec3 specular = lightColor * (spec * material.specular);  
+    vec3 specular = lightColor * (spec * material.specular);
         
     vec3 result = ambient + diffuse + specular;
     color = vec4(result, 1.0);

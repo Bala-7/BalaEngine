@@ -82,6 +82,9 @@ public:
 	int GetTargetFPS();
 	int GetCurrentFPS();
 
+	glm::vec3 GetEnvironmentLight();
+	void SetEnvironmentLight(glm::vec3 value);
+
 private:
 
 	static RenderEngine* p_Instance;
@@ -107,6 +110,9 @@ private:
 	GLFWwindow* window;
 
 	Camera* camera;
+
+	// Lighting
+	glm::vec3 environmentLight;
 
 	
 	const char* TEXTURES_PATH = "Assets/Textures/";
