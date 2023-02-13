@@ -95,6 +95,12 @@ void MeshRenderer::draw()
 	shader->setVec3("objectColor", glm::vec3(1.0f, 1.0f, 1.0f));
 	shader->setVec3("lightColor", RenderEngine::GetInstance()->GetEnvironmentLight());
 	shader->setVec3("lightPos", glm::vec3(0.0f, 0.0f, 5.5f));
+	shader->setVec3("viewPos", RenderEngine::GetInstance()->GetCamera()->getCameraPosition());
+	shader->setVec3("material.ambient", glm::vec3(1.0f, 1.0f, 1.0f));
+	shader->setVec3("material.diffuse", glm::vec3(1.0f, 1.0f, 1.0f));
+	shader->setVec3("material.specular", glm::vec3(0.5f, 0.5f, 0.5f));
+	shader->setFloat("material.shininess", 32.0f);
+
 
 	// Bind the texture object
 	glBindTexture(GL_TEXTURE_2D, texture);
