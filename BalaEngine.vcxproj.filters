@@ -144,6 +144,9 @@
     <ClCompile Include="Dependencies\imgui\imgui_widgets.cpp">
       <Filter>Archivos de origen\Editor\imgui</Filter>
     </ClCompile>
+    <ClCompile Include="Code\Engine\Editor\Editor.cpp">
+      <Filter>Archivos de origen\Editor</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Code\Engine\Rendering\Camera.h">
@@ -233,7 +236,10 @@
     <ClInclude Include="Dependencies\imgui\imgui_impl_opengl3_loader.h">
       <Filter>Archivos de encabezado\Editor\imgui</Filter>
     </ClInclude>
-    <ClInclude Include="imgui_widgets.h">
+    <ClInclude Include="Code\Engine\Editor\Editor.h">
+      <Filter>Archivos de encabezado\Editor</Filter>
+    </ClInclude>
+    <ClInclude Include="Code\Engine\Editor\imgui_widgets.h">
       <Filter>Archivos de encabezado\Editor\Utils</Filter>
     </ClInclude>
   </ItemGroup>

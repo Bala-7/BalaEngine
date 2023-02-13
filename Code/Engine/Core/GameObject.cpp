@@ -39,3 +39,8 @@ Component* GameObject::GetComponent(Component::ComponentType type)
 	return NULL;
 }
 
+std::list<Component*> GameObject::GetComponentsList()
+{
+	return components;
+}
+

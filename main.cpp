@@ -14,11 +14,7 @@
 #include "Engine/Rendering/UITextRenderer.h"
 #include "Engine/Debug/FPSCounter.h"
 #include "Engine/Rendering/Model.h"
-
-#include "imgui.h"
-#include "imgui_impl_glfw.h"
-#include "imgui_impl_opengl3.h"
-#include "imgui_widgets.h"
+#include "Engine/Editor/Editor.h"
 
 #ifdef _WIN32
 #include <Windows.h>
@@ -33,9 +29,14 @@ void CreateSprites2D();
 
 RenderEngine* renderEngine;
 GameplayEngine* gameplayEngine;
+Editor* editor;
+
+MeshRenderer* mr;
 
 int main()
 {
+	
+
 	renderEngine = new RenderEngine();
 	renderEngine->Initialize();
 
@@ -44,32 +45,16 @@ int main()
 
 	GLFWwindow* window = renderEngine->GetWindow();
 	
-	// IMGUI
-	IMGUI_CHECKVERSION();
-	ImGui::CreateContext();
-	ImGuiIO& io = ImGui::GetIO(); (void)io;
-	ImGui::StyleColorsDark();
-	ImGui_ImplGlfw_InitForOpenGL(window, true);
-	ImGui_ImplOpenGL3_Init("#version 450");
-	// \IMGUI
+	editor = new Editor();
+	editor->Initialize();
 
 	/*Shader ourShader("Assets/Shaders/TexturedModel.vs", "Assets/Shaders/TexturedModel.fs");
 
 	Model ourModel("resources/objects/backpack/backpack.obj");*/
 
-	//CreateCube3D();
-	CreateSprites2D();
-	GameObject* go = new GameObject();
-	MeshRenderer* mr = new MeshRenderer(MeshType::kCube);
-	mr->setTexture(RenderEngine::GetInstance()->GetTextureID("Concrete.jpg"));
-	mr->setProgram(RenderEngine::GetInstance()->GetShaderProgram());
-	mr->shader->setVec3("objectColor", glm::vec3(1.0f, 1.0f, 1.0f));
-	mr->shader->setVec3("lightColor", glm::vec3(1.0f, 1.0f, 1.0f));
-	
-	go->transform->position = glm::vec3(0.0f, 0.5f, 4.0f);
-	go->transform->scale = glm::vec3(1.0f, 1.0f, 1.0f);
-	go->transform->rotation = glm::vec3(0.0f, 0.0f, 0.0f);
-	go->AddComponent(mr);
+	CreateCube3D();
+	//CreateSprites2D();
+
 
 	glfwSetKeyCallback(window, key_callback);	// Input callback
 	// RendererInitialization();	// Triangle renderer
@@ -78,12 +63,6 @@ int main()
 	float t = 0.0f;
 	const float dt = 1.0f / renderEngine->GetTargetFPS();
 	float accumulator = 0.0f;
-
-	float rotation = 0;
-	bool drawCube = true;
-	float rotationSpeed = 0.0f;
-	float color[4] = { 1.0f, 1.0f, 1.0f, 1.0f };
-	glm::vec3 position = glm::vec3(0.0f);
 
 	while (!renderEngine->ShouldClose())
 	{
@@ -105,13 +84,13 @@ int main()
 
 			// Game Logic code
 			gameplayEngine->Update();
-			
 			// \Game Logic code\
 			
-			go->transform->position = position;
-			go->transform->rotation = glm::vec3(0.0f, rotation, 0.0f);
-			rotation += rotationSpeed * dt;
-
+			if(editor->autoRotate)
+			{
+				editor->GetDisplayedGameObject()->transform->rotation = glm::vec3(0.0f, editor->cubeRotation, 0.0f);
+				editor->cubeRotation += editor->rotationSpeed * dt;
+			}
 			accumulator -= dt;
 			t += dt;
 		}
@@ -119,32 +98,10 @@ int main()
 		// Scene Rendering code
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		glClearColor(0.0, 0.0, 0.0, 1.0);//clear yellow
-		if(drawCube)
-			mr->draw();
+		mr->draw();
 	
 
-		// ImGui render
-		ImGui_ImplOpenGL3_NewFrame();
-		ImGui_ImplGlfw_NewFrame();
-		ImGui::NewFrame();
-
-		ImGui::Begin("ImGui Editor Window");
-		ImGui::Text("Edit object parameters");
-		ImGui::Checkbox("Draw Cube", &drawCube);
-		ImGui::SliderFloat("Rotation Speed", &rotationSpeed, 0.0f, 20.0f);
-		ImGui::ColorEdit4("Light Color", color);
-		if (ImGui::CollapsingHeader("Cube"))
-		{
-			ImGui::Separator();
-			ImGui::Text("Position");
-			ImGui::Separator();
-			nimgui::draw_vec3_widget("Position", position);
-		}
-		ImGui::End();
-
-		ImGui::Render();
-		ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
-		// \ImGui render
+		editor->DrawEditorWindows();
 
 		//renderEngine->Update();
 		// \Scene Rendering code\
@@ -153,13 +110,11 @@ int main()
 		//renderEngine->UpdateUI();
 		//renderEngine->UpdateDebug();
 		// \GUI Rendering code
-		renderEngine->SetEnvironmentLight(glm::vec3(color[0], color[1], color[2]));
+		renderEngine->SetEnvironmentLight(glm::vec3(editor->color[0], editor->color[1], editor->color[2]));
 		glfwSwapBuffers(window);
 	}
 
-	ImGui_ImplOpenGL3_Shutdown();
-	ImGui_ImplGlfw_Shutdown();
-	ImGui::DestroyContext();
+	editor->Terminate();
 
 	renderEngine->Terminate();
 
@@ -182,11 +137,18 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
 void CreateCube3D()
 {
 	GameObject* go = new GameObject();
-	MeshRenderer* mr = new MeshRenderer(MeshType::kCube);
-	mr->setTexture(RenderEngine::GetInstance()->GetTextureID("Assets/Textures/Concrete.jpg"));
+	mr = new MeshRenderer(MeshType::kCube);
+	mr->setTexture(RenderEngine::GetInstance()->GetTextureID("Concrete.jpg"));
 	mr->setProgram(RenderEngine::GetInstance()->GetShaderProgram());
-	go->transform->position = glm::vec3(0.0f, 0.0f, 0.0f);
+	mr->shader->setVec3("objectColor", glm::vec3(1.0f, 1.0f, 1.0f));
+	mr->shader->setVec3("lightColor", glm::vec3(1.0f, 1.0f, 1.0f));
+
+	go->transform->position = glm::vec3(0.0f, 0.0f, 3.0f);
+	go->transform->scale = glm::vec3(1.0f, 1.0f, 1.0f);
+	go->transform->rotation = glm::vec3(0.0f, 0.0f, 0.0f);
 	go->AddComponent(mr);
+
+	editor->SetDisplayedGameObject(go);
 }
 
 void CreateSprites2D()

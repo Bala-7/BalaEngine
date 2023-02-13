@@ -2,10 +2,11 @@
 
 #include "imgui.h"
 #include "imgui_internal.h"
+#include <string>
 
 namespace nimgui
 {
-	static void draw_vec3_widget(const std::string& label, glm::vec3& values, float columnWidth = 100.0f)
+	static void draw_vec3_widget(const char* label, glm::vec3& values, float columnWidth = 100.0f)
 	{
 		ImGuiIO& io = ImGui::GetIO();
 		auto boldFont = io.Fonts->Fonts[0];
@@ -22,7 +23,10 @@ namespace nimgui
 		ImGui::PopFont();
 
 		ImGui::SameLine();
-		ImGui::DragFloat("##X", &values.x, 0.1f, 0.0f, 0.0f, "%.2f");
+		char floatFieldNameX[100] = "##";
+		strcat(floatFieldNameX, label);
+		strcat(floatFieldNameX, "X");
+		ImGui::DragFloat(floatFieldNameX, &values.x, 0.1f, 0.0f, 0.0f, "%.2f");
 		ImGui::PopItemWidth();
 		ImGui::SameLine();
 
@@ -31,7 +35,10 @@ namespace nimgui
 		ImGui::PopFont();
 
 		ImGui::SameLine();
-		ImGui::DragFloat("##Y", &values.y, 0.1f, 0.0f, 0.0f, "%.2f");
+		char floatFieldNameY[100] = "##";
+		strcat(floatFieldNameY, label);
+		strcat(floatFieldNameY, "Y");
+		ImGui::DragFloat(floatFieldNameY, &values.y, 0.1f, 0.0f, 0.0f, "%.2f");
 		ImGui::PopItemWidth();
 		ImGui::SameLine();
 
@@ -40,11 +47,12 @@ namespace nimgui
 		ImGui::PopFont();
 
 		ImGui::SameLine();
-		ImGui::DragFloat("##Z", &values.z, 0.1f, 0.0f, 0.0f, "%.2f");
+		char floatFieldNameZ[100] = "##";
+		strcat(floatFieldNameZ, label);
+		strcat(floatFieldNameZ, "Z");
+		ImGui::DragFloat(floatFieldNameZ, &values.z, 0.1f, 0.0f, 0.0f, "%.2f");
 		ImGui::PopItemWidth();
 
 		ImGui::PopStyleVar();
-
-
 	}
 }

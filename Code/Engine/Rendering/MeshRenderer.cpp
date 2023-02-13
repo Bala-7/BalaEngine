@@ -4,9 +4,11 @@
 
 MeshRenderer::MeshRenderer(MeshType modelType) 
 {
+	componentType = ComponentType::MESH_RENDERER;
 	camera = RenderEngine::GetInstance()->GetCamera();
 	scale = glm::vec3(1.0f, 1.0f, 1.0f);
 	position = glm::vec3(0.0, 0.0, 0.0);
+	_material = new Material();
 
 	switch (modelType) {
 	case kTriangle: Mesh::setTriData(vertices, indices);
@@ -94,13 +96,18 @@ void MeshRenderer::draw()
 	shader->setMat4("model", modelMatrix);
 	shader->setVec3("objectColor", glm::vec3(1.0f, 1.0f, 1.0f));
 	shader->setVec3("lightColor", RenderEngine::GetInstance()->GetEnvironmentLight());
-	shader->setVec3("lightPos", glm::vec3(0.0f, 0.0f, 5.5f));
+	
 	shader->setVec3("viewPos", RenderEngine::GetInstance()->GetCamera()->getCameraPosition());
-	shader->setVec3("material.ambient", glm::vec3(1.0f, 1.0f, 1.0f));
-	shader->setVec3("material.diffuse", glm::vec3(1.0f, 1.0f, 1.0f));
-	shader->setVec3("material.specular", glm::vec3(0.5f, 0.5f, 0.5f));
-	shader->setFloat("material.shininess", 32.0f);
+	
+	shader->setVec3("material.ambient", _material->ambient);
+	shader->setVec3("material.diffuse", _material->diffuse);
+	shader->setVec3("material.specular", _material->specular);
+	shader->setFloat("material.shininess", _material->shininess);
 
+	shader->setVec3("light.position", glm::vec3(0.0f, 0.0f, 5.5f));
+	shader->setVec3("light.ambient", glm::vec3(0.2f, 0.2f, 0.2f));
+	shader->setVec3("light.diffuse", glm::vec3(0.5f, 0.5f, 0.5f)); // darken diffuse light a bit
+	shader->setVec3("light.specular", glm::vec3(1.0f, 1.0f, 1.0f));
 
 	// Bind the texture object
 	glBindTexture(GL_TEXTURE_2D, texture);
@@ -117,6 +124,11 @@ void MeshRenderer::draw()
 void MeshRenderer::setTexture(GLuint textureID) 
 {
 	texture = textureID;
+}
+
+Material* MeshRenderer::GetMaterial()
+{
+	return _material;
 }
 
 void MeshRenderer::setScale(glm::vec3 _scale) 

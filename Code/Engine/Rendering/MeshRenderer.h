@@ -9,6 +9,14 @@
 #include "Engine/Core/Component.h"
 #include "Engine/Rendering/Shader.h"
 
+struct Material
+{
+	glm::vec3 ambient = glm::vec3(1.0f, 1.0f, 1.0f);
+	glm::vec3 diffuse = glm::vec3(1.0f, 1.0f, 1.0f);
+	glm::vec3 specular = glm::vec3(0.5f, 0.5f, 0.5f);
+	float shininess = 32.0f;
+};
+
 class MeshRenderer : public Component
 {
 
@@ -26,9 +34,11 @@ public:
 	void setProgram(GLuint _program);
 	void setTexture(GLuint _textureID);
 
+	Material* GetMaterial();
+
 	Shader* shader;
 private:
-
+	Material* _material;
 	std::vector<Vertex>vertices;
 	std::vector<GLuint>indices;
 	glm::mat4 modelMatrix;

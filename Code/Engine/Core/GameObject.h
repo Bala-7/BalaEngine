@@ -12,6 +12,7 @@ public:
 
 	void AddComponent(Component* newComponent);
 	Component* GetComponent(Component::ComponentType type);
+	std::list<Component*> GetComponentsList();
 
 	void Update();
 

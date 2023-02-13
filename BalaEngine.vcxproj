@@ -25,6 +25,7 @@
     <ClCompile Include="Code\Engine\Core\Transform.cpp" />
     <ClCompile Include="Code\Engine\Debug\Debug.cpp" />
     <ClCompile Include="Code\Engine\Debug\FPSCounter.cpp" />
+    <ClCompile Include="Code\Engine\Editor\Editor.cpp" />
     <ClCompile Include="Code\Engine\Gameplay\GameplayEngine.cpp" />
     <ClCompile Include="Code\Engine\Rendering\Camera.cpp" />
     <ClCompile Include="Code\Engine\Rendering\LightRenderer.cpp" />
@@ -55,6 +56,8 @@
     <ClInclude Include="Code\Engine\Core\Transform.h" />
     <ClInclude Include="Code\Engine\Debug\Debug.h" />
     <ClInclude Include="Code\Engine\Debug\FPSCounter.h" />
+    <ClInclude Include="Code\Engine\Editor\Editor.h" />
+    <ClInclude Include="Code\Engine\Editor\imgui_widgets.h" />
     <ClInclude Include="Code\Engine\Gameplay\GameplayEngine.h" />
     <ClInclude Include="Code\Engine\Rendering\Camera.h" />
     <ClInclude Include="Code\Engine\Rendering\LightRenderer.h" />
@@ -78,7 +81,6 @@
     <ClInclude Include="Dependencies\imgui\imstb_rectpack.h" />
     <ClInclude Include="Dependencies\imgui\imstb_textedit.h" />
     <ClInclude Include="Dependencies\imgui\imstb_truetype.h" />
-    <ClInclude Include="imgui_widgets.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
