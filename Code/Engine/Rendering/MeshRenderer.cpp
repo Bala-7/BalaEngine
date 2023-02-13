@@ -36,8 +36,13 @@ MeshRenderer::MeshRenderer(MeshType modelType)
 	glEnableVertexAttribArray(0);
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex),
 		(GLvoid*)0);
+
 	glEnableVertexAttribArray(1);
-	glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex),
+	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex),
+		(void*)(offsetof(Vertex, Vertex::normal)));
+
+	glEnableVertexAttribArray(2);
+	glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex),
 		(void*)(offsetof(Vertex, Vertex::texCoords)));
 
 	// Unbind Buffers and vertexArray
@@ -72,12 +77,12 @@ void MeshRenderer::draw()
 	// Set the model matrix
 	glm::mat4 translationMatrix = glm::translate(glm::mat4(1.0f), position);
 	glm::mat4 scaleMatrix = glm::scale(glm::mat4(1.0f), scale);
-	glm::mat4 rotateMatrix = 
-		glm::rotate(glm::mat4(1.0f), glm::radians(rotation.x), glm::vec3(1.0, 0.0, 0.0)) *
-		glm::rotate(glm::mat4(1.0f), glm::radians(rotation.y), glm::vec3(0.0, 1.0, 0.0)) *
-		glm::rotate(glm::mat4(1.0f), glm::radians(rotation.z), glm::vec3(0.0, 0.0, 1.0));
+	glm::mat4 rotateMatrix = glm::rotate(translationMatrix, glm::radians(rotation.x), glm::vec3(1.0, 0.0, 0.0));
+	rotateMatrix = glm::rotate(rotateMatrix, glm::radians(rotation.y), glm::vec3(0.0, 1.0, 0.0));
+	rotateMatrix = glm::rotate(rotateMatrix, glm::radians(rotation.z), glm::vec3(0.0, 0.0, 1.0));
+		
 	modelMatrix = glm::mat4(1.0f);
-	modelMatrix = translationMatrix * rotateMatrix * scaleMatrix;
+	modelMatrix = /*translationMatrix * */rotateMatrix * scaleMatrix;
 
 	// vp matrix is the multiplied view and projection amtrices
 	glm::mat4 vp = camera->getProjectionMatrix() * camera->getViewMatrix();
@@ -89,6 +94,7 @@ void MeshRenderer::draw()
 	shader->setMat4("model", modelMatrix);
 	shader->setVec3("objectColor", glm::vec3(1.0f, 1.0f, 1.0f));
 	shader->setVec3("lightColor", RenderEngine::GetInstance()->GetEnvironmentLight());
+	shader->setVec3("lightPos", glm::vec3(0.0f, 0.0f, 5.5f));
 
 	// Bind the texture object
 	glBindTexture(GL_TEXTURE_2D, texture);

@@ -182,8 +182,9 @@ void RenderEngine::InitGame()
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-	camera = new Camera(100.0f, 0.1f, 100.0f, glm::vec3(0.0f, 0.0f, 6.0f));
-	glm::mat4 projection = glm::ortho(0.0f, (float) config.WINDOW_SIZE_X, (float) config.WINDOW_SIZE_Y, 0.0f, -1.0f, 1.0f);
+	//camera = new Camera(100.0f, 0.1f, 100.0f, glm::vec3(0.0f, 0.0f, 6.0f));
+	camera = new Camera(120, 1280, 720, 0.1f, 100.0f, glm::vec3(0.0f, 0.0f, 6.0f));
+	//glm::mat4 projection = glm::ortho(0.0f, (float) config.WINDOW_SIZE_X, (float) config.WINDOW_SIZE_Y, 0.0f, -1.0f, 1.0f);
 	ShaderLoader shaderLoader;
 	shaderProgram = shaderLoader.createProgram(config.VERTEX_SHADER_PATH.c_str(), config.FRAGMENT_SHADER_PATH.c_str());
 	textShaderProgram = shaderLoader.createProgram(config.VERTEX_SHADER_TEXT_PATH.c_str(), config.FRAGMENT_SHADER_TEXT_PATH.c_str());

@@ -55,6 +55,9 @@
     <Filter Include="Archivos de encabezado\Editor\imgui">
       <UniqueIdentifier>{54ad5589-10f7-4254-88ad-0f63bdc149e3}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Archivos de encabezado\Editor\Utils">
+      <UniqueIdentifier>{7487829e-0f24-4c2f-8342-fec9f20b9873}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -229,6 +232,9 @@
     </ClInclude>
     <ClInclude Include="Dependencies\imgui\imgui_impl_opengl3_loader.h">
       <Filter>Archivos de encabezado\Editor\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="imgui_widgets.h">
+      <Filter>Archivos de encabezado\Editor\Utils</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

@@ -18,6 +18,7 @@
 #include "imgui.h"
 #include "imgui_impl_glfw.h"
 #include "imgui_impl_opengl3.h"
+#include "imgui_widgets.h"
 
 #ifdef _WIN32
 #include <Windows.h>
@@ -64,9 +65,10 @@ int main()
 	mr->setProgram(RenderEngine::GetInstance()->GetShaderProgram());
 	mr->shader->setVec3("objectColor", glm::vec3(1.0f, 1.0f, 1.0f));
 	mr->shader->setVec3("lightColor", glm::vec3(1.0f, 1.0f, 1.0f));
-	go->transform->position = glm::vec3(0.0f, 0.0f, 3.0f);
-	go->transform->scale = glm::vec3(3.0f, 3.0f, 3.0f);
-	go->transform->rotation = glm::vec3(30.0f, 30.0f, 0.0f);
+	
+	go->transform->position = glm::vec3(0.0f, 0.5f, 4.0f);
+	go->transform->scale = glm::vec3(1.0f, 1.0f, 1.0f);
+	go->transform->rotation = glm::vec3(0.0f, 0.0f, 0.0f);
 	go->AddComponent(mr);
 
 	glfwSetKeyCallback(window, key_callback);	// Input callback
@@ -79,9 +81,9 @@ int main()
 
 	float rotation = 0;
 	bool drawCube = true;
-	float rotationSpeed = 10.0f;
+	float rotationSpeed = 0.0f;
 	float color[4] = { 1.0f, 1.0f, 1.0f, 1.0f };
-
+	glm::vec3 position = glm::vec3(0.0f);
 
 	while (!renderEngine->ShouldClose())
 	{
@@ -105,8 +107,9 @@ int main()
 			gameplayEngine->Update();
 			
 			// \Game Logic code\
-
-			go->transform->rotation = glm::vec3(30.0f, rotation, 0.0f);
+			
+			go->transform->position = position;
+			go->transform->rotation = glm::vec3(0.0f, rotation, 0.0f);
 			rotation += rotationSpeed * dt;
 
 			accumulator -= dt;
@@ -130,6 +133,13 @@ int main()
 		ImGui::Checkbox("Draw Cube", &drawCube);
 		ImGui::SliderFloat("Rotation Speed", &rotationSpeed, 0.0f, 20.0f);
 		ImGui::ColorEdit4("Light Color", color);
+		if (ImGui::CollapsingHeader("Cube"))
+		{
+			ImGui::Separator();
+			ImGui::Text("Position");
+			ImGui::Separator();
+			nimgui::draw_vec3_widget("Position", position);
+		}
 		ImGui::End();
 
 		ImGui::Render();
