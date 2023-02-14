@@ -10,6 +10,8 @@ public:
 
 	void Update() override;
 	void OnComponentAdded() override;
+	void DrawInspector() override;
+
 private:
 	float currentTime;
 	int updateRateMS = 1000;

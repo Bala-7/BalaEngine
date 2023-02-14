@@ -26,6 +26,7 @@ public:
 
 	void Update() override;
 	void OnComponentAdded() override;
+	void DrawInspector() override;
 
 	void draw();
 	void setPosition(glm::vec3 _position);

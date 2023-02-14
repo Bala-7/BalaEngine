@@ -11,6 +11,7 @@ public:
 
 	void Update() override;
 	void OnComponentAdded() override;
+	void DrawInspector() override;
 
 	void setPosition(glm::vec2 _position);
 	void setScale(float _scale);

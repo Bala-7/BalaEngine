@@ -24,3 +24,7 @@ void FPSCounter::OnComponentAdded()
 {
 
 }
+
+void FPSCounter::DrawInspector()
+{
+}

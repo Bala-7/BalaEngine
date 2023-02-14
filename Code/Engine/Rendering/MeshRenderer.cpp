@@ -2,6 +2,11 @@
 #include "Engine/Core/GameObject.h"
 #include "Engine/Rendering/RenderEngine.h"
 
+#include "imgui.h"
+#include "imgui_impl_glfw.h"
+#include "imgui_impl_opengl3.h"
+#include "Engine/Editor/imgui_widgets.h"
+
 MeshRenderer::MeshRenderer(MeshType modelType) 
 {
 	componentType = ComponentType::MESH_RENDERER;
@@ -150,4 +155,27 @@ void MeshRenderer::setProgram(GLuint _program)
 {
 	this->program = _program;
 	shader = new Shader(_program);
+}
+
+void MeshRenderer::DrawInspector()
+{
+	ImGui::Separator();
+	ImGui::Text("MESH RENDERER");
+	ImGui::Separator();
+	ImGui::Text("Ambient");
+	ImGui::Separator();
+	nimgui::draw_vec3_widget("Ambient", _material->ambient);
+	ImGui::Separator();
+	ImGui::Text("Diffuse");
+	ImGui::Separator();
+	nimgui::draw_vec3_widget("Diffuse", _material->diffuse);
+	ImGui::Separator();
+	ImGui::Text("Specular");
+	ImGui::Separator();
+	nimgui::draw_vec3_widget("Specular", _material->specular);
+	ImGui::Separator();
+	ImGui::Text("Shininess");
+	ImGui::Separator();
+	ImGui::DragFloat("##Shininess", &_material->shininess, 0.1f, 2.0f, 256.0f, "%.2f");
+
 }

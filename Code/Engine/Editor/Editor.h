@@ -22,8 +22,5 @@ private:
 	GameObject* _displayedGameObject;
 
 	void DrawInspector();
-
-	void DrawComponent(Transform* transform);
-	void DrawComponent(MeshRenderer* meshRenderer);
 };
 

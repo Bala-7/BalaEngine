@@ -74,51 +74,8 @@ void Editor::DrawInspector()
 {
 	for (auto i : _displayedGameObject->GetComponentsList())
 	{
-		if(i->GetType() == Component::ComponentType::TRANSFORM)
-			DrawComponent(static_cast<Transform*>(i));
-		else if (i->GetType() == Component::ComponentType::MESH_RENDERER)
-			DrawComponent(static_cast<MeshRenderer*>(i));
+		i->DrawInspector();
 	}
 
 }
 
-void Editor::DrawComponent(Transform* transform)
-{
-	ImGui::Separator();
-	ImGui::Text("TRANSFORM");
-	ImGui::Separator();
-	ImGui::Text("Position");
-	ImGui::Separator();
-	nimgui::draw_vec3_widget("Position", transform->position);
-	ImGui::Separator();
-	ImGui::Text("Rotation");
-	ImGui::Separator();
-	nimgui::draw_vec3_widget("Rotation", transform->rotation);
-	ImGui::Separator();
-	ImGui::Text("Scale");
-	ImGui::Separator();
-	nimgui::draw_vec3_widget("Scale", transform->scale);
-}
-
-void Editor::DrawComponent(MeshRenderer* meshRenderer)
-{
-	ImGui::Separator();
-	ImGui::Text("MESH RENDERER");
-	ImGui::Separator();
-	ImGui::Text("Ambient");
-	ImGui::Separator();
-	nimgui::draw_vec3_widget("Ambient", meshRenderer->GetMaterial()->ambient);
-	ImGui::Separator();
-	ImGui::Text("Diffuse");
-	ImGui::Separator();
-	nimgui::draw_vec3_widget("Diffuse", meshRenderer->GetMaterial()->diffuse);
-	ImGui::Separator();
-	ImGui::Text("Specular");
-	ImGui::Separator();
-	nimgui::draw_vec3_widget("Specular", meshRenderer->GetMaterial()->specular);
-	ImGui::Separator();
-	ImGui::Text("Shininess");
-	ImGui::Separator();
-	ImGui::DragFloat("##Shininess", &meshRenderer->GetMaterial()->shininess, 0.1f, 2.0f, 256.0f, "%.2f");
-	
-}

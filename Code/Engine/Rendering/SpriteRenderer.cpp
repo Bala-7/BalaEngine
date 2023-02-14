@@ -188,3 +188,7 @@ void SpriteRenderer::setSprite(int index)
 	glBindBuffer(GL_ARRAY_BUFFER, vbo);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(Vertex) * vertices.size(), &vertices[0], GL_STATIC_DRAW);
 }
+
+void SpriteRenderer::DrawInspector()
+{
+}

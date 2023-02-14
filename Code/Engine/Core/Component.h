@@ -19,6 +19,8 @@ public:
 
 	ComponentType GetType();
 	
+	virtual void DrawInspector() = 0;
+
 
 protected:
 	bool isActive = true;

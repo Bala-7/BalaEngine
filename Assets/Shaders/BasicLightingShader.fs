@@ -1,4 +1,5 @@
 #version 450 core
+
 struct Material {
     vec3 ambient;
     vec3 diffuse;
@@ -30,6 +31,8 @@ uniform Light light;
 uniform sampler2D Texture;
  
 out vec4 FragColor;
+
+
 
 void main()
 {

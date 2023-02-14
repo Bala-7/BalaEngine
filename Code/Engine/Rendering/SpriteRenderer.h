@@ -22,7 +22,7 @@ public:
 	
 	void Update() override;
 	void OnComponentAdded() override;
-
+	void DrawInspector() override;
 	
 	void setPosition(glm::vec3 _position);
 	void setScale(glm::vec3 _scale);
