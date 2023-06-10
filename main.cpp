@@ -26,12 +26,15 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
 
 void CreateCube3D();
 void CreateSprites2D();
+void CreateModel();
 
 RenderEngine* renderEngine;
 GameplayEngine* gameplayEngine;
 Editor* editor;
 
 MeshRenderer* mr;
+Light* light;
+Model* model;
 
 int main()
 {
@@ -52,9 +55,9 @@ int main()
 
 	Model ourModel("resources/objects/backpack/backpack.obj");*/
 
-	CreateCube3D();
+	//CreateCube3D();
 	//CreateSprites2D();
-
+	CreateModel();
 
 	glfwSetKeyCallback(window, key_callback);	// Input callback
 	// RendererInitialization();	// Triangle renderer
@@ -99,7 +102,7 @@ int main()
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		glClearColor(0.0, 0.0, 0.0, 1.0);//clear yellow
 		mr->draw();
-	
+		//model->Draw();
 
 		editor->DrawEditorWindows();
 
@@ -136,19 +139,26 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
 
 void CreateCube3D()
 {
-	GameObject* go = new GameObject();
+	GameObject* lightGO = new GameObject();
+	light = new Light(Light::LightType::Point,
+		glm::vec3(0.0f, 0.0f, -1.0f),
+		glm::vec3(0.2f, 0.2f, 0.2f), glm::vec3(0.5f, 0.5f, 0.5f), glm::vec3(1.0f, 1.0f, 1.0f),
+		1.0f, 0.09f, 0.032f,
+		glm::cos(glm::radians(12.5f)), glm::cos(glm::radians(17.5f)));
+	
+	GameObject* meshGO = new GameObject();
 	mr = new MeshRenderer(MeshType::kCube);
 	mr->setTexture(RenderEngine::GetInstance()->GetTextureID("Concrete.jpg"));
 	mr->setProgram(RenderEngine::GetInstance()->GetShaderProgram());
 	mr->shader->setVec3("objectColor", glm::vec3(1.0f, 1.0f, 1.0f));
 	mr->shader->setVec3("lightColor", glm::vec3(1.0f, 1.0f, 1.0f));
 
-	go->transform->position = glm::vec3(0.0f, 0.0f, 3.0f);
-	go->transform->scale = glm::vec3(1.0f, 1.0f, 1.0f);
-	go->transform->rotation = glm::vec3(0.0f, 0.0f, 0.0f);
-	go->AddComponent(mr);
+	meshGO->transform->position = glm::vec3(0.0f, 0.0f, -30.0f);
+	meshGO->transform->scale = glm::vec3(1.0f, 1.0f, 1.0f);
+	meshGO->transform->rotation = glm::vec3(0.0f, 0.0f, 0.0f);
+	meshGO->AddComponent(mr);
 
-	editor->SetDisplayedGameObject(go);
+	editor->SetDisplayedGameObject(meshGO);
 }
 
 void CreateSprites2D()
@@ -190,4 +200,30 @@ void CreateSprites2D()
 	fpsTextGO->AddComponent(fpsTR);
 	FPSCounter* counter = new FPSCounter(fpsTR);
 	fpsTextGO->AddComponent(counter);
+}
+
+void CreateModel()
+{
+	GameObject* lightGO = new GameObject();
+	light = new Light(Light::LightType::Point,
+		glm::vec3(0.0f, 0.0f, -1.0f),
+		glm::vec3(0.2f, 0.2f, 0.2f), glm::vec3(0.5f, 0.5f, 0.5f), glm::vec3(1.0f, 1.0f, 1.0f),
+		1.0f, 0.09f, 0.032f,
+		glm::cos(glm::radians(12.5f)), glm::cos(glm::radians(17.5f)));
+
+	GameObject* meshGO = new GameObject();
+	mr = new MeshRenderer(MeshType::kModel);
+	mr->setTexture(RenderEngine::GetInstance()->GetTextureID("Concrete.jpg"));
+	mr->setProgram(RenderEngine::GetInstance()->GetShaderProgram());
+	mr->shader->setVec3("objectColor", glm::vec3(1.0f, 1.0f, 1.0f));
+	mr->shader->setVec3("lightColor", glm::vec3(1.0f, 1.0f, 1.0f));
+
+	meshGO->transform->position = glm::vec3(0.05f, -2.0f, 5.0f);
+	meshGO->transform->scale = glm::vec3(1.0f, 1.0f, 1.0f);
+	meshGO->transform->rotation = glm::vec3(0.0f, 0.0f, 0.0f);
+	meshGO->AddComponent(mr);
+
+	editor->SetDisplayedGameObject(meshGO);
+
+	//model = new Model("Assets/Models/example.obj");
 }

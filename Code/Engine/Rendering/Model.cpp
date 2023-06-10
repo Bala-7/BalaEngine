@@ -4,6 +4,14 @@
 
 #include <assimp/postprocess.h>
 #include "stb_image.h"
+#include "RenderEngine.h"
+
+void Model::Draw()
+{
+	Shader* shader = new Shader(RenderEngine::GetInstance()->GetShaderProgram());
+	for (unsigned int i = 0; i < meshes.size(); i++)
+		meshes[i].Draw(*shader);
+}
 
 void Model::Draw(Shader& shader)
 {

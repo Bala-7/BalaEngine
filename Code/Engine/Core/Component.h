@@ -14,7 +14,8 @@ public:
 		TRANSFORM,
 		SPRITE_RENDERER,
 		MESH_RENDERER,
-		UITEXT_RENDERER
+		UITEXT_RENDERER,
+		LIGHT
 	};
 
 	ComponentType GetType();

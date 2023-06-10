@@ -2,12 +2,19 @@
 #include <vector>
 #include "Camera.h"
 #include "LightRenderer.h"
+#include "Light.h"
 #include <GL/glew.h>
 #include "glm/glm.hpp"
 #include "glm/gtc/matrix_transform.hpp"
 #include "glm/gtc/type_ptr.hpp"
 #include "Engine/Core/Component.h"
 #include "Engine/Rendering/Shader.h"
+
+#include <assimp/Importer.hpp>
+#include <assimp/scene.h>
+#include <assimp/postprocess.h>
+#include "Model.h"
+
 
 struct Material
 {
@@ -34,11 +41,15 @@ public:
 	void setRotation(glm::vec3 _rotation);
 	void setProgram(GLuint _program);
 	void setTexture(GLuint _textureID);
+	void setLight(Light light);
+	void setModel(std::string path);
 
 	Material* GetMaterial();
 
 	Shader* shader;
+	
 private:
+	Light* _light;
 	Material* _material;
 	std::vector<Vertex>vertices;
 	std::vector<GLuint>indices;
@@ -46,5 +57,16 @@ private:
 	Camera* camera;
 	glm::vec3 position, scale, rotation;
 	GLuint vao, vbo, ebo, texture, program;
+
+	// Model loading
+	std::string directory;
+	std::vector<Mesh> meshes;
+	std::string modelPath;
+
+	void loadModel(std::string path);
+	void processNode(aiNode* node, const aiScene* scene);
+	Mesh processMesh(aiMesh* mesh, const aiScene* scene);
+	std::vector<Texture> loadMaterialTextures(aiMaterial* mat, aiTextureType type, std::string typeName);
+	unsigned int TextureFromFile(const char* path, const std::string& directory, bool gamma);
 };
 

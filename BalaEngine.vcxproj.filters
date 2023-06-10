@@ -147,6 +147,9 @@
     <ClCompile Include="Code\Engine\Editor\Editor.cpp">
       <Filter>Archivos de origen\Editor</Filter>
     </ClCompile>
+    <ClCompile Include="Code\Engine\Rendering\Light.cpp">
+      <Filter>Archivos de origen\Engine\Rendering</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Code\Engine\Rendering\Camera.h">
@@ -241,6 +244,9 @@
     </ClInclude>
     <ClInclude Include="Code\Engine\Editor\imgui_widgets.h">
       <Filter>Archivos de encabezado\Editor\Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="Code\Engine\Rendering\Light.h">
+      <Filter>Archivos de encabezado\Engine\Rendering</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

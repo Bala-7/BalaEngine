@@ -28,6 +28,7 @@
     <ClCompile Include="Code\Engine\Editor\Editor.cpp" />
     <ClCompile Include="Code\Engine\Gameplay\GameplayEngine.cpp" />
     <ClCompile Include="Code\Engine\Rendering\Camera.cpp" />
+    <ClCompile Include="Code\Engine\Rendering\Light.cpp" />
     <ClCompile Include="Code\Engine\Rendering\LightRenderer.cpp" />
     <ClCompile Include="Code\Engine\Rendering\Mesh.cpp" />
     <ClCompile Include="Code\Engine\Rendering\MeshRenderer.cpp" />
@@ -60,6 +61,7 @@
     <ClInclude Include="Code\Engine\Editor\imgui_widgets.h" />
     <ClInclude Include="Code\Engine\Gameplay\GameplayEngine.h" />
     <ClInclude Include="Code\Engine\Rendering\Camera.h" />
+    <ClInclude Include="Code\Engine\Rendering\Light.h" />
     <ClInclude Include="Code\Engine\Rendering\LightRenderer.h" />
     <ClInclude Include="Code\Engine\Rendering\Mesh.h" />
     <ClInclude Include="Code\Engine\Rendering\MeshRenderer.h" />

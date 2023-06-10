@@ -9,7 +9,8 @@ enum MeshType {
 	kTriangle = 0,
 	kQuad = 1,
 	kCube = 2,
-	kSphere = 3
+	kSphere = 3,
+	kModel = 4
 };
 
 struct Vertex {
@@ -32,6 +33,7 @@ public:
 	static void setQuadData(std::vector<Vertex>& vertices, std::vector<uint32_t>& indices);
 	static void setCubeData(std::vector<Vertex>& vertices, std::vector<uint32_t>& indices);
 	static void setSphereData(std::vector<Vertex>& vertices, std::vector<uint32_t>& indices);
+	static void setModelData(std::vector<Vertex>& vertices, std::vector<uint32_t>& indices);
 
 	Mesh(std::vector<Vertex> vertices, std::vector<unsigned int> indices, std::vector<Texture> textures);
 	void Draw(Shader& shader);
