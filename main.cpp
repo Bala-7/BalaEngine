@@ -7,6 +7,7 @@
 #include <iostream>
 #include "Code/Engine/Rendering/RenderEngine.h"
 #include "Engine/Rendering/MeshRenderer.h"
+#include "Engine/Rendering/ModelRenderer.h"
 #include "Code/Engine/Core/GameObject.h"
 #include "Code/Engine/Gameplay/GameplayEngine.h"
 #include "Code/Engine/Debug/Debug.h"
@@ -33,6 +34,7 @@ GameplayEngine* gameplayEngine;
 Editor* editor;
 
 MeshRenderer* mr;
+ModelRenderer* modelRenderer;
 Light* light;
 Model* model;
 
@@ -101,8 +103,9 @@ int main()
 		// Scene Rendering code
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		glClearColor(0.0, 0.0, 0.0, 1.0);//clear yellow
-		mr->draw();
+		//mr->draw();
 		//model->Draw();
+		modelRenderer->draw();
 
 		editor->DrawEditorWindows();
 
@@ -212,16 +215,18 @@ void CreateModel()
 		glm::cos(glm::radians(12.5f)), glm::cos(glm::radians(17.5f)));
 
 	GameObject* meshGO = new GameObject();
-	mr = new MeshRenderer(MeshType::kModel);
+	modelRenderer = new ModelRenderer("Assets/Models/Samus/Samus/Samus_small.obj");
+
+	/*mr = new MeshRenderer(MeshType::kModel);
 	mr->setTexture(RenderEngine::GetInstance()->GetTextureID("Concrete.jpg"));
 	mr->setProgram(RenderEngine::GetInstance()->GetShaderProgram());
 	mr->shader->setVec3("objectColor", glm::vec3(1.0f, 1.0f, 1.0f));
-	mr->shader->setVec3("lightColor", glm::vec3(1.0f, 1.0f, 1.0f));
+	mr->shader->setVec3("lightColor", glm::vec3(1.0f, 1.0f, 1.0f));*/
 
 	meshGO->transform->position = glm::vec3(0.05f, -2.0f, 5.0f);
 	meshGO->transform->scale = glm::vec3(1.0f, 1.0f, 1.0f);
 	meshGO->transform->rotation = glm::vec3(0.0f, 0.0f, 0.0f);
-	meshGO->AddComponent(mr);
+	meshGO->AddComponent(modelRenderer);
 
 	editor->SetDisplayedGameObject(meshGO);
 

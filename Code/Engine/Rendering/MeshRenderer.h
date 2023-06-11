@@ -29,6 +29,8 @@ class MeshRenderer : public Component
 
 public:
 	MeshRenderer(MeshType modelType);
+	MeshRenderer(std::vector<Vertex> _vertices, std::vector<GLuint> _indices);
+
 	~MeshRenderer();
 
 	void Update() override;
@@ -43,6 +45,8 @@ public:
 	void setTexture(GLuint _textureID);
 	void setLight(Light light);
 	void setModel(std::string path);
+
+	void setTriangles(std::vector<Vertex> _vertices, std::vector<GLuint> _indices);
 
 	Material* GetMaterial();
 

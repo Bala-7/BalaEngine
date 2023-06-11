@@ -62,11 +62,58 @@ MeshRenderer::MeshRenderer(MeshType modelType)
 	glBindVertexArray(0);
 }
 
+MeshRenderer::MeshRenderer(std::vector<Vertex> _vertices, std::vector<GLuint> _indices)
+{
+	componentType = ComponentType::MESH_RENDERER;
+	camera = RenderEngine::GetInstance()->GetCamera();
+	scale = glm::vec3(1.0f, 1.0f, 1.0f);
+	position = glm::vec3(0.0, 0.0, 0.0);
+	_material = new Material();
+	modelPath = "Assets/Models/Samus/Samus/Samus_small.obj";
+
+	vertices = _vertices;
+	indices = _indices;
+
+	// Generate and bind VAO, VBO and EBO
+	glGenVertexArrays(1, &vao);
+	glBindVertexArray(vao);
+
+	glGenBuffers(1, &vbo);
+	glBindBuffer(GL_ARRAY_BUFFER, vbo);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(Vertex) * vertices.size(), &vertices[0], GL_STATIC_DRAW);
+
+	glGenBuffers(1, &ebo);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ebo);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(GLuint) * indices.size(), &indices[0], GL_STATIC_DRAW);
+
+	// Set attributes: position(0) and texture(1)
+	glEnableVertexAttribArray(0);
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex),
+		(GLvoid*)0);
+
+	glEnableVertexAttribArray(1);
+	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex),
+		(void*)(offsetof(Vertex, Vertex::normal)));
+
+	glEnableVertexAttribArray(2);
+	glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex),
+		(void*)(offsetof(Vertex, Vertex::texCoords)));
+
+	// Unbind Buffers and vertexArray
+	glBindBuffer(GL_ARRAY_BUFFER, 0);
+	glBindVertexArray(0);
+}
+
 void MeshRenderer::setModel(std::string path)
 {
 	loadModel(path);
 }
 
+void MeshRenderer::setTriangles(std::vector<Vertex> _vertices, std::vector<GLuint> _indices)
+{
+	this->vertices = _vertices;
+	this->indices = _indices;
+}
 
 MeshRenderer::~MeshRenderer() 
 {

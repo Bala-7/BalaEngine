@@ -33,6 +33,7 @@
     <ClCompile Include="Code\Engine\Rendering\Mesh.cpp" />
     <ClCompile Include="Code\Engine\Rendering\MeshRenderer.cpp" />
     <ClCompile Include="Code\Engine\Rendering\Model.cpp" />
+    <ClCompile Include="Code\Engine\Rendering\ModelRenderer.cpp" />
     <ClCompile Include="Code\Engine\Rendering\ObjLoader.cpp" />
     <ClCompile Include="Code\Engine\Rendering\RenderEngine.cpp" />
     <ClCompile Include="Code\Engine\Rendering\Shader.cpp" />
@@ -66,6 +67,7 @@
     <ClInclude Include="Code\Engine\Rendering\Mesh.h" />
     <ClInclude Include="Code\Engine\Rendering\MeshRenderer.h" />
     <ClInclude Include="Code\Engine\Rendering\Model.h" />
+    <ClInclude Include="Code\Engine\Rendering\ModelRenderer.h" />
     <ClInclude Include="Code\Engine\Rendering\ObjLoader.h" />
     <ClInclude Include="Code\Engine\Rendering\RenderEngine.h" />
     <ClInclude Include="Code\Engine\Rendering\Shader.h" />
