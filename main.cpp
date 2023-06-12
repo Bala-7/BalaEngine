@@ -15,7 +15,9 @@
 #include "Engine/Rendering/UITextRenderer.h"
 #include "Engine/Debug/FPSCounter.h"
 #include "Engine/Rendering/Model.h"
-#include "Engine/Editor/Editor.h"
+#include "Engine/Editor/editor.h"
+#include "Engine/Core/SceneGraph.h"
+#include "Engine/Core/SceneNode.h"
 
 #ifdef _WIN32
 #include <Windows.h>
@@ -28,10 +30,12 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
 void CreateCube3D();
 void CreateSprites2D();
 void CreateModel();
+void CreateSceneGraph();
 
 RenderEngine* renderEngine;
 GameplayEngine* gameplayEngine;
 Editor* editor;
+SceneGraph* sceneGraph;
 
 MeshRenderer* mr;
 ModelRenderer* modelRenderer;
@@ -50,7 +54,7 @@ int main()
 
 	GLFWwindow* window = renderEngine->GetWindow();
 	
-	editor = new Editor();
+	editor = Editor::Instance();
 	editor->Initialize();
 
 	/*Shader ourShader("Assets/Shaders/TexturedModel.vs", "Assets/Shaders/TexturedModel.fs");
@@ -59,7 +63,7 @@ int main()
 
 	//CreateCube3D();
 	//CreateSprites2D();
-	CreateModel();
+	CreateSceneGraph();
 
 	glfwSetKeyCallback(window, key_callback);	// Input callback
 	// RendererInitialization();	// Triangle renderer
@@ -105,7 +109,8 @@ int main()
 		glClearColor(0.0, 0.0, 0.0, 1.0);//clear yellow
 		//mr->draw();
 		//model->Draw();
-		modelRenderer->draw();
+		//modelRenderer->draw();
+		sceneGraph->Draw();
 
 		editor->DrawEditorWindows();
 
@@ -217,12 +222,6 @@ void CreateModel()
 	GameObject* meshGO = new GameObject();
 	modelRenderer = new ModelRenderer("Assets/Models/Samus/Samus/Samus_small.obj");
 
-	/*mr = new MeshRenderer(MeshType::kModel);
-	mr->setTexture(RenderEngine::GetInstance()->GetTextureID("Concrete.jpg"));
-	mr->setProgram(RenderEngine::GetInstance()->GetShaderProgram());
-	mr->shader->setVec3("objectColor", glm::vec3(1.0f, 1.0f, 1.0f));
-	mr->shader->setVec3("lightColor", glm::vec3(1.0f, 1.0f, 1.0f));*/
-
 	meshGO->transform->position = glm::vec3(0.05f, -2.0f, 5.0f);
 	meshGO->transform->scale = glm::vec3(1.0f, 1.0f, 1.0f);
 	meshGO->transform->rotation = glm::vec3(0.0f, 0.0f, 0.0f);
@@ -231,4 +230,32 @@ void CreateModel()
 	editor->SetDisplayedGameObject(meshGO);
 
 	//model = new Model("Assets/Models/example.obj");
+}
+
+void CreateSceneGraph()
+{
+	sceneGraph = new SceneGraph();
+	
+	// Light
+	GameObject* lightGO = new GameObject("Point Light");
+	light = new Light(Light::LightType::Point,
+		glm::vec3(0.0f, 0.0f, -1.0f),
+		glm::vec3(0.2f, 0.2f, 0.2f), glm::vec3(0.5f, 0.5f, 0.5f), glm::vec3(1.0f, 1.0f, 1.0f),
+		1.0f, 0.09f, 0.032f,
+		glm::cos(glm::radians(12.5f)), glm::cos(glm::radians(17.5f)));
+	lightGO->AddComponent(light);
+
+	// 3D Model
+	GameObject* meshGO = new GameObject("Samus Model");
+	modelRenderer = new ModelRenderer("Assets/Models/Samus/Samus/Samus_small.obj");
+	meshGO->transform->position = glm::vec3(0.05f, -2.0f, 5.0f);
+	meshGO->transform->scale = glm::vec3(1.0f, 1.0f, 1.0f);
+	meshGO->transform->rotation = glm::vec3(0.0f, 0.0f, 0.0f);
+	meshGO->AddComponent(modelRenderer);
+	editor->SetDisplayedGameObject(meshGO);
+
+	sceneGraph->GetRootNode()->AddChild(new SceneNode(lightGO));
+	sceneGraph->GetRootNode()->AddChild(new SceneNode(meshGO));
+
+	editor->sceneGraph = sceneGraph;
 }

@@ -8,6 +8,14 @@ GameObject::GameObject()
 	GameplayEngine::GetInstance()->AddGameObject(this);
 }
 
+GameObject::GameObject(std::string _name)
+{
+	name = _name;
+	transform = new Transform();
+	AddComponent(transform);
+	GameplayEngine::GetInstance()->AddGameObject(this);
+}
+
 GameObject::~GameObject()
 {
 }
@@ -26,6 +34,22 @@ void GameObject::Update()
 		if(component->GetType() != Component::ComponentType::SPRITE_RENDERER)
 			component->Update();
 	}
+}
+
+void GameObject::DrawInspector()
+{
+	for (auto i : components)
+		i->DrawInspector();
+}
+
+void GameObject::SetRenderComponent(ModelRenderer* newComponent)
+{
+	renderComponent = newComponent;
+}
+
+ModelRenderer* GameObject::GetRenderComponent()
+{
+	return renderComponent;
 }
 
 Component* GameObject::GetComponent(Component::ComponentType type)

@@ -8,6 +8,8 @@ public:
 	ModelRenderer(const char* path) 
 	{
 		loadModel(path);
+		std::string pathString = path;
+		_modelName = pathString.substr(pathString.find_last_of("/\\") + 1);
 	}
 
 	~ModelRenderer();
@@ -22,6 +24,7 @@ public:
 	void setRotation(glm::vec3 _rotation);
 
 private:
+	std::string _modelName;
 	std::string directory;
 	std::vector<MeshRenderer> _meshes;
 	glm::vec3 position, scale, rotation;

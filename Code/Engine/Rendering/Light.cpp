@@ -38,8 +38,6 @@ void Light::OnComponentAdded()
 void Light::DrawInspector()
 {
 	ImGui::Separator();
-	ImGui::Text("TRANSFORM");
-	ImGui::Separator();
 	ImGui::Text("Direction");
 	ImGui::Separator();
 	nimgui::draw_vec3_widget("Direction", _direction);

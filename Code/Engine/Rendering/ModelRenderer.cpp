@@ -19,6 +19,8 @@ void ModelRenderer::Update()
 
 void ModelRenderer::OnComponentAdded()
 {
+	gameObject->SetRenderComponent(this);
+
 	setPosition(gameObject->transform->position);
 	setScale(gameObject->transform->scale);
 	setRotation(gameObject->transform->rotation);
@@ -33,7 +35,10 @@ void ModelRenderer::DrawInspector()
 	ImGui::Separator();
 	ImGui::Text("MODEL RENDERER");
 	ImGui::Separator();
-	ImGui::Text("TODO: Make Model Renderer inspector");
+	char modelNameText[100];
+	strcpy(modelNameText, "Model name: ");
+	strcat(modelNameText, _modelName.c_str());
+	ImGui::Text(modelNameText);
 	
 }
 
@@ -144,7 +149,8 @@ MeshRenderer ModelRenderer::processMesh(aiMesh* mesh, const aiScene* scene)
 	}
 
 	MeshRenderer* _mesh = new MeshRenderer(vertices, indices);
-	_mesh->setTexture(RenderEngine::GetInstance()->GetTextureID("Concrete.jpg"));
+	//_mesh->setTexture(RenderEngine::GetInstance()->GetTextureID("Concrete.jpg"));
+	_mesh->setTexture(textures[0].id);
 	_mesh->setProgram(RenderEngine::GetInstance()->GetShaderProgram());
 	_mesh->shader->setVec3("objectColor", glm::vec3(1.0f, 1.0f, 1.0f));
 	_mesh->shader->setVec3("lightColor", glm::vec3(1.0f, 1.0f, 1.0f));

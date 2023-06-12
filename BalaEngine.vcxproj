@@ -21,6 +21,7 @@
   <ItemGroup>
     <ClCompile Include="Code\Engine\Core\Component.cpp" />
     <ClCompile Include="Code\Engine\Core\GameObject.cpp" />
+    <ClCompile Include="Code\Engine\Core\SceneNode.cpp" />
     <ClCompile Include="Code\Engine\Core\Time.cpp" />
     <ClCompile Include="Code\Engine\Core\Transform.cpp" />
     <ClCompile Include="Code\Engine\Debug\Debug.cpp" />
@@ -50,10 +51,13 @@
     <ClCompile Include="Dependencies\imgui\imgui_tables.cpp" />
     <ClCompile Include="Dependencies\imgui\imgui_widgets.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="SceneGraph.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Code\Engine\Core\Component.h" />
     <ClInclude Include="Code\Engine\Core\GameObject.h" />
+    <ClInclude Include="Code\Engine\Core\SceneGraph.h" />
+    <ClInclude Include="Code\Engine\Core\SceneNode.h" />
     <ClInclude Include="Code\Engine\Core\Time.h" />
     <ClInclude Include="Code\Engine\Core\Transform.h" />
     <ClInclude Include="Code\Engine\Debug\Debug.h" />
