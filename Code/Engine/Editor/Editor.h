@@ -40,6 +40,6 @@ private:
 
 	void DrawSceneGraphWindow();
 	void DrawLightingWindow();
-
+	void DrawSceneViewWindow();
 };
 

@@ -85,6 +85,13 @@ public:
 	glm::vec3 GetEnvironmentLight();
 	void SetEnvironmentLight(glm::vec3 value);
 
+	void CreateFramebuffer();
+	void BindFramebuffer();
+	void UnbindFramebuffer();
+	void RescaleFramebuffer(float width, float height);
+
+	GLuint GetFrameBufferTexture() { return texture_id; }
+
 private:
 
 	static RenderEngine* p_Instance;
@@ -129,6 +136,11 @@ private:
 	std::map<char, Character> Characters;
 	FT_Library ft;
 	FT_Face ftFace;
+
+	// Framebuffer display
+	GLuint FBO;
+	GLuint RBO;
+	GLuint texture_id;
 };
 
 #endif

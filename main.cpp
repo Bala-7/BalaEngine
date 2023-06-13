@@ -19,6 +19,10 @@
 #include "Engine/Core/SceneGraph.h"
 #include "Engine/Core/SceneNode.h"
 
+#include "imgui.h"
+#include "imgui_impl_glfw.h"
+#include "imgui_impl_opengl3.h"
+
 #ifdef _WIN32
 #include <Windows.h>
 #else
@@ -44,8 +48,6 @@ Model* model;
 
 int main()
 {
-	
-
 	renderEngine = new RenderEngine();
 	renderEngine->Initialize();
 
@@ -104,15 +106,19 @@ int main()
 			t += dt;
 		}
 		
+		glViewport(0, 0, 1280, 720);
 		// Scene Rendering code
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		glClearColor(0.0, 0.0, 0.0, 1.0);//clear yellow
-		//mr->draw();
-		//model->Draw();
-		//modelRenderer->draw();
-		sceneGraph->Draw();
+
+		
 
 		editor->DrawEditorWindows();
+
+		renderEngine->BindFramebuffer();
+		sceneGraph->Draw();
+		renderEngine->UnbindFramebuffer();
+		
 
 		//renderEngine->Update();
 		// \Scene Rendering code\
