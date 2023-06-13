@@ -13,6 +13,7 @@ void Editor::Initialize()
 	IMGUI_CHECKVERSION();
 	ImGui::CreateContext();
 	ImGuiIO& io = ImGui::GetIO(); (void)io;
+	io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;
 
 	ImGui::StyleColorsDark();
 	ImGui_ImplGlfw_InitForOpenGL(RenderEngine::GetInstance()->GetWindow(), true);
@@ -33,26 +34,33 @@ void Editor::DrawEditorWindows()
 	ImGui_ImplOpenGL3_NewFrame();
 	ImGui_ImplGlfw_NewFrame();
 	ImGui::NewFrame();
+
+	// Set up ImGui windows and layout
+	ImGui::DockSpaceOverViewport();
+
 	DrawSceneGraphWindow();
-	
-	ImGui::SetNextWindowPos(ImVec2(0, 0));
-	//ImGui::SetNextWindowSize(ImVec2(400, 400));
+	// Begin the main menu bar
+	bool showSceneGraphWindow;
+	bool showSceneViewWindow;
+	bool showInspectorWindow;
+	bool showLightingWindow;
+
+	if (ImGui::BeginMainMenuBar()) {
+		if (ImGui::BeginMenu("Window")) {
+			ImGui::MenuItem("Scene Graph", nullptr, &showSceneGraphWindow);
+			ImGui::MenuItem("Scene View", nullptr, &showSceneViewWindow);
+			ImGui::MenuItem("Inspector", nullptr, &showInspectorWindow);
+			ImGui::MenuItem("Lighting", nullptr, &showLightingWindow);
+			ImGui::EndMenu();
+		}
+		ImGui::EndMainMenuBar();
+	}
+
 	ImGui::Begin("GameObject Inspector");
 	ImGui::Text("Edit object parameters");
 	ImGui::Checkbox("Auto rotate", &autoRotate);
 	if(autoRotate)
 		ImGui::SliderFloat("Rotation Speed", &rotationSpeed, 0.0f, 20.0f);
-	
-	/*if (ImGui::CollapsingHeader("Light"))
-	{
-		ImGui::Separator();
-		ImGui::Text("Environment Color");
-		ImGui::Separator(); 
-		ImGui::ColorEdit4("##Environment Color", color);
-
-	}*/
-
-
 	
 	ImGui::Separator();
 	ImGui::Separator();
@@ -93,15 +101,12 @@ void Editor::DrawInspector()
 
 void Editor::DrawSceneGraphWindow()
 {
-	ImGui::SetNextWindowPos(ImVec2(200, 0));
-	//ImGui::SetNextWindowSize(ImVec2(400, 400));
 	sceneGraph->DrawEditorWindow();
 }
 
 
 void Editor::DrawLightingWindow()
 {
-	ImGui::SetNextWindowPos(ImVec2(400, 0));
 	ImGui::Begin("Lighting");
 	ImGui::Text("Environment Color");
 	ImGui::Separator();
@@ -115,37 +120,12 @@ void Editor::DrawSceneViewWindow()
 	int subViewportHeight = 480;
 	int subViewportX = 100;
 	int subViewportY = 100;
-
-	ImGui::SetNextWindowPos(ImVec2(426, 240));
 	
-	
-	ImGui::Begin("Scene View", nullptr, ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove);
+	ImGui::Begin("Scene View", nullptr, ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize);
 
 	// Render the sub-viewport content within the ImGui frame
 	ImGui::BeginChild("SubViewport", ImVec2(subViewportWidth, subViewportHeight), true);
 	{
-		// Get the draw list for the sub-viewport
-		/*ImDrawList* drawList = ImGui::GetWindowDrawList();
-
-		// Clear the sub-viewport with a background color
-		drawList->AddRectFilled(ImGui::GetWindowPos(), ImVec2(ImGui::GetWindowPos().x + ImGui::GetWindowSize().x, ImGui::GetWindowPos().y + ImGui::GetWindowSize().y), IM_COL32(0, 0, 1.0f, 255));
-
-		// Perform your OpenGL rendering commands for the sub-viewport content
-		glViewport(subViewportX, subViewportY, subViewportWidth, subViewportHeight);
-		glScissor(subViewportX, subViewportY, subViewportWidth, subViewportHeight);
-		glEnable(GL_SCISSOR_TEST);
-
-		// Clear the color and depth buffers for the sub-viewport content
-		glClearColor(0.2f, 0.2f, 0.2f, 1.0f);
-		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
-
-
-		// Render your OpenGL code for the sub-viewport here
-		//scene->Draw();
-
-		glDisable(GL_SCISSOR_TEST);*/
-
 		// we access the ImGui window size
 		const float window_width = ImGui::GetContentRegionAvail().x;
 		const float window_height = ImGui::GetContentRegionAvail().y;
@@ -167,9 +147,6 @@ void Editor::DrawSceneViewWindow()
 			ImVec2(1, 0)
 		);
 	}
-	
-	
-
 	ImGui::EndChild();
 
 	ImGui::End();

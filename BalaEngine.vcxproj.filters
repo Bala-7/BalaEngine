@@ -123,6 +123,21 @@
     <ClCompile Include="Code\Engine\Rendering\Model.cpp">
       <Filter>Archivos de origen\Engine\Rendering</Filter>
     </ClCompile>
+    <ClCompile Include="Code\Engine\Editor\Editor.cpp">
+      <Filter>Archivos de origen\Editor</Filter>
+    </ClCompile>
+    <ClCompile Include="Code\Engine\Rendering\Light.cpp">
+      <Filter>Archivos de origen\Engine\Rendering</Filter>
+    </ClCompile>
+    <ClCompile Include="Code\Engine\Rendering\ModelRenderer.cpp">
+      <Filter>Archivos de origen\Engine\Rendering</Filter>
+    </ClCompile>
+    <ClCompile Include="SceneGraph.cpp">
+      <Filter>Archivos de origen\Engine\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="Code\Engine\Core\SceneNode.cpp">
+      <Filter>Archivos de origen\Engine\Core</Filter>
+    </ClCompile>
     <ClCompile Include="Dependencies\imgui\imgui.cpp">
       <Filter>Archivos de origen\Editor\imgui</Filter>
     </ClCompile>
@@ -143,21 +158,6 @@
     </ClCompile>
     <ClCompile Include="Dependencies\imgui\imgui_widgets.cpp">
       <Filter>Archivos de origen\Editor\imgui</Filter>
-    </ClCompile>
-    <ClCompile Include="Code\Engine\Editor\Editor.cpp">
-      <Filter>Archivos de origen\Editor</Filter>
-    </ClCompile>
-    <ClCompile Include="Code\Engine\Rendering\Light.cpp">
-      <Filter>Archivos de origen\Engine\Rendering</Filter>
-    </ClCompile>
-    <ClCompile Include="Code\Engine\Rendering\ModelRenderer.cpp">
-      <Filter>Archivos de origen\Engine\Rendering</Filter>
-    </ClCompile>
-    <ClCompile Include="SceneGraph.cpp">
-      <Filter>Archivos de origen\Engine\Core</Filter>
-    </ClCompile>
-    <ClCompile Include="Code\Engine\Core\SceneNode.cpp">
-      <Filter>Archivos de origen\Engine\Core</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -221,33 +221,6 @@
     <ClInclude Include="Code\Engine\Rendering\Model.h">
       <Filter>Archivos de encabezado\Engine\Rendering</Filter>
     </ClInclude>
-    <ClInclude Include="Dependencies\imgui\imconfig.h">
-      <Filter>Archivos de encabezado\Editor\imgui</Filter>
-    </ClInclude>
-    <ClInclude Include="Dependencies\imgui\imgui.h">
-      <Filter>Archivos de encabezado\Editor\imgui</Filter>
-    </ClInclude>
-    <ClInclude Include="Dependencies\imgui\imgui_impl_glfw.h">
-      <Filter>Archivos de encabezado\Editor\imgui</Filter>
-    </ClInclude>
-    <ClInclude Include="Dependencies\imgui\imgui_impl_opengl3.h">
-      <Filter>Archivos de encabezado\Editor\imgui</Filter>
-    </ClInclude>
-    <ClInclude Include="Dependencies\imgui\imgui_internal.h">
-      <Filter>Archivos de encabezado\Editor\imgui</Filter>
-    </ClInclude>
-    <ClInclude Include="Dependencies\imgui\imstb_rectpack.h">
-      <Filter>Archivos de encabezado\Editor\imgui</Filter>
-    </ClInclude>
-    <ClInclude Include="Dependencies\imgui\imstb_textedit.h">
-      <Filter>Archivos de encabezado\Editor\imgui</Filter>
-    </ClInclude>
-    <ClInclude Include="Dependencies\imgui\imstb_truetype.h">
-      <Filter>Archivos de encabezado\Editor\imgui</Filter>
-    </ClInclude>
-    <ClInclude Include="Dependencies\imgui\imgui_impl_opengl3_loader.h">
-      <Filter>Archivos de encabezado\Editor\imgui</Filter>
-    </ClInclude>
     <ClInclude Include="Code\Engine\Editor\Editor.h">
       <Filter>Archivos de encabezado\Editor</Filter>
     </ClInclude>
@@ -265,6 +238,33 @@
     </ClInclude>
     <ClInclude Include="Code\Engine\Core\SceneNode.h">
       <Filter>Archivos de encabezado\Engine\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Dependencies\imgui\imconfig.h">
+      <Filter>Archivos de encabezado\Editor\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="Dependencies\imgui\imgui.h">
+      <Filter>Archivos de encabezado\Editor\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="Dependencies\imgui\imgui_impl_glfw.h">
+      <Filter>Archivos de encabezado\Editor\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="Dependencies\imgui\imgui_impl_opengl3.h">
+      <Filter>Archivos de encabezado\Editor\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="Dependencies\imgui\imgui_impl_opengl3_loader.h">
+      <Filter>Archivos de encabezado\Editor\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="Dependencies\imgui\imgui_internal.h">
+      <Filter>Archivos de encabezado\Editor\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="Dependencies\imgui\imstb_rectpack.h">
+      <Filter>Archivos de encabezado\Editor\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="Dependencies\imgui\imstb_textedit.h">
+      <Filter>Archivos de encabezado\Editor\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="Dependencies\imgui\imstb_truetype.h">
+      <Filter>Archivos de encabezado\Editor\imgui</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

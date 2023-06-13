@@ -159,7 +159,7 @@
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(ProjectDir)Dependencies\glew-2.1.0\include;$(ProjectDir)Dependencies\glfw-3.3.2.bin.WIN64\include;$(ProjectDir)Dependencies\stb-master;$(ProjectDir)Dependencies\bullet\include;$(ProjectDir)Dependencies\freetype\include;$(ProjectDir)Dependencies\irrKlang-64bit-1.6.0\include;$(ProjectDir)Dependencies\assimp\include;$(ProjectDir)Dependencies\glm;$(ProjectDir)Code\;$(ProjectDir)Dependencies\imgui</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)Dependencies\imgui;$(ProjectDir)Dependencies\glew-2.1.0\include;$(ProjectDir)Dependencies\glfw-3.3.2.bin.WIN64\include;$(ProjectDir)Dependencies\stb-master;$(ProjectDir)Dependencies\bullet\include;$(ProjectDir)Dependencies\freetype\include;$(ProjectDir)Dependencies\irrKlang-64bit-1.6.0\include;$(ProjectDir)Dependencies\assimp\include;$(ProjectDir)Dependencies\glm;$(ProjectDir)Code\;$(ProjectDir)Dependencies\imgui</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>_MBCS;%(PreprocessorDefinitions);_CRT_SECURE_NO_WARNINGS</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
     </ClCompile>
@@ -192,7 +192,7 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(ProjectDir)Dependencies\glew-2.1.0\include;$(ProjectDir)Dependencies\glfw-3.3.2.bin.WIN64\include;$(ProjectDir)Dependencies\stb-master;$(ProjectDir)Dependencies\bullet\include;$(ProjectDir)Dependencies\freetype\include;$(ProjectDir)Dependencies\irrKlang-64bit-1.6.0\include;;$(ProjectDir)Dependencies\imgui</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)Dependencies\imgui;$(ProjectDir)Dependencies\glew-2.1.0\include;$(ProjectDir)Dependencies\glfw-3.3.2.bin.WIN64\include;$(ProjectDir)Dependencies\stb-master;$(ProjectDir)Dependencies\bullet\include;$(ProjectDir)Dependencies\freetype\include;$(ProjectDir)Dependencies\irrKlang-64bit-1.6.0\include;;$(ProjectDir)Dependencies\imgui</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>_MBCS;%(PreprocessorDefinitions);</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
     </ClCompile>
