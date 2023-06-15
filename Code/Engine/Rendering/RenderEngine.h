@@ -92,6 +92,11 @@ public:
 
 	GLuint GetFrameBufferTexture() { return texture_id; }
 
+	void OnKeyboardInput(GLFWwindow* window, int key, int scancode, int action, int mode);
+	void OnMouseInput(GLFWwindow* window, int button, int action, int mods);
+	void OnCursorPositionInput(GLFWwindow* window, double xpos, double ypos);
+
+
 private:
 
 	static RenderEngine* p_Instance;
@@ -141,6 +146,13 @@ private:
 	GLuint FBO;
 	GLuint RBO;
 	GLuint texture_id;
+
+	// Input
+	bool isShiftKeyPressed = false;
+	bool isMouseCenterButtonPressed = false;
+
+	float lastMouseX = 0.0f;
+	float lastMouseY = 0.0f;
 };
 
 #endif

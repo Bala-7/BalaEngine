@@ -30,6 +30,8 @@
 #endif
 
 void key_callback(GLFWwindow* window, int key, int scancode, int action, int mode);
+void mouseButtonCallback(GLFWwindow* window, int button, int action, int mods);
+void cursorPositionCallback(GLFWwindow* window, double xpos, double ypos);
 
 void CreateCube3D();
 void CreateSprites2D();
@@ -45,6 +47,14 @@ MeshRenderer* mr;
 ModelRenderer* modelRenderer;
 Light* light;
 Model* model;
+
+// Input
+bool keys[1024];
+GLfloat lastX;
+GLfloat lastY;
+GLfloat xChange;
+GLfloat yChange;
+bool mouseFirstMoved = true;
 
 int main()
 {
@@ -68,6 +78,9 @@ int main()
 	CreateSceneGraph();
 
 	glfwSetKeyCallback(window, key_callback);	// Input callback
+	//glfwSetMouseButtonCallback(window, mouseButtonCallback);
+	glfwSetCursorPosCallback(window, cursorPositionCallback);
+
 	// RendererInitialization();	// Triangle renderer
 
 	auto currentTime = Time::Now();
@@ -86,7 +99,13 @@ int main()
 
 		glfwPollEvents();
 
+		renderEngine->GetCamera()->OnKeyInput(keys, frameTime);
+		if(keys[GLFW_KEY_LEFT_SHIFT])
+			renderEngine->GetCamera()->OnMouseMovement(xChange, yChange, frameTime);
 		
+		xChange = 0.0f;
+		yChange = 0.0f;
+
 		while (accumulator >= dt) 
 		{
 			// Physics code
@@ -142,12 +161,46 @@ int main()
 // -----------------------------------
 // -- Input --------------------------
 
+
 void key_callback(GLFWwindow* window, int key, int scancode, int action, int mode)
 {
 	// When a user presses the escape key, we set the WindowShouldClose property to true, closing the application
 	if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS)
 		glfwSetWindowShouldClose(window, GL_TRUE);
+
+	if (key >= 0 && key <= 1024)
+	{
+		if (action == GLFW_PRESS)
+			keys[key] = true;
+		else if (action == GLFW_RELEASE)
+			keys[key] = false;
+	}
+
 }
+
+// GLFW callback for mouse button events
+void mouseButtonCallback(GLFWwindow* window, int button, int action, int mods) 
+{
+	
+}
+
+// GLFW callback for mouse movement events
+void cursorPositionCallback(GLFWwindow* window, double xpos, double ypos) 
+{
+	if (mouseFirstMoved)
+	{
+		lastX = xpos;
+		lastY = ypos;
+		mouseFirstMoved = false;
+	}
+
+	xChange = xpos - lastX;
+	yChange = lastY - ypos;	// Invert this operation to invert mouse Y movement
+
+	lastX = xpos;
+	lastY = ypos;
+}
+
 
 // -----------------------------------
 

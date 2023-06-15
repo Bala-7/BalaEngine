@@ -193,6 +193,9 @@ void RenderEngine::InitGame()
 
 GLFWwindow* RenderEngine::CreateWindow()
 {
+	// Set window hints
+	glfwWindowHint(GLFW_RESIZABLE, GLFW_TRUE);
+
 	GLFWwindow* window = glfwCreateWindow(config.WINDOW_SIZE_X, config.WINDOW_SIZE_Y, "BalaEngine", nullptr, nullptr);
 	if (window == nullptr)
 	{
@@ -371,3 +374,4 @@ void RenderEngine::RescaleFramebuffer(float width, float height)
 	glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH24_STENCIL8, width, height);
 	glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_RENDERBUFFER, RBO);
 }
+

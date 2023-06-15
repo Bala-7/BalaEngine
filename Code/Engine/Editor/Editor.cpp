@@ -135,7 +135,9 @@ void Editor::DrawSceneViewWindow()
 
 		// we rescale the framebuffer to the actual window size here and reset the glViewport 
 		RenderEngine::GetInstance()->RescaleFramebuffer(window_width, window_height);
-		glViewport(pos.x, 720-pos.y-window_height, window_width, window_height);
+		int fullWindowWidth, fullWindowHeight;
+		glfwGetWindowSize(RenderEngine::GetInstance()->GetWindow(), &fullWindowWidth, &fullWindowHeight);
+		glViewport(pos.x, fullWindowHeight -pos.y-window_height, window_width, window_height);
 
 		// and here we can add our created texture as image to ImGui
 		// unfortunately we need to use the cast to void* or I didn't find another way tbh
