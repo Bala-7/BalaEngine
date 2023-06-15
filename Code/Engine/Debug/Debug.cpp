@@ -5,6 +5,8 @@
 #include <Windows.h>
 
 std::stringstream Debug::logBuffer;
+std::stringstream Debug::warningsBuffer;
+std::stringstream Debug::errorBuffer;
 
 void Debug::Log(const char* message)
 {
@@ -18,7 +20,7 @@ void Debug::LogWarning(const char* message)
 {
 	Color(6);
 	std::cout << message << "\n";
-	logBuffer << message << "\n";
+	warningsBuffer << message << "\n";
 	Color(7);
 }
 
@@ -26,7 +28,7 @@ void Debug::LogError(const char* message)
 {
 	Color(4);
 	std::cout << message << "\n";
-	logBuffer << message << "\n";
+	errorBuffer << message << "\n";
 	Color(7);
 }
 
@@ -42,7 +44,7 @@ void Debug::LogWarning(std::string message)
 {
 	Color(6);
 	std::cout << message << "\n";
-	logBuffer << message << "\n";
+	warningsBuffer << message << "\n";
 	Color(7);
 }
 
@@ -50,13 +52,23 @@ void Debug::LogError(std::string message)
 {
 	Color(4);
 	std::cout << message << "\n";
-	logBuffer << message << "\n";
+	errorBuffer << message << "\n";
 	Color(7);
 }
 
 const char* Debug::GetLogBuffer()
 {
 	return logBuffer.str().c_str();
+}
+
+const char* Debug::GetWarningsBuffer()
+{
+	return warningsBuffer.str().c_str();
+}
+
+const char* Debug::GetErrorBuffer()
+{
+	return errorBuffer.str().c_str();
 }
 
 //COLORS LIST

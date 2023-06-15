@@ -125,7 +125,25 @@ void Editor::DrawLightingWindow()
 void Editor::DrawConsoleWindow()
 {
 	ImGui::Begin("Console");
-	ImGui::TextUnformatted(Debug::GetLogBuffer());
+	if (ImGui::BeginTabBar("Console TabBar")) {
+		if (ImGui::BeginTabItem("Log")) {
+			ImGui::TextUnformatted(Debug::GetLogBuffer());
+			ImGui::EndTabItem();
+		}
+
+		if (ImGui::BeginTabItem("Warnings")) {
+			ImGui::Text("This tab will show the warnings");
+			ImGui::EndTabItem();
+		}
+
+		if (ImGui::BeginTabItem("Errors")) {
+			ImGui::Text("This tab will show the errors");
+			ImGui::EndTabItem();
+		}
+
+		ImGui::EndTabBar();
+	}
+	
 	ImGui::End();
 }
 
