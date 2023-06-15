@@ -1,11 +1,12 @@
 #include "Editor.h"
 
 #include "Engine/Rendering/RenderEngine.h"
+#include "Engine/Debug/Debug.h"
 
-#include "imgui.h"
-#include "imgui_impl_glfw.h"
-#include "imgui_impl_opengl3.h"
-#include "imgui_widgets.h"
+
+
+
+
 
 void Editor::Initialize()
 {
@@ -74,6 +75,8 @@ void Editor::DrawEditorWindows()
 	DrawLightingWindow();
 	
 	DrawSceneViewWindow();
+
+	DrawConsoleWindow();
 	ImGui::Render();
 	
 	ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
@@ -88,6 +91,11 @@ void Editor::SetDisplayedGameObject(GameObject* go)
 GameObject* Editor::GetDisplayedGameObject()
 {
 	return _displayedGameObject;
+}
+
+bool Editor::IsMouseOverSceneView()
+{
+	return mouseOverSceneView;
 }
 
 void Editor::DrawInspector()
@@ -114,6 +122,20 @@ void Editor::DrawLightingWindow()
 	ImGui::End();
 }
 
+void Editor::DrawConsoleWindow()
+{
+	ImGui::Begin("Console");
+	ImGui::TextUnformatted(Debug::GetLogBuffer());
+	ImGui::End();
+}
+
+bool Editor::IsMouseOverWindow(const ImVec2& windowPos, const ImVec2& windowSize) 
+{
+	const ImVec2 mousePos = ImGui::GetIO().MousePos;
+	return mousePos.x >= windowPos.x && mousePos.x <= (windowPos.x + windowSize.x) &&
+		mousePos.y >= windowPos.y && mousePos.y <= (windowPos.y + windowSize.y);
+}
+
 void Editor::DrawSceneViewWindow()
 {
 	int subViewportWidth = 854;
@@ -121,7 +143,13 @@ void Editor::DrawSceneViewWindow()
 	int subViewportX = 100;
 	int subViewportY = 100;
 	
+
 	ImGui::Begin("Scene View", nullptr, ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize);
+
+	const ImVec2 windowPos = ImGui::GetWindowPos();
+	const ImVec2 windowSize = ImGui::GetWindowSize();
+
+	mouseOverSceneView = IsMouseOverWindow(windowPos, windowSize);
 
 	// Render the sub-viewport content within the ImGui frame
 	ImGui::BeginChild("SubViewport", ImVec2(subViewportWidth, subViewportHeight), true);

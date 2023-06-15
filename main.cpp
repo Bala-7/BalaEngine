@@ -187,18 +187,25 @@ void mouseButtonCallback(GLFWwindow* window, int button, int action, int mods)
 // GLFW callback for mouse movement events
 void cursorPositionCallback(GLFWwindow* window, double xpos, double ypos) 
 {
-	if (mouseFirstMoved)
+	if (editor->IsMouseOverSceneView())
 	{
+		if (mouseFirstMoved)
+		{
+			lastX = xpos;
+			lastY = ypos;
+			mouseFirstMoved = false;
+		}
+
+		xChange = xpos - lastX;
+		yChange = lastY - ypos;	// Invert this operation to invert mouse Y movement
+
 		lastX = xpos;
 		lastY = ypos;
-		mouseFirstMoved = false;
 	}
 
-	xChange = xpos - lastX;
-	yChange = lastY - ypos;	// Invert this operation to invert mouse Y movement
-
-	lastX = xpos;
-	lastY = ypos;
+	// Pass the event to ImGui for its internal handling
+	ImGui_ImplGlfw_CursorPosCallback(window, xpos, ypos);
+	
 }
 
 

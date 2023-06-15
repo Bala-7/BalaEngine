@@ -2,6 +2,11 @@
 #include "Engine/Core/GameObject.h"
 #include "Engine/Rendering/MeshRenderer.h"
 #include "Engine/Core/SceneGraph.h"
+#include <GLFW/glfw3.h>
+#include "imgui.h"
+#include "imgui_impl_glfw.h"
+#include "imgui_impl_opengl3.h"
+#include "imgui_widgets.h"
 
 class Editor
 {
@@ -28,6 +33,8 @@ public:
 		return instance;
 	}
 
+	bool IsMouseOverSceneView();
+
 	// Delete the copy constructor and assignment operator
 	Editor(const Editor&) = delete;
 	void operator=(const Editor&) = delete;
@@ -35,11 +42,17 @@ protected:
 
 private:
 	GameObject* _displayedGameObject;
+	bool mouseOverSceneView;
 
 	void DrawInspector();
 
 	void DrawSceneGraphWindow();
 	void DrawLightingWindow();
+	void DrawConsoleWindow();
 	void DrawSceneViewWindow();
+
+	bool IsMouseOverWindow(const ImVec2& windowPos, const ImVec2& windowSize);
+
+	
 };
 
