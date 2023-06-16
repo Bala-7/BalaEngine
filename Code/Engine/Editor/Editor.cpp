@@ -4,10 +4,6 @@
 #include "Engine/Debug/Debug.h"
 
 
-
-
-
-
 void Editor::Initialize()
 {
 	// IMGUI
@@ -110,25 +106,26 @@ void Editor::DrawInspector()
 void Editor::DrawSceneGraphWindow()
 {
 	ImGui::Begin("Scene Graph");
-	std::vector<std::pair<GameObject*, int>> itemsVector;
+	std::vector<std::pair<SceneNode*, int>> itemsVector;
 	sceneGraph->GetRootNode()->GetChildNamesForEditor(0, itemsVector);
 	
 	static int selectedItemIndex = -1;
 	int previousDepth = 0;
 	for (size_t i = 0; i < itemsVector.size(); ++i)
 	{
-		const std::pair<GameObject*, int>& pair = itemsVector[i];
-		if (pair.first)
+		const std::pair<SceneNode*, int>& pair = itemsVector[i];
+		if (pair.first->GetGameObject())
 		{
-			if (pair.second > previousDepth)
-				ImGui::Indent(12);
-			else if (pair.second < previousDepth)
-				ImGui::Unindent(12);
+			int difference = pair.second - previousDepth;
+			if (difference > 0)
+				ImGui::Indent(12 * difference);
+			else if (difference < 0)
+				ImGui::Unindent(12 * (-difference));
 
 			previousDepth = pair.second;
-			if (ImGui::Selectable(pair.first->name.c_str(), selectedItemIndex == i))
+			if (ImGui::Selectable(pair.first->GetGameObject()->name.c_str(), selectedItemIndex == i))
 			{
-				Editor::Instance()->SetDisplayedGameObject(pair.first);
+				Editor::Instance()->SetDisplayedGameObject(pair.first->GetGameObject());
 				selectedItemIndex = i;
 			}
 		}
@@ -136,6 +133,8 @@ void Editor::DrawSceneGraphWindow()
 
 	ImGui::Separator();
 
+
+	// -- Adding a new node--
 	if (ImGui::Button("Add Node"))
 	{
 		showNewNodeTextField = true;
@@ -164,9 +163,43 @@ void Editor::DrawSceneGraphWindow()
 	}
 	ImGui::Separator();
 
+	// -- Adding a child node --
+	if (ImGui::Button("Add Child Node"))
+	{
+		showNewChildTextField = true;
+		newNodeName = "";
+		Debug::Log("Adding child node");
+	}
+
+	if (showNewChildTextField)
+	{
+		char buffer[256];  // Buffer for the input text
+
+		strncpy(buffer, newNodeName.c_str(), sizeof(buffer));
+		buffer[sizeof(buffer) - 1] = '\0';  // Ensure null-termination
+
+		if (ImGui::InputText("Name", buffer, sizeof(buffer), ImGuiInputTextFlags_CallbackCharFilter, HandleInputText, nullptr))
+		{
+			newNodeName = buffer;
+		}
+
+		if (ImGui::Button("Confirm"))
+		{
+			SceneNode* nodeToAddChildTo = itemsVector[selectedItemIndex].first;
+			nodeToAddChildTo->AddChild(new SceneNode(new GameObject(newNodeName)));
+			Debug::Log("Added child node '" + newNodeName + "' to '" + nodeToAddChildTo->GetGameObject()->name + "'.");
+			// Do something with the entered name
+			showNewChildTextField = false;
+		}
+	}
+
+	ImGui::Separator();
+	// -- Deleting node --
 	if (ImGui::Button("Delete"))
 	{
-		Debug::Log("TODO: The 'Delete' button is not working yet.");
+		SceneNode* nodeToDelete = itemsVector[selectedItemIndex].first;
+		nodeToDelete->Destroy(); // TODO: Access to the SceneNode, not the GameObject
+		Debug::Log("Deleted node '" + nodeToDelete->GetGameObject()->name + "'.");
 	}
 	ImGui::End();
 }

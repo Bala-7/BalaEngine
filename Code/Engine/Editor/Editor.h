@@ -55,8 +55,10 @@ private:
 
 	static int HandleInputText(ImGuiInputTextCallbackData* data);
 	static std::string ImWcharToString(ImWchar imWchar);
+	
 	// Adding GameObjects
 	bool showNewNodeTextField = false;
+	bool showNewChildTextField = false;
 	std::string newNodeName;
 };
 

@@ -25,12 +25,15 @@ SceneNode::~SceneNode()
 void SceneNode::AddChild(SceneNode* child)
 {
 	children.push_back(child);
+	child->SetParent(this);
 }
 
 void SceneNode::RemoveChild(SceneNode* child)
 {
 	auto it = std::find(children.begin(), children.end(), child);
-	if (it != children.end()) {
+	if (it != children.end()) 
+	{
+		(*it)->RemoveParent();
 		children.erase(it);
 	}
 }
@@ -72,13 +75,43 @@ void SceneNode::DrawEditorWindow(int level)
 	}
 }
 
-void SceneNode::GetChildNamesForEditor(int depth, std::vector<std::pair<GameObject*, int>>& result)
+void SceneNode::GetChildNamesForEditor(int depth, std::vector<std::pair<SceneNode*, int>>& result)
 {
 	// Add current node to the result list
-	result.emplace_back(gameObject, depth);
+	result.emplace_back(this, depth);
 	
 	// Recursively iterate over children
 	for (SceneNode* child : children) {
 		child->GetChildNamesForEditor(depth + 1, result);
 	}
+}
+
+void SceneNode::SetParent(SceneNode* newParent)
+{
+	parent = newParent;
+}
+
+void SceneNode::RemoveParent()
+{
+	parent = nullptr;
+}
+
+void SceneNode::Destroy()
+{
+	if(children.size() > 0)
+	{	
+		for (SceneNode* child : children) 
+		{
+			child->Destroy();
+		}
+	}
+	children.clear();
+	parent->RemoveChild(this);
+	RemoveParent();
+	delete this;
+}
+
+GameObject* SceneNode::GetGameObject()
+{
+	return gameObject;
 }
