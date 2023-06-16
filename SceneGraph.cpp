@@ -5,6 +5,7 @@
 //#include "imgui_widgets.h"
 
 #include "Code/Engine/Editor/Editor.h"
+#include "Engine/Debug/Debug.h"
 
 SceneGraph::SceneGraph()
 {
@@ -31,34 +32,3 @@ SceneNode* SceneGraph::GetRootNode()
 	return rootNode;
 }
 
-void SceneGraph::DrawEditorWindow()
-{
-	ImGui::Begin("Scene Graph");
-	
-	std::vector<std::pair<GameObject*, int>> itemsVector;
-	rootNode->GetChildNamesForEditor(0, itemsVector);
-	static int selectedItemIndex = -1;
-	int previousDepth = 0;
-	for (size_t i = 0; i < itemsVector.size(); ++i)
-	{
-		const std::pair<GameObject*, int>& pair = itemsVector[i];
-		if (pair.first) 
-		{
-			if (pair.second > previousDepth)
-				ImGui::Indent(12);
-			else if (pair.second < previousDepth)
-				ImGui::Unindent(12);
-
-			previousDepth = pair.second;
-			if (ImGui::Selectable(pair.first->name.c_str(), selectedItemIndex == i))
-			{
-				Editor::Instance()->SetDisplayedGameObject(pair.first);
-				selectedItemIndex = i;
-			}
-		}
-	}
-
-	ImGui::Separator();
-	//rootNode->DrawEditorWindow(0);
-	ImGui::End();
-}

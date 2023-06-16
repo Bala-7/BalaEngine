@@ -9,7 +9,6 @@ public:
 	void Draw();
 	SceneNode* GetRootNode();
 
-	void DrawEditorWindow();
 private:
 	SceneNode* rootNode;
 };

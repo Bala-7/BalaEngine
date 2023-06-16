@@ -109,7 +109,66 @@ void Editor::DrawInspector()
 
 void Editor::DrawSceneGraphWindow()
 {
-	sceneGraph->DrawEditorWindow();
+	ImGui::Begin("Scene Graph");
+	std::vector<std::pair<GameObject*, int>> itemsVector;
+	sceneGraph->GetRootNode()->GetChildNamesForEditor(0, itemsVector);
+	
+	static int selectedItemIndex = -1;
+	int previousDepth = 0;
+	for (size_t i = 0; i < itemsVector.size(); ++i)
+	{
+		const std::pair<GameObject*, int>& pair = itemsVector[i];
+		if (pair.first)
+		{
+			if (pair.second > previousDepth)
+				ImGui::Indent(12);
+			else if (pair.second < previousDepth)
+				ImGui::Unindent(12);
+
+			previousDepth = pair.second;
+			if (ImGui::Selectable(pair.first->name.c_str(), selectedItemIndex == i))
+			{
+				Editor::Instance()->SetDisplayedGameObject(pair.first);
+				selectedItemIndex = i;
+			}
+		}
+	}
+
+	ImGui::Separator();
+
+	if (ImGui::Button("Add Node"))
+	{
+		showNewNodeTextField = true;
+		newNodeName = "";
+		Debug::Log("Adding node");
+	}
+
+	if (showNewNodeTextField)
+	{
+		char buffer[256];  // Buffer for the input text
+
+		strncpy(buffer, newNodeName.c_str(), sizeof(buffer));
+		buffer[sizeof(buffer) - 1] = '\0';  // Ensure null-termination
+
+		if (ImGui::InputText("Name", buffer, sizeof(buffer), ImGuiInputTextFlags_CallbackCharFilter, HandleInputText, nullptr))
+		{
+			newNodeName = buffer;
+		}
+
+		if (ImGui::Button("Confirm"))
+		{
+			sceneGraph->GetRootNode()->AddChild(new SceneNode(new GameObject(newNodeName)));
+			// Do something with the entered name
+			showNewNodeTextField = false;
+		}
+	}
+	ImGui::Separator();
+
+	if (ImGui::Button("Delete"))
+	{
+		Debug::Log("TODO: The 'Delete' button is not working yet.");
+	}
+	ImGui::End();
 }
 
 
@@ -201,4 +260,42 @@ void Editor::DrawSceneViewWindow()
 	
 
 
+}
+
+int Editor::HandleInputText(ImGuiInputTextCallbackData* data)
+{
+	if (data->EventChar == '\b' && data->CursorPos > 0)
+	{
+		// Delete the character to the left of the cursor
+		std::string& text = *static_cast<std::string*>(data->UserData);
+		text.erase(data->CursorPos - 1, 1);
+		data->CursorPos--;
+		data->BufTextLen--;
+		return true;
+	}
+	/*std::string log = "Introduced character ";
+	log = log.append(ImWcharToString(data->EventChar));
+	Debug::Log(log);*/
+
+	return false;
+}
+
+std::string Editor::ImWcharToString(ImWchar imWchar)
+{
+	// Convert wide character to narrow character using std::wcrtomb
+	char narrowChar[124];
+	std::mbstate_t state = std::mbstate_t(); // Initialize conversion state
+
+	std::size_t result = std::wcrtomb(narrowChar, imWchar, &state);
+
+	if (result == static_cast<std::size_t>(-1))
+	{
+		// Conversion error occurred
+		return "";
+	}
+
+	// Create std::string from narrow character
+	std::string str(narrowChar, result);
+
+	return str;
 }

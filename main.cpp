@@ -176,6 +176,7 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
 			keys[key] = false;
 	}
 
+	ImGui_ImplGlfw_KeyCallback(window, key, scancode, action, mode);
 }
 
 // GLFW callback for mouse button events

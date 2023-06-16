@@ -53,6 +53,10 @@ private:
 
 	bool IsMouseOverWindow(const ImVec2& windowPos, const ImVec2& windowSize);
 
-	
+	static int HandleInputText(ImGuiInputTextCallbackData* data);
+	static std::string ImWcharToString(ImWchar imWchar);
+	// Adding GameObjects
+	bool showNewNodeTextField = false;
+	std::string newNodeName;
 };
 
