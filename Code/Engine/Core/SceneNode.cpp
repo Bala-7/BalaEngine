@@ -50,11 +50,23 @@ void SceneNode::Update(float deltaTime)
 
 void SceneNode::Draw()
 {
-	if (gameObject && gameObject->GetRenderComponent()) {
+	if (gameObject && gameObject->GetRenderComponent()) 
+	{
 		gameObject->GetRenderComponent()->draw();
 	}
 	for (SceneNode* child : children) {
 		child->Draw();
+	}
+}
+
+void SceneNode::DrawShadows()
+{
+	if (gameObject && gameObject->GetRenderComponent())
+	{
+		gameObject->GetRenderComponent()->DrawShadows();
+	}
+	for (SceneNode* child : children) {
+		child->DrawShadows();
 	}
 }
 

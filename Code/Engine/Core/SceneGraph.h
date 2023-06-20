@@ -7,6 +7,7 @@ public:
 	~SceneGraph();
 	void Update(float deltaTime);
 	void Draw();
+	void DrawShadows();
 	SceneNode* GetRootNode();
 
 private:

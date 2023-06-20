@@ -6,11 +6,13 @@ layout (location = 2) in vec2 texCoord;
 
 uniform mat4 vp;
 uniform mat4 model;
+uniform mat4 wvp;
 
 out vec3 Normal;
 out vec2 TexCoord;
 out vec3 FragPos;
-
+out float interpolatedDepth;
+out vec4 ShadowCoord;
 
 void main()
 {
@@ -19,4 +21,7 @@ void main()
 	
 	TexCoord = texCoord;	
 	Normal = mat3(transpose(inverse(model))) * aNormal;
+	
+	interpolatedDepth = gl_Position.z / gl_Position.w;
+	ShadowCoord = wvp * vec4(position, 1.0);
 }

@@ -44,14 +44,19 @@ void ModelRenderer::DrawInspector()
 
 void ModelRenderer::draw()
 {
-	for (auto it = begin(_meshes); it != end(_meshes); ++it) {
-		it->draw();
+	for (auto it = begin(_meshes); it != end(_meshes); ++it) 
+	{
+		it->DrawLightingPass();
 	}
 }
 
 void ModelRenderer::setPosition(glm::vec3 _position)
 {
 	this->position = _position;
+}
+
+void ModelRenderer::DrawShadows()
+{
 }
 
 void ModelRenderer::setScale(glm::vec3 _scale)
@@ -150,7 +155,10 @@ MeshRenderer ModelRenderer::processMesh(aiMesh* mesh, const aiScene* scene)
 
 	MeshRenderer* _mesh = new MeshRenderer(vertices, indices);
 	//_mesh->setTexture(RenderEngine::GetInstance()->GetTextureID("Concrete.jpg"));
-	_mesh->setTexture(textures[0].id);
+	if (textures.size() > 0)
+		_mesh->setTexture(textures[0].id);
+	else
+		_mesh->setTexture(RenderEngine::GetInstance()->GetTextureID("Concrete.jpg"));
 	_mesh->setProgram(RenderEngine::GetInstance()->GetShaderProgram());
 	_mesh->shader->setVec3("objectColor", glm::vec3(1.0f, 1.0f, 1.0f));
 	_mesh->shader->setVec3("lightColor", glm::vec3(1.0f, 1.0f, 1.0f));

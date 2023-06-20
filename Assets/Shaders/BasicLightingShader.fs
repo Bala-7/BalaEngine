@@ -34,10 +34,13 @@ struct Light {
 in vec3 Normal;  
 in vec2 TexCoord;
 in vec3 FragPos;
+in float interpolatedDepth;
+in vec4 ShadowCoord;  
   
 uniform vec3 objectColor;
 uniform vec3 environmentColor;
 uniform vec3 viewPos; 
+uniform sampler2D shadowMap;
 
 uniform Material material;
 uniform Light light; 
@@ -47,10 +50,28 @@ uniform sampler2D Texture;
  
 out vec4 FragColor;
 
-
+float ShadowCalculation(vec4 fragPosLightSpace)
+{
+	// perform perspective divide
+	vec3 projCoords = (fragPosLightSpace.xyz / fragPosLightSpace.w) * 0.5 + 0.5;
+	
+	float closestDepth = texture(shadowMap, projCoords.xy).r;
+	
+	float currentDepth = projCoords.z;
+	float shadow = currentDepth > closestDepth ? 1.0 : 0.0;
+	
+	return shadow;
+}
 
 void main()
 {
+	// This is required by the editor texture to render objects with proper depth 
+	float fragmentDepth = gl_FragCoord.z / gl_FragCoord.w;
+	if (fragmentDepth < interpolatedDepth) {
+        // Fragment is behind, discard or do additional processing
+        discard;
+    }
+
 	// Attenuation by distance
 	float attenuation = 1.0;    
 
@@ -80,7 +101,10 @@ void main()
 	vec3 specular = light.specular * (material.specular * spec) * environmentColor * attenuation;  
 	
 	
-	vec3 result = (ambient + diffuse + specular) * objectColor;
+	// Shadows
+	float shadow = ShadowCalculation(ShadowCoord);
+	shadow = 0;
+	vec3 result = (ambient + (1.0 - shadow)*(diffuse + specular)) * objectColor;
     
 	if (light.isSpotLight)
 	{
@@ -98,6 +122,8 @@ void main()
 			result = (ambient + diffuse + specular) * objectColor;
 		}
 	}
+	
+	
 	
 	FragColor = vec4(result, 1.0) * texture(Texture, TexCoord);
 }

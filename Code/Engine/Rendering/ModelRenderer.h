@@ -20,6 +20,7 @@ public:
 
 	void draw();
 	void setPosition(glm::vec3 _position);
+	void DrawShadows();
 	void setScale(glm::vec3 _scale);
 	void setRotation(glm::vec3 _rotation);
 

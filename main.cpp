@@ -134,9 +134,7 @@ int main()
 
 		editor->DrawEditorWindows();
 
-		renderEngine->BindFramebuffer();
-		sceneGraph->Draw();
-		renderEngine->UnbindFramebuffer();
+		renderEngine->RenderScene(sceneGraph);
 		
 
 		//renderEngine->Update();
@@ -297,6 +295,8 @@ void CreateModel()
 	editor->SetDisplayedGameObject(meshGO);
 
 	//model = new Model("Assets/Models/example.obj");
+
+
 }
 
 void CreateSceneGraph()
@@ -321,8 +321,14 @@ void CreateSceneGraph()
 	meshGO->AddComponent(modelRenderer);
 	editor->SetDisplayedGameObject(meshGO);
 
+	GameObject* terrainGO = new GameObject("Terrain");
+	ModelRenderer* terrainModel = new ModelRenderer("Assets/Models/DefaultTerrain.obj");
+	terrainGO->transform->position = glm::vec3(0.00f, -2.03f, 4.0f);
+	terrainGO->AddComponent(terrainModel);
+
 	sceneGraph->GetRootNode()->AddChild(new SceneNode(lightGO));
 	sceneGraph->GetRootNode()->AddChild(new SceneNode(meshGO));
+	sceneGraph->GetRootNode()->AddChild(new SceneNode(terrainGO));
 
 	editor->sceneGraph = sceneGraph;
 }

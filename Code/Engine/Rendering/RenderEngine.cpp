@@ -35,6 +35,8 @@ void RenderEngine::Initialize()
 
 	LoadFont("Assets/Fonts/Arial.ttf");
 
+	CreateFramebuffer();
+
 	Debug::Log("Render Engine initialized!");
 }
 
@@ -317,6 +319,9 @@ void RenderEngine::InitializeConfigValues()
 	config.VERTEX_SHADER_PATH = config.configValues["VERTEX_SHADER_PATH"];
 	config.FRAGMENT_SHADER_PATH = config.configValues["FRAGMENT_SHADER_PATH"];
 
+	config.VERTEX_SHADER_SHADOW_PATH = config.configValues["VERTEX_SHADER_SHADOWS_PATH"];
+	config.FRAGMENT_SHADER_SHADOW_PATH = config.configValues["FRAGMENT_SHADER_SHADOWS_PATH"];
+
 	config.VERTEX_SHADER_TEXT_PATH = config.configValues["VERTEX_SHADER_TEXT_PATH"];
 	config.FRAGMENT_SHADER_TEXT_PATH = config.configValues["FRAGMENT_SHADER_TEXT_PATH"];
 }
@@ -353,6 +358,8 @@ void RenderEngine::CreateFramebuffer()
 void RenderEngine::BindFramebuffer()
 {
 	glBindFramebuffer(GL_FRAMEBUFFER, FBO);
+	glViewport(0, 0, 854, 480);
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 }
 
 // here we unbind our framebuffer
@@ -375,3 +382,9 @@ void RenderEngine::RescaleFramebuffer(float width, float height)
 	glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_RENDERBUFFER, RBO);
 }
 
+void RenderEngine::RenderScene(SceneGraph* scene)
+{
+	BindFramebuffer();
+	scene->Draw();
+	UnbindFramebuffer();
+}

@@ -121,6 +121,7 @@ MeshRenderer::~MeshRenderer()
 
 void MeshRenderer::Update()
 {
+	SetupMatricesAndShaderForLightingPass();
 	draw();
 }
 
@@ -132,7 +133,51 @@ void MeshRenderer::OnComponentAdded()
 	setRotation(gameObject->transform->rotation);
 }
 
-void MeshRenderer::draw() 
+void MeshRenderer::DrawShadowPass()
+{
+	SetupMatricesAndShaderForShadowPass();
+	draw();
+}
+
+void MeshRenderer::SetupMatricesAndShaderForShadowPass()
+{	
+	// Get position and scale from Transform component
+	setPosition(gameObject->transform->position);
+	setScale(gameObject->transform->scale);
+	setRotation(gameObject->transform->rotation);
+
+	glUseProgram(shadowShader->ID);
+	glm::vec3 lightDirection = glm::vec3(0.0f, 0.0f, -1.0f);
+	glm::vec3 lightPosition = glm::vec3(0.0f, -1.0f, 6.0f);
+	float nearPlane = 0.1f;   // Near clipping plane
+	float farPlane = 100.0f;  // Far clipping plane
+	float aspectRatio = 1.0f; // Aspect ratio (assuming square viewport)
+	float fov = 90.0f;        // Field of view
+	glm::mat4 projectionMatrix = glm::perspective(glm::radians(fov), aspectRatio, nearPlane, farPlane);
+	glm::mat4 viewMatrix = glm::lookAt(lightPosition, position, glm::vec3(0.0f, 1.0f, 0.0f));
+	lightVP = viewMatrix * projectionMatrix;
+
+	shader->setMat4("lightvp", lightVP);
+
+	// Set the model matrix
+	glm::mat4 translationMatrix = glm::translate(glm::mat4(1.0f), position);
+	glm::mat4 scaleMatrix = glm::scale(glm::mat4(1.0f), scale);
+	glm::mat4 rotateMatrix = glm::rotate(translationMatrix, glm::radians(rotation.x), glm::vec3(1.0, 0.0, 0.0));
+	rotateMatrix = glm::rotate(rotateMatrix, glm::radians(rotation.y), glm::vec3(0.0, 1.0, 0.0));
+	rotateMatrix = glm::rotate(rotateMatrix, glm::radians(rotation.z), glm::vec3(0.0, 0.0, 1.0));
+
+	modelMatrix = glm::mat4(1.0f);
+	modelMatrix = /*translationMatrix * */rotateMatrix * scaleMatrix;
+	shader->setMat4("modelMatrix", modelMatrix);
+}
+
+void MeshRenderer::DrawLightingPass()
+{
+	SetupMatricesAndShaderForLightingPass();
+	draw();
+}
+
+void MeshRenderer::SetupMatricesAndShaderForLightingPass()
 {
 	// Get position and scale from Transform component
 	setPosition(gameObject->transform->position);
@@ -145,7 +190,7 @@ void MeshRenderer::draw()
 	glm::mat4 rotateMatrix = glm::rotate(translationMatrix, glm::radians(rotation.x), glm::vec3(1.0, 0.0, 0.0));
 	rotateMatrix = glm::rotate(rotateMatrix, glm::radians(rotation.y), glm::vec3(0.0, 1.0, 0.0));
 	rotateMatrix = glm::rotate(rotateMatrix, glm::radians(rotation.z), glm::vec3(0.0, 0.0, 1.0));
-		
+
 	modelMatrix = glm::mat4(1.0f);
 	modelMatrix = /*translationMatrix * */rotateMatrix * scaleMatrix;
 
@@ -159,20 +204,23 @@ void MeshRenderer::draw()
 	shader->setMat4("model", modelMatrix);
 	shader->setVec3("objectColor", glm::vec3(1.0f, 1.0f, 1.0f));
 	shader->setVec3("environmentColor", RenderEngine::GetInstance()->GetEnvironmentLight());
-	
+
 	shader->setVec3("viewPos", RenderEngine::GetInstance()->GetCamera()->getCameraPosition());
-	
+
 	shader->setVec3("material.ambient", _material->ambient);
 	shader->setVec3("material.diffuse", _material->diffuse);
 	shader->setVec3("material.specular", _material->specular);
 	shader->setFloat("material.shininess", _material->shininess);
 
-	shader->setVec3("light.direction", glm::vec3(0.0f, 0.0f, -1.0f));
-	shader->setVec3("light.position", glm::vec3(0.0f, 0.0f, 5.5f));
+	glm::vec3 lightDirection = glm::vec3(0.0f, 0.0f, -1.0f);
+	glm::vec3 lightPosition = glm::vec3(0.0f, 0.0f, 5.5f);
+
+	shader->setVec3("light.direction", lightDirection);
+	shader->setVec3("light.position", lightPosition);
 	shader->setVec3("light.ambient", glm::vec3(0.2f, 0.2f, 0.2f));
 	shader->setVec3("light.diffuse", glm::vec3(0.5f, 0.5f, 0.5f)); // darken diffuse light a bit
 	shader->setVec3("light.specular", glm::vec3(1.0f, 1.0f, 1.0f));
-	
+
 	shader->setFloat("light.constant", 1.0f);
 	shader->setFloat("light.linear", 0.09f);
 	shader->setFloat("light.quadratic", 0.032f);
@@ -183,7 +231,12 @@ void MeshRenderer::draw()
 	shader->setBool("light.isDirectionalLight", false);
 	shader->setBool("light.isSpotLight", false);
 	shader->setBool("light.isPointLight", true);
+}
 
+
+
+void MeshRenderer::draw()
+{
 	// Bind the texture object
 	glBindTexture(GL_TEXTURE_2D, texture);
 
@@ -230,6 +283,12 @@ void MeshRenderer::setProgram(GLuint _program)
 {
 	this->program = _program;
 	shader = new Shader(_program);
+}
+
+void MeshRenderer::setShadowsProgram(GLuint _program)
+{
+	this->shadowsProgram = _program;
+	shadowShader = new Shader(_program);
 }
 
 // /*MODEL LOADING 
@@ -375,6 +434,8 @@ unsigned int MeshRenderer::TextureFromFile(const char* path, const std::string& 
 
 	return textureID;
 }
+
+
 
 // MODEL LOADING*/
 

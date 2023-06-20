@@ -27,6 +27,11 @@ void SceneGraph::Draw()
 	rootNode->Draw();
 }
 
+void SceneGraph::DrawShadows()
+{
+	rootNode->DrawShadows();
+}
+
 SceneNode* SceneGraph::GetRootNode()
 {
 	return rootNode;

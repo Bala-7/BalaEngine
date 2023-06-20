@@ -37,11 +37,16 @@ public:
 	void OnComponentAdded() override;
 	void DrawInspector() override;
 
+	void DrawShadowPass();
+	void DrawLightingPass();
 	void draw();
+	void SetupMatricesAndShaderForLightingPass();
+	void SetupMatricesAndShaderForShadowPass();
 	void setPosition(glm::vec3 _position);
 	void setScale(glm::vec3 _scale);
 	void setRotation(glm::vec3 _rotation);
 	void setProgram(GLuint _program);
+	void setShadowsProgram(GLuint _program);
 	void setTexture(GLuint _textureID);
 	void setLight(Light light);
 	void setModel(std::string path);
@@ -51,6 +56,7 @@ public:
 	Material* GetMaterial();
 
 	Shader* shader;
+	Shader* shadowShader;
 	
 private:
 	Light* _light;
@@ -60,17 +66,21 @@ private:
 	glm::mat4 modelMatrix;
 	Camera* camera;
 	glm::vec3 position, scale, rotation;
-	GLuint vao, vbo, ebo, texture, program;
+	GLuint vao, vbo, ebo, texture, program, shadowsProgram;
 
 	// Model loading
 	std::string directory;
 	std::vector<Mesh> meshes;
 	std::string modelPath;
 
+	glm::mat4 lightVP;
+
 	void loadModel(std::string path);
 	void processNode(aiNode* node, const aiScene* scene);
 	Mesh processMesh(aiMesh* mesh, const aiScene* scene);
 	std::vector<Texture> loadMaterialTextures(aiMaterial* mat, aiTextureType type, std::string typeName);
 	unsigned int TextureFromFile(const char* path, const std::string& directory, bool gamma);
+
+	
 };
 

@@ -50,6 +50,7 @@ private:
 	void DrawLightingWindow();
 	void DrawConsoleWindow();
 	void DrawSceneViewWindow();
+	void DrawShadowMapWindow();
 
 	bool IsMouseOverWindow(const ImVec2& windowPos, const ImVec2& windowSize);
 
@@ -60,5 +61,6 @@ private:
 	bool showNewNodeTextField = false;
 	bool showNewChildTextField = false;
 	std::string newNodeName;
+	bool showAddComponentModal = false;
 };
 

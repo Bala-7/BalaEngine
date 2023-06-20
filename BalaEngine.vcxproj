@@ -39,6 +39,7 @@
     <ClCompile Include="Code\Engine\Rendering\RenderEngine.cpp" />
     <ClCompile Include="Code\Engine\Rendering\Shader.cpp" />
     <ClCompile Include="Code\Engine\Rendering\ShaderLoader.cpp" />
+    <ClCompile Include="Code\Engine\Rendering\ShadowMapFBO.cpp" />
     <ClCompile Include="Code\Engine\Rendering\SpriteLayer.cpp" />
     <ClCompile Include="Code\Engine\Rendering\SpriteRenderer.cpp" />
     <ClCompile Include="Code\Engine\Rendering\TextureLoader.cpp" />
@@ -76,6 +77,7 @@
     <ClInclude Include="Code\Engine\Rendering\RenderEngine.h" />
     <ClInclude Include="Code\Engine\Rendering\Shader.h" />
     <ClInclude Include="Code\Engine\Rendering\ShaderLoader.h" />
+    <ClInclude Include="Code\Engine\Rendering\ShadowMapFBO.h" />
     <ClInclude Include="Code\Engine\Rendering\SpriteLayer.h" />
     <ClInclude Include="Code\Engine\Rendering\SpriteRenderer.h" />
     <ClInclude Include="Code\Engine\Rendering\TextureLoader.h" />

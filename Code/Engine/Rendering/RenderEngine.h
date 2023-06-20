@@ -21,6 +21,7 @@
 #include "Engine/Core/GameObject.h"
 #include "Engine/Rendering/SpriteLayer.h"
 #include "Engine/Rendering/UITextRenderer.h"
+#include "Engine/Core/SceneGraph.h"
 
 class RenderEngine
 {
@@ -40,6 +41,9 @@ public:
 
 		std::string VERTEX_SHADER_TEXT_PATH;
 		std::string FRAGMENT_SHADER_TEXT_PATH;
+
+		std::string VERTEX_SHADER_SHADOW_PATH;
+		std::string FRAGMENT_SHADER_SHADOW_PATH;
 	};
 
 	struct Character {
@@ -96,6 +100,7 @@ public:
 	void OnMouseInput(GLFWwindow* window, int button, int action, int mods);
 	void OnCursorPositionInput(GLFWwindow* window, double xpos, double ypos);
 
+	void RenderScene(SceneGraph* scene);
 
 private:
 

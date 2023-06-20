@@ -13,6 +13,7 @@ public:
 	void RemoveChild(SceneNode* child);
 	void Update(float deltaTime);
 	void Draw();
+	void DrawShadows();
 	void DrawEditorWindow(int level);
 
 	void GetChildNamesForEditor(int depth, std::vector<std::pair<SceneNode*, int>>& result);

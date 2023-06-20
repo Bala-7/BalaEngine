@@ -159,6 +159,9 @@
     <ClCompile Include="Dependencies\imgui\imgui_widgets.cpp">
       <Filter>Archivos de origen\Editor\imgui</Filter>
     </ClCompile>
+    <ClCompile Include="Code\Engine\Rendering\ShadowMapFBO.cpp">
+      <Filter>Archivos de origen</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Code\Engine\Rendering\Camera.h">
@@ -265,6 +268,9 @@
     </ClInclude>
     <ClInclude Include="Dependencies\imgui\imstb_truetype.h">
       <Filter>Archivos de encabezado\Editor\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="Code\Engine\Rendering\ShadowMapFBO.h">
+      <Filter>Archivos de encabezado</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
