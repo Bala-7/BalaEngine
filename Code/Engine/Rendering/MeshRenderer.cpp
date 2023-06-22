@@ -9,6 +9,8 @@
 
 #include "stb_image.h"
 
+glm::mat4 MeshRenderer::lightViewProjectionMatrix;
+
 MeshRenderer::MeshRenderer(MeshType modelType) 
 {
 	componentType = ComponentType::MESH_RENDERER;
@@ -121,7 +123,7 @@ MeshRenderer::~MeshRenderer()
 
 void MeshRenderer::Update()
 {
-	SetupMatricesAndShaderForLightingPass();
+	SetupShaderForLightingPass();
 	draw();
 }
 
@@ -135,11 +137,11 @@ void MeshRenderer::OnComponentAdded()
 
 void MeshRenderer::DrawShadowPass()
 {
-	SetupMatricesAndShaderForShadowPass();
+	SetupShaderForShadowPass();
 	draw();
 }
 
-void MeshRenderer::SetupMatricesAndShaderForShadowPass()
+void MeshRenderer::SetupShaderForShadowPass()
 {	
 	// Get position and scale from Transform component
 	setPosition(gameObject->transform->position);
@@ -147,25 +149,9 @@ void MeshRenderer::SetupMatricesAndShaderForShadowPass()
 	setRotation(gameObject->transform->rotation);
 
 	glUseProgram(shadowShader->ID);
-	lightVP = RenderEngine::GetInstance()->GetLightViewProjectionMatrix();
-
-	/*GLuint depthTexture = RenderEngine::GetInstance()->GetDepthMapTexture();
-	glActiveTexture(GL_TEXTURE0);
-	glBindTexture(GL_TEXTURE_2D, depthTexture);
-	shadowShader->setInt("depthTexture", 0);*/
-
-	glm::vec3 lightDirection = glm::vec3(0.0f, -1.0f, -1.0f);
-	glm::vec3 lightPosition = glm::vec3(0.0f, 2.0f, 3.0f);
-	float nearPlane = 0.01f;   // Near clipping plane
-	float farPlane = 100.0f;  // Far clipping plane
-	glm::mat4 lightProjectionMatrix = glm::ortho(-10.0f, 10.f, -10.f, 10.f, nearPlane, farPlane);
-	glm::mat4 lightViewMatrix = glm::lookAt(lightPosition, glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f));
-	lightViewProjectionMatrix = lightProjectionMatrix * lightViewMatrix;
+	lightViewProjectionMatrix = RenderEngine::GetInstance()->GetLightViewProjectionMatrix();
 	
-
 	shadowShader->setMat4("lightvp", lightViewProjectionMatrix);
-	//shadowShader->setFloat("nearPlane", nearPlane);
-	//shadowShader->setFloat("farPlane", farPlane);
 
 	// Set the model matrix
 	glm::mat4 translationMatrix = glm::translate(glm::mat4(1.0f), position);
@@ -185,11 +171,11 @@ void MeshRenderer::SetupMatricesAndShaderForShadowPass()
 
 void MeshRenderer::DrawLightingPass()
 {
-	SetupMatricesAndShaderForLightingPass();
+	SetupShaderForLightingPass();
 	draw();
 }
 
-void MeshRenderer::SetupMatricesAndShaderForLightingPass()
+void MeshRenderer::SetupShaderForLightingPass()
 {
 	// Get position and scale from Transform component
 	setPosition(gameObject->transform->position);
@@ -266,8 +252,6 @@ void MeshRenderer::SetupMatricesAndShaderForLightingPass()
 
 void MeshRenderer::draw()
 {
-
-
 	// Bind the VAO and draw object
 	glBindVertexArray(vao);
 	glDrawElements(GL_TRIANGLES, indices.size(), GL_UNSIGNED_INT, 0);
@@ -487,5 +471,4 @@ void MeshRenderer::DrawInspector()
 	ImGui::Text("Shininess");
 	ImGui::Separator();
 	ImGui::DragFloat("##Shininess", &_material->shininess, 0.1f, 2.0f, 256.0f, "%.2f");
-
 }

@@ -37,12 +37,7 @@ void RenderEngine::Initialize()
 
 	CreateFramebuffer();
 
-	CreateShadowmapFramebuffer();
-
-	
-	shadowMap = new ShadowMapFBO();
-	//shadowMap->Init();
-	
+	CreateShadowmapFramebuffer();	
 
 	Debug::Log("Render Engine initialized!");
 }
@@ -166,6 +161,17 @@ void RenderEngine::SetEnvironmentLight(glm::vec3 value)
 {
 	environmentLight = value;
 }
+
+glm::vec3 RenderEngine::GetDirectionalLightDirection()
+{
+	return directionalLightDirection;
+}
+
+void RenderEngine::SetDirectionalLightDirection(glm::vec3 value)
+{
+	directionalLightDirection = value;
+}
+
 
 void RenderEngine::InitGLFW()
 {
@@ -341,25 +347,8 @@ void RenderEngine::InitializeConfigValues()
 
 void RenderEngine::CreateShadowmapFramebuffer()
 {
-	glGenFramebuffers(1, &shadowMapFBO);
-	glBindFramebuffer(GL_FRAMEBUFFER, shadowMapFBO);
-
-	int WIDTH = 1024;
-	int HEIGHT = 1024;
-
-	glGenTextures(1, &shadowMapTexture);
-	glBindTexture(GL_TEXTURE_2D, shadowMapTexture);
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT, WIDTH, HEIGHT, 0, GL_DEPTH_COMPONENT, GL_FLOAT, NULL);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, shadowMapTexture, 0);
-
-	
-	if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
-		std::cout << "ERROR::FRAMEBUFFER:: Framebuffer is not complete!\n";
-
-	glBindFramebuffer(GL_FRAMEBUFFER, 0);
-	glBindTexture(GL_TEXTURE_2D, 0);
+	shadowMap = new ShadowMapFBO();
+	shadowMap->Init();
 }
 
 void RenderEngine::CreateFramebuffer()
@@ -419,31 +408,31 @@ void RenderEngine::RescaleFramebuffer(float width, float height)
 	glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_RENDERBUFFER, RBO);
 }
 
-void RenderEngine::RescaleDepthFramebuffer(float width, float height)
-{
-	GLuint texture = GetDepthMapTexture();
-	glBindTexture(GL_TEXTURE_2D, shadowMapTexture);
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, NULL);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, shadowMapTexture, 0);
-
-
-	GLuint fb = GetDepthMapFBO();
-	/*glBindRenderbuffer(GL_RENDERBUFFER, shadowMapFBO);
-	glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH24_STENCIL8, width, height);
-	glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_RENDERBUFFER, shadowMapFBO);*/
-}
 
 void RenderEngine::RenderScene(SceneGraph* scene)
 {
 	// Shadow pass
-	/*shadowMap->Bind();
+	CalculateLightViewMatrices();
+
+	shadowMap->Bind();
 	scene->DrawShadows();
-	shadowMap->Unbind();*/
+	shadowMap->Unbind();
 
 	// Light pass
 	BindFramebuffer();
 	scene->Draw();
 	UnbindFramebuffer();
+}
+
+void RenderEngine::CalculateLightViewMatrices()
+{
+	float nearPlane = 0.01f;   // Near clipping plane
+	float farPlane = 100.0f;  // Far clipping plane
+	glm::vec3 lightTarget = glm::vec3(0.0f, 0.0f, 0.0f);
+	float lightDistance = 10.0f;
+	glm::vec3 lightPosition = lightTarget - glm::normalize(directionalLightDirection) * lightDistance;
+	glm::mat4 lightProjectionMatrix = glm::ortho(-10.0f, 10.f, -10.f, 10.f, nearPlane, farPlane);
+	//glm::mat4 lightViewMatrix = glm::lookAt(lightPosition, lightTarget, glm::vec3(0.0f, 1.0f, 0.0f));
+	glm::mat4 lightViewMatrix = glm::lookAt(lightTarget - directionalLightDirection, lightTarget, glm::vec3(0.0f, 1.0f, 0.0f));
+	lightViewProjectionMatrix = lightProjectionMatrix * lightViewMatrix;
 }

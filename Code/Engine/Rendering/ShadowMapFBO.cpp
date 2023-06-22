@@ -8,6 +8,7 @@ ShadowMapFBO::ShadowMapFBO()
 
 bool ShadowMapFBO::Init()
 {
+	glGenFramebuffers(1, &shadowMapFBO);
 	glGenTextures(1, &shadowMapTexture);
 	glBindTexture(GL_TEXTURE_2D, shadowMapTexture);
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT, SHADOW_WIDTH, SHADOW_HEIGHT, 0, GL_DEPTH_COMPONENT, GL_FLOAT, NULL);
@@ -48,7 +49,6 @@ void ShadowMapFBO::Bind()
 void ShadowMapFBO::Unbind()
 {
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
-	RenderEngine::GetInstance()->SetDepthMapTexture(shadowMapTexture);
 }
 
 GLuint ShadowMapFBO::GetDepthMapTexture()

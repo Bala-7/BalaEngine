@@ -98,32 +98,6 @@ int main()
 	glm::mat4 lightViewProjectionMatrix = lightProjectionMatrix * lightViewMatrix;
 	
 	// Shadowmap framebuffer and texture
-	GLuint shadowMapTexture;
-	GLuint shadowMapFBO;
-
-	glGenFramebuffers(1, &shadowMapFBO);
-	
-	int SHADOW_WIDTH = 1024;
-	int SHADOW_HEIGHT = 1024;
-
-	glGenTextures(1, &shadowMapTexture);
-	glBindTexture(GL_TEXTURE_2D, shadowMapTexture);
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT, SHADOW_WIDTH, SHADOW_HEIGHT, 0, GL_DEPTH_COMPONENT, GL_FLOAT, NULL);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-	if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
-		std::cout << "ERROR::FRAMEBUFFER:: Framebuffer is not complete!\n";
-
-	glBindFramebuffer(GL_FRAMEBUFFER, shadowMapFBO);
-	
-	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, shadowMapTexture, 0);
-	//glBindTexture(GL_TEXTURE_2D, 0);
-	glDrawBuffer(GL_NONE);
-	glReadBuffer(GL_NONE);
-	glBindFramebuffer(GL_FRAMEBUFFER, 0);
-
 	ShaderLoader shaderLoader;
 	GLuint screenQuadShader = shaderLoader.createProgram("Assets/Shaders/ScreenQuadShader.vs", "Assets/Shaders/ScreenQuadShader.fs");
 	GLuint screenQuadVAO;
@@ -197,20 +171,6 @@ int main()
 			t += dt;
 		}
 		
-		
-		
-		glEnable(GL_DEPTH_TEST);
-		glViewport(0, 0, SHADOW_WIDTH, SHADOW_HEIGHT);
-		glBindFramebuffer(GL_FRAMEBUFFER, shadowMapFBO);
-		glClear(GL_DEPTH_BUFFER_BIT);
-		sceneGraph->DrawShadows();
-		glBindFramebuffer(GL_FRAMEBUFFER, 0);
-
-		renderEngine->SetDepthMapTexture(shadowMapTexture);
-		glViewport(0, 0, 1280, 720);
-		// Scene Rendering code
-		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-		glClearColor(0.0, 0.0, 0.0, 1.0);//clear yellow
 		renderEngine->RenderScene(sceneGraph);
 		
 		editor->DrawEditorWindows();
@@ -234,6 +194,7 @@ int main()
 		//renderEngine->UpdateDebug();
 		// \GUI Rendering code
 		renderEngine->SetEnvironmentLight(glm::vec3(editor->color[0], editor->color[1], editor->color[2]));
+		renderEngine->SetDirectionalLightDirection(editor->directionalLightDirection);
 		glfwSwapBuffers(window);
 	}
 

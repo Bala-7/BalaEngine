@@ -238,6 +238,9 @@ void Editor::DrawLightingWindow()
 	ImGui::Text("Environment Color");
 	ImGui::Separator();
 	ImGui::ColorEdit4("##Environment Color", color);
+	ImGui::Separator();
+	ImGui::Text("Light Direction (for shadows)");
+	nimgui::draw_vec3_widget("Light direction", directionalLightDirection);
 	ImGui::End();
 }
 

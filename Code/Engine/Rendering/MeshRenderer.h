@@ -40,8 +40,8 @@ public:
 	void DrawShadowPass();
 	void DrawLightingPass();
 	void draw();
-	void SetupMatricesAndShaderForLightingPass();
-	void SetupMatricesAndShaderForShadowPass();
+	void SetupShaderForLightingPass();
+	void SetupShaderForShadowPass();
 	void setPosition(glm::vec3 _position);
 	void setScale(glm::vec3 _scale);
 	void setRotation(glm::vec3 _rotation);
@@ -59,7 +59,7 @@ public:
 	Shader* shadowShader;
 	
 	// TEMP : Shadow mapping
-	glm::mat4 lightViewProjectionMatrix;
+	static glm::mat4 lightViewProjectionMatrix;
 	// \TEMP\
 
 private:
@@ -77,8 +77,7 @@ private:
 	std::vector<Mesh> meshes;
 	std::string modelPath;
 
-	glm::mat4 lightVP;
-
+	
 	void loadModel(std::string path);
 	void processNode(aiNode* node, const aiScene* scene);
 	Mesh processMesh(aiMesh* mesh, const aiScene* scene);

@@ -15,6 +15,7 @@ public:
 	bool autoRotate = false;
 	float rotationSpeed = 0.0f;
 	float color[4] = { 1.0f, 1.0f, 1.0f, 1.0f };
+	glm::vec3 directionalLightDirection;
 
 	SceneGraph* sceneGraph;
 

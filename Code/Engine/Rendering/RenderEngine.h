@@ -88,18 +88,20 @@ public:
 	int GetTargetFPS();
 	int GetCurrentFPS();
 
+	// Lighting
 	glm::vec3 GetEnvironmentLight();
+	glm::vec3 GetDirectionalLightDirection();
 	void SetEnvironmentLight(glm::vec3 value);
+	void SetDirectionalLightDirection(glm::vec3 value);
+
 
 	void CreateFramebuffer();
 	void CreateShadowmapFramebuffer();
 	void BindFramebuffer();
 	void UnbindFramebuffer();
 	void RescaleFramebuffer(float width, float height);
-	void RescaleDepthFramebuffer(float width, float height);
 
 	GLuint GetFrameBufferTexture() { return texture_id; }
-	
 	
 	void OnKeyboardInput(GLFWwindow* window, int key, int scancode, int action, int mode);
 	void OnMouseInput(GLFWwindow* window, int button, int action, int mods);
@@ -108,13 +110,13 @@ public:
 	void RenderScene(SceneGraph* scene);
 
 	// Shadows
-	GLuint GetDepthMapTexture() { return shadowMapTexture; }
-	GLuint GetDepthMapFBO() { return shadowMapFBO; }
+	GLuint GetDepthMapTexture() { return shadowMap->GetDepthMapTexture(); }
+	GLuint GetDepthMapFBO() { return shadowMap->GetDepthMapFBO(); }
 	glm::mat4 GetLightProjectionMatrix() { return lightProjectionMatrix; }
 	glm::mat4 GetLightViewMatrix() { return lightViewMatrix; }
 	glm::mat4 GetLightViewProjectionMatrix() { return lightViewProjectionMatrix; }
+	void CalculateLightViewMatrices();
 
-	void SetDepthMapTexture(GLuint newTexture) { shadowMapTexture = newTexture; }
 	void SetLightViewProjectionMatrix(glm::mat4 newMatrix) { lightViewProjectionMatrix = newMatrix; }
 
 private:
@@ -145,7 +147,7 @@ private:
 
 	// Lighting
 	glm::vec3 environmentLight;
-
+	glm::vec3 directionalLightDirection;
 	
 	const char* TEXTURES_PATH = "Assets/Textures/";
 	TextureLoader textureLoader;
@@ -177,9 +179,6 @@ private:
 
 	// Shadows
 	ShadowMapFBO* shadowMap;
-
-	GLuint shadowMapTexture;
-	GLuint shadowMapFBO;
 	GLuint shadowShaderProgram;
 	
 	glm::mat4 lightProjectionMatrix;
