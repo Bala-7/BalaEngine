@@ -431,7 +431,8 @@ void RenderEngine::CalculateLightViewMatrices()
 	glm::vec3 lightTarget = glm::vec3(0.0f, 0.0f, 0.0f);
 	float lightDistance = 10.0f;
 	glm::vec3 lightPosition = lightTarget - glm::normalize(directionalLightDirection) * lightDistance;
-	glm::mat4 lightProjectionMatrix = glm::ortho(-10.0f, 10.f, -10.f, 10.f, nearPlane, farPlane);
+	float orthographicSize = 3.0f;
+	glm::mat4 lightProjectionMatrix = glm::ortho(-orthographicSize, orthographicSize, -orthographicSize, orthographicSize, nearPlane, farPlane);
 	//glm::mat4 lightViewMatrix = glm::lookAt(lightPosition, lightTarget, glm::vec3(0.0f, 1.0f, 0.0f));
 	glm::mat4 lightViewMatrix = glm::lookAt(lightTarget - directionalLightDirection, lightTarget, glm::vec3(0.0f, 1.0f, 0.0f));
 	lightViewProjectionMatrix = lightProjectionMatrix * lightViewMatrix;

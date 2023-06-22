@@ -18,7 +18,7 @@ public:
 private:
 	GLuint shadowMapFBO;
 	GLuint shadowMapTexture;
-	const GLuint SHADOW_WIDTH = 1024, SHADOW_HEIGHT = 1024;
+	const GLuint SHADOW_WIDTH = 128, SHADOW_HEIGHT = 128;
 
 	glm::mat4 lightSpaceMatrix;
 };

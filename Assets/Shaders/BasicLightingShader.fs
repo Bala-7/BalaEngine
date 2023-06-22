@@ -59,12 +59,16 @@ float ShadowCalculation(vec4 fragPosLightSpace)
 	float currentDepth = projCoords.z;
 	
 	float bias = 0.005;
+	//float bias = max(0.005 * (1.0 - dot(Normal, light.direction)), 0.005); // Not working
 	float shadow = currentDepth-bias > closestDepth ? 0.0 : 1.0;
 	
 	if(fragPosLightSpace == vec4(0.0, 0.0, 0.0, 0.0))
 	{
 		return 1;
 	}
+	
+	if(projCoords.z > 1.0)
+		shadow = 1.0;
 	
 	return shadow;
 }

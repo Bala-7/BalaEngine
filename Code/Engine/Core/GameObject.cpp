@@ -52,6 +52,11 @@ ModelRenderer* GameObject::GetRenderComponent()
 	return renderComponent;
 }
 
+void GameObject::SetSceneNode(SceneNode* newNode)
+{
+	node = newNode;
+}
+
 Component* GameObject::GetComponent(Component::ComponentType type)
 {
 	for (auto const& component : components)

@@ -5,6 +5,8 @@
 #include <typeinfo>
 #include "Engine/Rendering/ModelRenderer.h"
 
+class SceneNode;
+
 class GameObject
 {
 public:
@@ -23,6 +25,9 @@ public:
 	void SetRenderComponent(ModelRenderer* newComponent);
 	ModelRenderer* GetRenderComponent();
 
+	void SetSceneNode(SceneNode* newNode);
+	SceneNode* GetNode() { return node; }
+
 	Transform* transform;
 	std::string name;
 protected:
@@ -31,6 +36,7 @@ protected:
 private:
 	std::list<Component*> components;
 	ModelRenderer* renderComponent;
+	SceneNode* node;
 };
 
 

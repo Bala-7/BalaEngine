@@ -12,6 +12,7 @@ SceneNode::SceneNode()
 SceneNode::SceneNode(GameObject* go)
 {
 	gameObject = go;
+	gameObject->SetSceneNode(this);
 }
 
 SceneNode::~SceneNode()
@@ -26,6 +27,7 @@ void SceneNode::AddChild(SceneNode* child)
 {
 	children.push_back(child);
 	child->SetParent(this);
+	child->SetSceneGraph(scene);
 }
 
 void SceneNode::RemoveChild(SceneNode* child)
@@ -93,7 +95,8 @@ void SceneNode::GetChildNamesForEditor(int depth, std::vector<std::pair<SceneNod
 	result.emplace_back(this, depth);
 	
 	// Recursively iterate over children
-	for (SceneNode* child : children) {
+	for (SceneNode* child : children) 
+	{
 		child->GetChildNamesForEditor(depth + 1, result);
 	}
 }
@@ -101,6 +104,11 @@ void SceneNode::GetChildNamesForEditor(int depth, std::vector<std::pair<SceneNod
 void SceneNode::SetParent(SceneNode* newParent)
 {
 	parent = newParent;
+}
+
+void SceneNode::SetSceneGraph(SceneGraph* newScene)
+{
+	scene = newScene;
 }
 
 void SceneNode::RemoveParent()

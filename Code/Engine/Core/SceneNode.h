@@ -2,6 +2,8 @@
 #include "GameObject.h"
 #include <vector>
 
+class SceneGraph;
+
 class SceneNode
 {
 public:
@@ -18,6 +20,8 @@ public:
 
 	void GetChildNamesForEditor(int depth, std::vector<std::pair<SceneNode*, int>>& result);
 	void SetParent(SceneNode* newParent);
+	void SetSceneGraph(SceneGraph* newScene);
+	SceneGraph* GetScene() { return scene; }
 	void RemoveParent();
 
 	void Destroy();
@@ -28,7 +32,6 @@ private:
 	std::vector<SceneNode*> children;
 	GameObject* gameObject;
 	SceneNode* parent;
-	
-
+	SceneGraph* scene;
 };
 

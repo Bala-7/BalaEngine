@@ -30,6 +30,8 @@ public:
 	float GetInnerCutOff() { return _innerCutOff; }
 	float GetOuterCutOff() { return _outerCutOff; }
 
+	LightType GetType() { return _lightTtype; }
+
 private:
 
 	glm::vec3 _direction;

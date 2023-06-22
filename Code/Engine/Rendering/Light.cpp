@@ -4,6 +4,11 @@
 #include "imgui_impl_glfw.h"
 #include "imgui_impl_opengl3.h"
 #include "Engine/Editor/imgui_widgets.h"
+#include "Engine/Core/GameObject.h"
+#include "Engine/Core/SceneNode.h"
+#include "Engine/Core/SceneGraph.h"
+
+
 
 Light::Light()
 {
@@ -33,10 +38,21 @@ Light::~Light()
 
 void Light::OnComponentAdded()
 {
+	gameObject->GetNode()->GetScene()->AddToSceneLights(this);
 }
 
 void Light::DrawInspector()
 {
+	const char* types[] = { "Directional", "Point", "Spot" };
+	ImGui::Separator();
+	ImGui::Separator();
+	ImGui::Text("LIGHT SETTINGS");
+	ImGui::Separator();
+	if (ImGui::Combo("Type", reinterpret_cast<int*>(&_lightTtype), types, IM_ARRAYSIZE(types)))
+	{
+		// Handle the selection change here if needed
+		// The selectedOption variable will hold the new selected value
+	}
 	ImGui::Separator();
 	ImGui::Text("Direction");
 	ImGui::Separator();

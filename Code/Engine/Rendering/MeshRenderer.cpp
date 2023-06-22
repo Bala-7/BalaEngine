@@ -227,7 +227,7 @@ void MeshRenderer::SetupShaderForLightingPass()
 	shader->setVec3("material.specular", _material->specular);
 	shader->setFloat("material.shininess", _material->shininess);
 
-	glm::vec3 lightDirection = glm::vec3(0.0f, -1.0f, -1.0f);
+	glm::vec3 lightDirection = RenderEngine::GetInstance()->GetDirectionalLightDirection();
 	glm::vec3 lightPosition = glm::vec3(0.0f, 0.0f, 5.5f);
 
 	shader->setVec3("light.direction", lightDirection);

@@ -355,6 +355,8 @@ void CreateSceneGraph()
 	
 	// Light
 	GameObject* lightGO = new GameObject("Point Light");
+	sceneGraph->GetRootNode()->AddChild(new SceneNode(lightGO));
+	ModelRenderer* lightModel = new ModelRenderer("Assets/Models/Lightbulb/Lightbulb.obj");
 	light = new Light(Light::LightType::Point,
 		glm::vec3(0.0f, 0.0f, -1.0f),
 		glm::vec3(0.2f, 0.2f, 0.2f), glm::vec3(0.5f, 0.5f, 0.5f), glm::vec3(1.0f, 1.0f, 1.0f),
@@ -365,6 +367,9 @@ void CreateSceneGraph()
 		glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f),
 		1.0f, 0.09f, 0.032f,
 		glm::cos(glm::radians(12.5f)), glm::cos(glm::radians(17.5f)));*/
+	lightGO->transform->scale = glm::vec3(0.2f, 0.2f, 0.2f);
+	lightGO->transform->rotation = glm::vec3(-90.0f, 0.0f, 0.0f);
+	//lightGO->AddComponent(lightModel);
 	lightGO->AddComponent(light);
 
 	// 3D Model
@@ -383,10 +388,9 @@ void CreateSceneGraph()
 	GameObject* terrainGO = new GameObject("Terrain");
 	ModelRenderer* terrainModel = new ModelRenderer("Assets/Models/DefaultTerrain.obj");
 	terrainGO->transform->position = glm::vec3(0.00f, -0.15f, 0.0f);
-	//terrainGO->transform->scale = glm::vec3(10.0f, 10.0f, 10.0f);
 	terrainGO->AddComponent(terrainModel);
 
-	sceneGraph->GetRootNode()->AddChild(new SceneNode(lightGO));
+	
 	sceneGraph->GetRootNode()->AddChild(new SceneNode(meshGO));
 	sceneGraph->GetRootNode()->AddChild(new SceneNode(terrainGO));
 

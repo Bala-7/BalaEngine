@@ -10,6 +10,7 @@
 SceneGraph::SceneGraph()
 {
 	rootNode = new SceneNode();
+	rootNode->SetSceneGraph(this);
 }
 
 SceneGraph::~SceneGraph()
@@ -35,5 +36,22 @@ void SceneGraph::DrawShadows()
 SceneNode* SceneGraph::GetRootNode()
 {
 	return rootNode;
+}
+
+void SceneGraph::AddToSceneLights(Light* newLight)
+{
+	sceneLights.push_back(newLight);
+}
+
+int SceneGraph::CountDirectionalLights()
+{
+	int directionalLightCount = 0;
+	for (auto i = sceneLights.begin(); i != sceneLights.end(); ++i)
+	{
+		if ((*i)->GetType() == Light::LightType::Directional)
+			directionalLightCount++;
+	}
+
+	return directionalLightCount;
 }
 
