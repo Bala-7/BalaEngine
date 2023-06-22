@@ -37,6 +37,13 @@ void RenderEngine::Initialize()
 
 	CreateFramebuffer();
 
+	CreateShadowmapFramebuffer();
+
+	
+	shadowMap = new ShadowMapFBO();
+	//shadowMap->Init();
+	
+
 	Debug::Log("Render Engine initialized!");
 }
 
@@ -102,6 +109,11 @@ GLuint RenderEngine::GetTextureID(const char* fileName)
 GLuint RenderEngine::GetShaderProgram()
 {
 	return shaderProgram;
+}
+
+GLuint RenderEngine::GetShadowShaderProgram()
+{
+	return shadowShaderProgram;
 }
 
 GLuint RenderEngine::GetTextShaderProgram()
@@ -190,6 +202,7 @@ void RenderEngine::InitGame()
 	//glm::mat4 projection = glm::ortho(0.0f, (float) config.WINDOW_SIZE_X, (float) config.WINDOW_SIZE_Y, 0.0f, -1.0f, 1.0f);
 	ShaderLoader shaderLoader;
 	shaderProgram = shaderLoader.createProgram(config.VERTEX_SHADER_PATH.c_str(), config.FRAGMENT_SHADER_PATH.c_str());
+	shadowShaderProgram = shaderLoader.createProgram(config.VERTEX_SHADER_SHADOW_PATH.c_str(), config.FRAGMENT_SHADER_SHADOW_PATH.c_str());
 	textShaderProgram = shaderLoader.createProgram(config.VERTEX_SHADER_TEXT_PATH.c_str(), config.FRAGMENT_SHADER_TEXT_PATH.c_str());
 }
 
@@ -326,6 +339,29 @@ void RenderEngine::InitializeConfigValues()
 	config.FRAGMENT_SHADER_TEXT_PATH = config.configValues["FRAGMENT_SHADER_TEXT_PATH"];
 }
 
+void RenderEngine::CreateShadowmapFramebuffer()
+{
+	glGenFramebuffers(1, &shadowMapFBO);
+	glBindFramebuffer(GL_FRAMEBUFFER, shadowMapFBO);
+
+	int WIDTH = 1024;
+	int HEIGHT = 1024;
+
+	glGenTextures(1, &shadowMapTexture);
+	glBindTexture(GL_TEXTURE_2D, shadowMapTexture);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT, WIDTH, HEIGHT, 0, GL_DEPTH_COMPONENT, GL_FLOAT, NULL);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, shadowMapTexture, 0);
+
+	
+	if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
+		std::cout << "ERROR::FRAMEBUFFER:: Framebuffer is not complete!\n";
+
+	glBindFramebuffer(GL_FRAMEBUFFER, 0);
+	glBindTexture(GL_TEXTURE_2D, 0);
+}
+
 void RenderEngine::CreateFramebuffer()
 {
 	glGenFramebuffers(1, &FBO);
@@ -360,6 +396,7 @@ void RenderEngine::BindFramebuffer()
 	glBindFramebuffer(GL_FRAMEBUFFER, FBO);
 	glViewport(0, 0, 854, 480);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	glClearColor(0.0, 0.0, 0.0, 1.0);
 }
 
 // here we unbind our framebuffer
@@ -382,8 +419,30 @@ void RenderEngine::RescaleFramebuffer(float width, float height)
 	glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_RENDERBUFFER, RBO);
 }
 
+void RenderEngine::RescaleDepthFramebuffer(float width, float height)
+{
+	GLuint texture = GetDepthMapTexture();
+	glBindTexture(GL_TEXTURE_2D, shadowMapTexture);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, NULL);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, shadowMapTexture, 0);
+
+
+	GLuint fb = GetDepthMapFBO();
+	/*glBindRenderbuffer(GL_RENDERBUFFER, shadowMapFBO);
+	glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH24_STENCIL8, width, height);
+	glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_RENDERBUFFER, shadowMapFBO);*/
+}
+
 void RenderEngine::RenderScene(SceneGraph* scene)
 {
+	// Shadow pass
+	/*shadowMap->Bind();
+	scene->DrawShadows();
+	shadowMap->Unbind();*/
+
+	// Light pass
 	BindFramebuffer();
 	scene->Draw();
 	UnbindFramebuffer();

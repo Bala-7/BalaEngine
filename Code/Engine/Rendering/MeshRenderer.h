@@ -58,6 +58,10 @@ public:
 	Shader* shader;
 	Shader* shadowShader;
 	
+	// TEMP : Shadow mapping
+	glm::mat4 lightViewProjectionMatrix;
+	// \TEMP\
+
 private:
 	Light* _light;
 	Material* _material;

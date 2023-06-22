@@ -88,6 +88,78 @@ int main()
 	const float dt = 1.0f / renderEngine->GetTargetFPS();
 	float accumulator = 0.0f;
 
+	// TEMP : Shadowmap variables
+	// Light matrices
+	glm::vec3 lightDirection = glm::vec3(0.0f, -1.0f, -1.0f);
+	float nearPlane = 0.01f;   // Near clipping plane
+	float farPlane = 100.0f;  // Far clipping plane
+	glm::mat4 lightProjectionMatrix = glm::ortho(-35.0f, 35.f, -35.f, 35.f, nearPlane, farPlane);
+	glm::mat4 lightViewMatrix = glm::lookAt(lightDirection, glm::vec3(0.4f, -1.4f, 5.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+	glm::mat4 lightViewProjectionMatrix = lightProjectionMatrix * lightViewMatrix;
+	
+	// Shadowmap framebuffer and texture
+	GLuint shadowMapTexture;
+	GLuint shadowMapFBO;
+
+	glGenFramebuffers(1, &shadowMapFBO);
+	
+	int SHADOW_WIDTH = 1024;
+	int SHADOW_HEIGHT = 1024;
+
+	glGenTextures(1, &shadowMapTexture);
+	glBindTexture(GL_TEXTURE_2D, shadowMapTexture);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT, SHADOW_WIDTH, SHADOW_HEIGHT, 0, GL_DEPTH_COMPONENT, GL_FLOAT, NULL);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+	if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
+		std::cout << "ERROR::FRAMEBUFFER:: Framebuffer is not complete!\n";
+
+	glBindFramebuffer(GL_FRAMEBUFFER, shadowMapFBO);
+	
+	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, shadowMapTexture, 0);
+	//glBindTexture(GL_TEXTURE_2D, 0);
+	glDrawBuffer(GL_NONE);
+	glReadBuffer(GL_NONE);
+	glBindFramebuffer(GL_FRAMEBUFFER, 0);
+
+	ShaderLoader shaderLoader;
+	GLuint screenQuadShader = shaderLoader.createProgram("Assets/Shaders/ScreenQuadShader.vs", "Assets/Shaders/ScreenQuadShader.fs");
+	GLuint screenQuadVAO;
+	glGenVertexArrays(1, &screenQuadVAO);
+	glBindVertexArray(screenQuadVAO);
+
+	// Define the vertex positions and texture coordinates for the quad
+	float quadVertices[] = {
+		// Positions        // Texture Coordinates
+		-1.0f,  1.0f,  0.0f,  0.0f, 1.0f, // Top-left
+		 1.0f,  1.0f,  0.0f,  1.0f, 1.0f, // Top-right
+		-1.0f, -1.0f,  0.0f,  0.0f, 0.0f, // Bottom-left
+		 1.0f, -1.0f,  0.0f,  1.0f, 0.0f, // Bottom-right
+	};
+	GLubyte quadIndices[] = { 0,1,2, // first triangle (bottom left - top left - top right)
+					 1,3,2 };
+
+	// Generate and bind a vertex buffer object (VBO) for the quad vertices
+	GLuint quadVBO;
+	glGenBuffers(1, &quadVBO);
+	glBindBuffer(GL_ARRAY_BUFFER, quadVBO);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(quadVertices), quadVertices, GL_STATIC_DRAW);
+
+	// Specify the vertex attribute pointers
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)0); // Positions
+	glEnableVertexAttribArray(0);
+	glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)(3 * sizeof(float))); // Texture coordinates
+	glEnableVertexAttribArray(1);
+
+	// Unbind the VAO and VBO
+	glBindVertexArray(0);
+	glBindBuffer(GL_ARRAY_BUFFER, 0);
+
+	
+	// \TEMP\
+
 	while (!renderEngine->ShouldClose())
 	{
 		auto newTime = Time::Now();
@@ -125,18 +197,35 @@ int main()
 			t += dt;
 		}
 		
+		
+		
+		glEnable(GL_DEPTH_TEST);
+		glViewport(0, 0, SHADOW_WIDTH, SHADOW_HEIGHT);
+		glBindFramebuffer(GL_FRAMEBUFFER, shadowMapFBO);
+		glClear(GL_DEPTH_BUFFER_BIT);
+		sceneGraph->DrawShadows();
+		glBindFramebuffer(GL_FRAMEBUFFER, 0);
+
+		renderEngine->SetDepthMapTexture(shadowMapTexture);
 		glViewport(0, 0, 1280, 720);
 		// Scene Rendering code
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		glClearColor(0.0, 0.0, 0.0, 1.0);//clear yellow
-
-		
-
-		editor->DrawEditorWindows();
-
 		renderEngine->RenderScene(sceneGraph);
 		
+		editor->DrawEditorWindows();
 
+		/* Test for drawing shadowmap framebuffer onto a quad. */
+		/*glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
+		glClear(GL_COLOR_BUFFER_BIT);
+		glUseProgram(screenQuadShader);
+		glUniform1i(glGetUniformLocation(screenQuadShader, "screenTexture"), 1);
+		glBindVertexArray(screenQuadVAO);
+		glDisable(GL_DEPTH_TEST);
+		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_BYTE, quadIndices);*/
+		/* End of text for drawing shadowmap*/
+		
+		
 		//renderEngine->Update();
 		// \Scene Rendering code\
 			
@@ -310,20 +399,30 @@ void CreateSceneGraph()
 		glm::vec3(0.2f, 0.2f, 0.2f), glm::vec3(0.5f, 0.5f, 0.5f), glm::vec3(1.0f, 1.0f, 1.0f),
 		1.0f, 0.09f, 0.032f,
 		glm::cos(glm::radians(12.5f)), glm::cos(glm::radians(17.5f)));
+	/*light = new Light(Light::LightType::Point,
+		glm::vec3(0.0f, 0.0f, -1.0f),
+		glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f),
+		1.0f, 0.09f, 0.032f,
+		glm::cos(glm::radians(12.5f)), glm::cos(glm::radians(17.5f)));*/
 	lightGO->AddComponent(light);
 
 	// 3D Model
 	GameObject* meshGO = new GameObject("Samus Model");
 	modelRenderer = new ModelRenderer("Assets/Models/Samus/Samus/Samus_small.obj");
-	meshGO->transform->position = glm::vec3(0.05f, -2.0f, 5.0f);
+	meshGO->transform->position = glm::vec3(0.00f, 0.0f, 0.0f);
 	meshGO->transform->scale = glm::vec3(1.0f, 1.0f, 1.0f);
 	meshGO->transform->rotation = glm::vec3(0.0f, 0.0f, 0.0f);
 	meshGO->AddComponent(modelRenderer);
 	editor->SetDisplayedGameObject(meshGO);
+	/*GameObject* meshGO = new GameObject("Cube");
+	ModelRenderer* cubeModel = new ModelRenderer("Assets/Models/Cube.obj");
+	meshGO->transform->position = glm::vec3(0.0f, 0.0f, 0.0f);
+	meshGO->AddComponent(cubeModel);*/
 
 	GameObject* terrainGO = new GameObject("Terrain");
 	ModelRenderer* terrainModel = new ModelRenderer("Assets/Models/DefaultTerrain.obj");
-	terrainGO->transform->position = glm::vec3(0.00f, -2.03f, 4.0f);
+	terrainGO->transform->position = glm::vec3(0.00f, -0.15f, 0.0f);
+	//terrainGO->transform->scale = glm::vec3(10.0f, 10.0f, 10.0f);
 	terrainGO->AddComponent(terrainModel);
 
 	sceneGraph->GetRootNode()->AddChild(new SceneNode(lightGO));

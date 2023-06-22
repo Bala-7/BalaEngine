@@ -22,6 +22,7 @@
 #include "Engine/Rendering/SpriteLayer.h"
 #include "Engine/Rendering/UITextRenderer.h"
 #include "Engine/Core/SceneGraph.h"
+#include "Engine/Rendering/ShadowMapFBO.h"
 
 class RenderEngine
 {
@@ -76,6 +77,7 @@ public:
 	Camera* GetCamera();
 	GLuint GetTextureID(const char* fileName);
 	GLuint GetShaderProgram();
+	GLuint GetShadowShaderProgram();
 	GLuint GetTextShaderProgram();
 	std::map<char, Character> GetCharacterList();
 	void AddSpriteToRenderList(SpriteRenderer* spriteRenderer);
@@ -90,17 +92,30 @@ public:
 	void SetEnvironmentLight(glm::vec3 value);
 
 	void CreateFramebuffer();
+	void CreateShadowmapFramebuffer();
 	void BindFramebuffer();
 	void UnbindFramebuffer();
 	void RescaleFramebuffer(float width, float height);
+	void RescaleDepthFramebuffer(float width, float height);
 
 	GLuint GetFrameBufferTexture() { return texture_id; }
-
+	
+	
 	void OnKeyboardInput(GLFWwindow* window, int key, int scancode, int action, int mode);
 	void OnMouseInput(GLFWwindow* window, int button, int action, int mods);
 	void OnCursorPositionInput(GLFWwindow* window, double xpos, double ypos);
 
 	void RenderScene(SceneGraph* scene);
+
+	// Shadows
+	GLuint GetDepthMapTexture() { return shadowMapTexture; }
+	GLuint GetDepthMapFBO() { return shadowMapFBO; }
+	glm::mat4 GetLightProjectionMatrix() { return lightProjectionMatrix; }
+	glm::mat4 GetLightViewMatrix() { return lightViewMatrix; }
+	glm::mat4 GetLightViewProjectionMatrix() { return lightViewProjectionMatrix; }
+
+	void SetDepthMapTexture(GLuint newTexture) { shadowMapTexture = newTexture; }
+	void SetLightViewProjectionMatrix(glm::mat4 newMatrix) { lightViewProjectionMatrix = newMatrix; }
 
 private:
 
@@ -158,6 +173,18 @@ private:
 
 	float lastMouseX = 0.0f;
 	float lastMouseY = 0.0f;
+
+
+	// Shadows
+	ShadowMapFBO* shadowMap;
+
+	GLuint shadowMapTexture;
+	GLuint shadowMapFBO;
+	GLuint shadowShaderProgram;
+	
+	glm::mat4 lightProjectionMatrix;
+	glm::mat4 lightViewMatrix;
+	glm::mat4 lightViewProjectionMatrix;
 };
 
 #endif

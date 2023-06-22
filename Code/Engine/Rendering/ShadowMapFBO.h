@@ -10,14 +10,14 @@ public:
 	ShadowMapFBO();
 
 	bool Init();
-	void BindForWriting();
-	void BindForReading(GLenum textureUnit);
+	void Bind();
+	void Unbind();
 	GLuint GetDepthMapTexture();
 	GLuint GetDepthMapFBO();
 
 private:
-	GLuint depthMapFBO;
-	GLuint depthMap;
+	GLuint shadowMapFBO;
+	GLuint shadowMapTexture;
 	const GLuint SHADOW_WIDTH = 1024, SHADOW_HEIGHT = 1024;
 
 	glm::mat4 lightSpaceMatrix;

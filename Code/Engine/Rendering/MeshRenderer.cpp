@@ -147,17 +147,25 @@ void MeshRenderer::SetupMatricesAndShaderForShadowPass()
 	setRotation(gameObject->transform->rotation);
 
 	glUseProgram(shadowShader->ID);
-	glm::vec3 lightDirection = glm::vec3(0.0f, 0.0f, -1.0f);
-	glm::vec3 lightPosition = glm::vec3(0.0f, -1.0f, 6.0f);
-	float nearPlane = 0.1f;   // Near clipping plane
-	float farPlane = 100.0f;  // Far clipping plane
-	float aspectRatio = 1.0f; // Aspect ratio (assuming square viewport)
-	float fov = 90.0f;        // Field of view
-	glm::mat4 projectionMatrix = glm::perspective(glm::radians(fov), aspectRatio, nearPlane, farPlane);
-	glm::mat4 viewMatrix = glm::lookAt(lightPosition, position, glm::vec3(0.0f, 1.0f, 0.0f));
-	lightVP = viewMatrix * projectionMatrix;
+	lightVP = RenderEngine::GetInstance()->GetLightViewProjectionMatrix();
 
-	shader->setMat4("lightvp", lightVP);
+	/*GLuint depthTexture = RenderEngine::GetInstance()->GetDepthMapTexture();
+	glActiveTexture(GL_TEXTURE0);
+	glBindTexture(GL_TEXTURE_2D, depthTexture);
+	shadowShader->setInt("depthTexture", 0);*/
+
+	glm::vec3 lightDirection = glm::vec3(0.0f, -1.0f, -1.0f);
+	glm::vec3 lightPosition = glm::vec3(0.0f, 2.0f, 3.0f);
+	float nearPlane = 0.01f;   // Near clipping plane
+	float farPlane = 100.0f;  // Far clipping plane
+	glm::mat4 lightProjectionMatrix = glm::ortho(-10.0f, 10.f, -10.f, 10.f, nearPlane, farPlane);
+	glm::mat4 lightViewMatrix = glm::lookAt(lightPosition, glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+	lightViewProjectionMatrix = lightProjectionMatrix * lightViewMatrix;
+	
+
+	shadowShader->setMat4("lightvp", lightViewProjectionMatrix);
+	//shadowShader->setFloat("nearPlane", nearPlane);
+	//shadowShader->setFloat("farPlane", farPlane);
 
 	// Set the model matrix
 	glm::mat4 translationMatrix = glm::translate(glm::mat4(1.0f), position);
@@ -166,9 +174,13 @@ void MeshRenderer::SetupMatricesAndShaderForShadowPass()
 	rotateMatrix = glm::rotate(rotateMatrix, glm::radians(rotation.y), glm::vec3(0.0, 1.0, 0.0));
 	rotateMatrix = glm::rotate(rotateMatrix, glm::radians(rotation.z), glm::vec3(0.0, 0.0, 1.0));
 
-	modelMatrix = glm::mat4(1.0f);
-	modelMatrix = /*translationMatrix * */rotateMatrix * scaleMatrix;
-	shader->setMat4("modelMatrix", modelMatrix);
+	//modelMatrix = glm::mat4(1.0f);
+	modelMatrix = translationMatrix * rotateMatrix * scaleMatrix;
+	shadowShader->setMat4("modelMatrix", modelMatrix);
+
+	glActiveTexture(GL_TEXTURE1);
+	GLuint shadowMapTexture = RenderEngine::GetInstance()->GetDepthMapTexture();
+	glBindTexture(GL_TEXTURE_2D, shadowMapTexture);
 }
 
 void MeshRenderer::DrawLightingPass()
@@ -192,27 +204,44 @@ void MeshRenderer::SetupMatricesAndShaderForLightingPass()
 	rotateMatrix = glm::rotate(rotateMatrix, glm::radians(rotation.z), glm::vec3(0.0, 0.0, 1.0));
 
 	modelMatrix = glm::mat4(1.0f);
-	modelMatrix = /*translationMatrix * */rotateMatrix * scaleMatrix;
+	modelMatrix = translationMatrix * rotateMatrix * scaleMatrix;
 
 	// vp matrix is the multiplied view and projection amtrices
 	glm::mat4 vp = camera->getProjectionMatrix() * camera->getViewMatrix();
 
 	// Send the data to the shader program
 	glUseProgram(this->program);
-
+	
+	shader->setMat4("lightSpaceMatrix", lightViewProjectionMatrix);
 	shader->setMat4("vp", vp);
 	shader->setMat4("model", modelMatrix);
+	
+	glm::vec3 FragPos = glm::vec3(modelMatrix * glm::vec4(position, 1.0f));
+	glm::vec4 fragPosLightSpace = lightViewProjectionMatrix * glm::vec4(FragPos, 1.0f);
+	glm::vec3 projCoords = glm::vec3(fragPosLightSpace.x, fragPosLightSpace.y, fragPosLightSpace.z) / fragPosLightSpace.w;
+
+
+
 	shader->setVec3("objectColor", glm::vec3(1.0f, 1.0f, 1.0f));
 	shader->setVec3("environmentColor", RenderEngine::GetInstance()->GetEnvironmentLight());
-
 	shader->setVec3("viewPos", RenderEngine::GetInstance()->GetCamera()->getCameraPosition());
+
+	glActiveTexture(GL_TEXTURE0);
+	// Bind the texture object
+	glBindTexture(GL_TEXTURE_2D, texture);
+	glActiveTexture(GL_TEXTURE1);
+	GLuint shadowMapTexture = RenderEngine::GetInstance()->GetDepthMapTexture();
+	glBindTexture(GL_TEXTURE_2D, shadowMapTexture);
+
+	shader->setInt("Texture", 0);
+	shader->setInt("shadowMap", 1);
 
 	shader->setVec3("material.ambient", _material->ambient);
 	shader->setVec3("material.diffuse", _material->diffuse);
 	shader->setVec3("material.specular", _material->specular);
 	shader->setFloat("material.shininess", _material->shininess);
 
-	glm::vec3 lightDirection = glm::vec3(0.0f, 0.0f, -1.0f);
+	glm::vec3 lightDirection = glm::vec3(0.0f, -1.0f, -1.0f);
 	glm::vec3 lightPosition = glm::vec3(0.0f, 0.0f, 5.5f);
 
 	shader->setVec3("light.direction", lightDirection);
@@ -228,17 +257,16 @@ void MeshRenderer::SetupMatricesAndShaderForLightingPass()
 	shader->setFloat("light.innerCutOff", glm::cos(glm::radians(12.5f)));
 	shader->setFloat("light.outerCutOff", glm::cos(glm::radians(17.5f)));
 
-	shader->setBool("light.isDirectionalLight", false);
+	shader->setBool("light.isDirectionalLight", true);
 	shader->setBool("light.isSpotLight", false);
-	shader->setBool("light.isPointLight", true);
+	shader->setBool("light.isPointLight", false);
 }
 
 
 
 void MeshRenderer::draw()
 {
-	// Bind the texture object
-	glBindTexture(GL_TEXTURE_2D, texture);
+
 
 	// Bind the VAO and draw object
 	glBindVertexArray(vao);

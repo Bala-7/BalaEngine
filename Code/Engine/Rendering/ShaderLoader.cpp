@@ -3,6 +3,7 @@
 #include<iostream>
 #include<fstream>
 #include<vector>
+#include "Engine/Debug/Debug.h"
 
 std::string ShaderLoader::readShader(const char* filename)
 {
@@ -70,7 +71,9 @@ GLuint ShaderLoader::createProgram(const char* vertexShaderFilename, const char*
 		glGetProgramInfoLog(program, info_log_length, NULL,
 			&program_log[0]);
 		std::cout << "Shader Loader : LINK ERROR" << std::endl << &program_log[0] << std::endl;
+
 		return 0;
 	}
+	
 	return program;
 }

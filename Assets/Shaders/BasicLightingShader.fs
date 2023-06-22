@@ -34,8 +34,8 @@ struct Light {
 in vec3 Normal;  
 in vec2 TexCoord;
 in vec3 FragPos;
+in vec4 FragPosLightSpace;  
 in float interpolatedDepth;
-in vec4 ShadowCoord;  
   
 uniform vec3 objectColor;
 uniform vec3 environmentColor;
@@ -54,11 +54,17 @@ float ShadowCalculation(vec4 fragPosLightSpace)
 {
 	// perform perspective divide
 	vec3 projCoords = (fragPosLightSpace.xyz / fragPosLightSpace.w) * 0.5 + 0.5;
-	
+
 	float closestDepth = texture(shadowMap, projCoords.xy).r;
-	
 	float currentDepth = projCoords.z;
-	float shadow = currentDepth > closestDepth ? 1.0 : 0.0;
+	
+	float bias = 0.005;
+	float shadow = currentDepth-bias > closestDepth ? 0.0 : 1.0;
+	
+	if(fragPosLightSpace == vec4(0.0, 0.0, 0.0, 0.0))
+	{
+		return 1;
+	}
 	
 	return shadow;
 }
@@ -102,9 +108,11 @@ void main()
 	
 	
 	// Shadows
-	float shadow = ShadowCalculation(ShadowCoord);
-	shadow = 0;
-	vec3 result = (ambient + (1.0 - shadow)*(diffuse + specular)) * objectColor;
+	float shadow = ShadowCalculation(FragPosLightSpace);
+	/*vec4 shadowCoords = vec4(FragPos.xyz / FragPos.w, 1.0f);
+	float shadowFactor = textureProj(shadowMap, shadowCoords);*/
+	
+	vec3 result = (ambient + shadow*(diffuse + specular)) * objectColor;
     
 	if (light.isSpotLight)
 	{
@@ -122,8 +130,17 @@ void main()
 			result = (ambient + diffuse + specular) * objectColor;
 		}
 	}
+	/*vec4 texColor = texture(Texture, shadowCoords.xy);
+	FragColor = vec4(result, 1.0) * texColor;*/
 	
-	
+	/*if (shadow < 1.0)
+	{
+		FragColor = vec4(0.1, 1.0, 0.1, 1.0);
+	}
+	else
+	{
+		FragColor = vec4(result, 1.0) * texture(Texture, TexCoord);
+	}*/
 	
 	FragColor = vec4(result, 1.0) * texture(Texture, TexCoord);
 }

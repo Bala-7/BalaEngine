@@ -5,8 +5,10 @@ layout (location = 0) in vec3 position;
 uniform mat4 lightvp;
 uniform mat4 modelMatrix;
 
+//out vec4 fragPosition;
+
 void main()
 {
-	vec4 worldPos = modelMatrix * vec4(position, 1.0f);
-	gl_Position = lightvp * worldPos;
+	gl_Position = lightvp * modelMatrix * vec4(position, 1.0f);
+	//fragPosition = gl_Position;
 }
