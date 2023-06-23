@@ -31,6 +31,10 @@ struct Light {
 	bool isSpotLight;
 };
 
+#define MAX_LIGHTS_COUNT 10
+uniform Light sceneLights[MAX_LIGHTS_COUNT];
+uniform int activeLights;
+
 in vec3 Normal;  
 in vec2 TexCoord;
 in vec3 FragPos;
@@ -43,7 +47,6 @@ uniform vec3 viewPos;
 uniform sampler2D shadowMap;
 
 uniform Material material;
-uniform Light light; 
 
 // texture
 uniform sampler2D Texture;
@@ -73,24 +76,17 @@ float ShadowCalculation(vec4 fragPosLightSpace)
 	return shadow;
 }
 
-void main()
+vec3 LightCalculation(Light light, float shadow)
 {
-	// This is required by the editor texture to render objects with proper depth 
-	float fragmentDepth = gl_FragCoord.z / gl_FragCoord.w;
-	if (fragmentDepth < interpolatedDepth) {
-        // Fragment is behind, discard or do additional processing
-        discard;
-    }
-
 	// Attenuation by distance
 	float attenuation = 1.0;    
-
+	
 	if (light.isPointLight || light.isSpotLight)
 	{
 		float distance    = length(light.position - FragPos);
 		attenuation = 1.0 / (light.constant + light.linear * distance + light.quadratic * (distance * distance));    
 	}
-
+	
 	// Ambient light
     vec3 ambient = light.ambient * material.ambient * environmentColor * attenuation;
 	
@@ -110,14 +106,6 @@ void main()
 	float spec = pow(max(dot(viewDir, reflectDir), 0.0), material.shininess);
 	vec3 specular = light.specular * (material.specular * spec) * environmentColor * attenuation;  
 	
-	
-	// Shadows
-	float shadow = ShadowCalculation(FragPosLightSpace);
-	/*vec4 shadowCoords = vec4(FragPos.xyz / FragPos.w, 1.0f);
-	float shadowFactor = textureProj(shadowMap, shadowCoords);*/
-	
-	vec3 result = (ambient + shadow*(diffuse + specular)) * objectColor;
-    
 	if (light.isSpotLight)
 	{
 		float theta = dot(lightDir, normalize(-light.direction));
@@ -125,26 +113,38 @@ void main()
 		float intensity = clamp((theta - light.outerCutOff) / epsilon, 0.0, 1.0); 
 		if (theta < light.innerCutOff)
 		{
-			result = ambient * objectColor;
+			return ambient;
 		}
 		else
 		{
 			diffuse *= intensity;
 			specular *= intensity;
-			result = (ambient + diffuse + specular) * objectColor;
 		}
 	}
-	/*vec4 texColor = texture(Texture, shadowCoords.xy);
-	FragColor = vec4(result, 1.0) * texColor;*/
 	
-	/*if (shadow < 1.0)
-	{
-		FragColor = vec4(0.1, 1.0, 0.1, 1.0);
-	}
-	else
-	{
-		FragColor = vec4(result, 1.0) * texture(Texture, TexCoord);
-	}*/
+	vec3 result = (ambient + (shadow)*(diffuse + specular));
+	return result;
+}
+
+void main()
+{
+	// This is required by the editor texture to render objects with proper depth 
+	float fragmentDepth = gl_FragCoord.z / gl_FragCoord.w;
+	if (fragmentDepth < interpolatedDepth) {
+        // Fragment is behind, discard or do additional processing
+        discard;
+    }
 	
-	FragColor = vec4(result, 1.0) * texture(Texture, TexCoord);
+	
+	// Shadows
+	float shadow = ShadowCalculation(FragPosLightSpace);
+	
+	// Light calculations
+	vec3 result = LightCalculation(sceneLights[0], shadow);
+	for(int i = 1; i < activeLights; ++i)
+		result += LightCalculation(sceneLights[i], shadow);
+	
+	
+	result *= objectColor;
+    FragColor = vec4(result, 1.0) * texture(Texture, TexCoord);
 }

@@ -13,7 +13,7 @@ public:
 	SceneNode* GetRootNode();
 
 	void AddToSceneLights(Light* newLight);
-
+	std::vector<Light*> GetSceneLights() { return sceneLights; }
 private:
 	SceneNode* rootNode;
 	std::vector<Light*> sceneLights;

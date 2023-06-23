@@ -361,16 +361,20 @@ void CreateSceneGraph()
 		glm::vec3(0.0f, 0.0f, -1.0f),
 		glm::vec3(0.2f, 0.2f, 0.2f), glm::vec3(0.5f, 0.5f, 0.5f), glm::vec3(1.0f, 1.0f, 1.0f),
 		1.0f, 0.09f, 0.032f,
-		glm::cos(glm::radians(12.5f)), glm::cos(glm::radians(17.5f)));
-	/*light = new Light(Light::LightType::Point,
-		glm::vec3(0.0f, 0.0f, -1.0f),
-		glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f),
-		1.0f, 0.09f, 0.032f,
-		glm::cos(glm::radians(12.5f)), glm::cos(glm::radians(17.5f)));*/
-	lightGO->transform->scale = glm::vec3(0.2f, 0.2f, 0.2f);
-	lightGO->transform->rotation = glm::vec3(-90.0f, 0.0f, 0.0f);
-	//lightGO->AddComponent(lightModel);
+		12.5f, 17.5f);
+	lightGO->transform->position = glm::vec3(-3.0f, 1.0f, 0.0f);
 	lightGO->AddComponent(light);
+
+	// Second light
+	GameObject* lightGO2 = new GameObject("Point Light 2");
+	sceneGraph->GetRootNode()->AddChild(new SceneNode(lightGO2));
+	Light* light2 = new Light(Light::LightType::Point,
+		glm::vec3(0.0f, 0.0f, -1.0f),
+		glm::vec3(0.2f, 0.2f, 0.2f), glm::vec3(0.5f, 0.5f, 0.5f), glm::vec3(1.0f, 1.0f, 1.0f),
+		1.0f, 0.09f, 0.032f,
+		12.5f, 17.5f);
+	lightGO2->transform->position = glm::vec3(3.0f, 1.0f, 0.0f);
+	lightGO2->AddComponent(light2);
 
 	// 3D Model
 	GameObject* meshGO = new GameObject("Samus Model");

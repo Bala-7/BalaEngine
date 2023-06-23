@@ -8,7 +8,8 @@ public:
 	virtual void Update();
 	virtual void OnComponentAdded() = 0;
 	void SetGameObject(GameObject* _gameObject);
-	
+	GameObject* GetGameObject() { return gameObject; }
+
 	enum class ComponentType
 	{
 		TRANSFORM,

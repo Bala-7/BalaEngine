@@ -227,25 +227,32 @@ void MeshRenderer::SetupShaderForLightingPass()
 	shader->setVec3("material.specular", _material->specular);
 	shader->setFloat("material.shininess", _material->shininess);
 
-	glm::vec3 lightDirection = RenderEngine::GetInstance()->GetDirectionalLightDirection();
-	glm::vec3 lightPosition = glm::vec3(0.0f, 0.0f, 5.5f);
+	
 
-	shader->setVec3("light.direction", lightDirection);
-	shader->setVec3("light.position", lightPosition);
-	shader->setVec3("light.ambient", glm::vec3(0.2f, 0.2f, 0.2f));
-	shader->setVec3("light.diffuse", glm::vec3(0.5f, 0.5f, 0.5f)); // darken diffuse light a bit
-	shader->setVec3("light.specular", glm::vec3(1.0f, 1.0f, 1.0f));
+	std::vector<Light*> sceneLights = gameObject->GetNode()->GetScene()->GetSceneLights();
+	int lightCount = sceneLights.size();
+	shader->setInt("activeLights", lightCount);
+	for (int i = 0; i < lightCount; ++i)
+	{
+		std::string lightIndex = "sceneLights[" + std::to_string(i) + "]";
+		shader->setVec3(lightIndex + ".direction", sceneLights[i]->GetDirection());
+		shader->setVec3(lightIndex + ".position", sceneLights[i]->GetGameObject()->transform->position);
 
-	shader->setFloat("light.constant", 1.0f);
-	shader->setFloat("light.linear", 0.09f);
-	shader->setFloat("light.quadratic", 0.032f);
+		shader->setVec3(lightIndex + ".ambient", sceneLights[i]->GetAmbient());
+		shader->setVec3(lightIndex + ".diffuse", sceneLights[i]->GetDiffuse()); // darken diffuse light a bit
+		shader->setVec3(lightIndex + ".specular", sceneLights[i]->GetSpecular());
 
-	shader->setFloat("light.innerCutOff", glm::cos(glm::radians(12.5f)));
-	shader->setFloat("light.outerCutOff", glm::cos(glm::radians(17.5f)));
+		shader->setFloat(lightIndex + ".constant", sceneLights[i]->GetConstant());
+		shader->setFloat(lightIndex + ".linear", sceneLights[i]->GetLinear());
+		shader->setFloat(lightIndex + ".quadratic", sceneLights[i]->GetQuadratic());
 
-	shader->setBool("light.isDirectionalLight", true);
-	shader->setBool("light.isSpotLight", false);
-	shader->setBool("light.isPointLight", false);
+		shader->setFloat(lightIndex + ".innerCutOff", glm::cos(glm::radians(sceneLights[i]->GetInnerCutOff())));
+		shader->setFloat(lightIndex + ".outerCutOff", glm::cos(glm::radians(sceneLights[i]->GetOuterCutOff())));
+
+		shader->setBool(lightIndex + ".isDirectionalLight", sceneLights[i]->GetType() == Light::LightType::Directional);
+		shader->setBool(lightIndex + ".isSpotLight", sceneLights[i]->GetType() == Light::LightType::Spot);
+		shader->setBool(lightIndex + ".isPointLight", sceneLights[i]->GetType() == Light::LightType::Point);
+	}
 }
 
 
