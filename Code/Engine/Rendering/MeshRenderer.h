@@ -38,9 +38,9 @@ public:
 	void DrawInspector() override;
 
 	void DrawShadowPass();
-	void DrawLightingPass();
+	void DrawLightingPass(Camera* camera);
 	void draw();
-	void SetupShaderForLightingPass();
+	void SetupShaderForLightingPass(Camera* camera);
 	void SetupShaderForShadowPass();
 	void setPosition(glm::vec3 _position);
 	void setScale(glm::vec3 _scale);
@@ -68,7 +68,7 @@ private:
 	std::vector<Vertex>vertices;
 	std::vector<GLuint>indices;
 	glm::mat4 modelMatrix;
-	Camera* camera;
+	Camera* renderCamera;
 	glm::vec3 position, scale, rotation;
 	GLuint vao, vbo, ebo, texture, program, shadowsProgram;
 

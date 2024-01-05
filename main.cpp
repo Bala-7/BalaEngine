@@ -23,6 +23,7 @@
 #include "imgui_impl_glfw.h"
 #include "imgui_impl_opengl3.h"
 
+
 #ifdef _WIN32
 #include <Windows.h>
 #else
@@ -170,9 +171,9 @@ int main()
 			accumulator -= dt;
 			t += dt;
 		}
-		
-		renderEngine->RenderScene(sceneGraph);
-		
+
+		renderEngine->UseWindow(window);
+		renderEngine->RenderSceneView(sceneGraph);
 		editor->DrawEditorWindows();
 
 		/* Test for drawing shadowmap framebuffer onto a quad. */
@@ -196,6 +197,7 @@ int main()
 		renderEngine->SetEnvironmentLight(glm::vec3(editor->color[0], editor->color[1], editor->color[2]));
 		renderEngine->SetDirectionalLightDirection(editor->directionalLightDirection);
 		glfwSwapBuffers(window);
+
 	}
 
 	editor->Terminate();

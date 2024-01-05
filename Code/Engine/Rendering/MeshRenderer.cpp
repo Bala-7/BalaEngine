@@ -14,7 +14,7 @@ glm::mat4 MeshRenderer::lightViewProjectionMatrix;
 MeshRenderer::MeshRenderer(MeshType modelType) 
 {
 	componentType = ComponentType::MESH_RENDERER;
-	camera = RenderEngine::GetInstance()->GetCamera();
+	renderCamera = RenderEngine::GetInstance()->GetCamera();
 	scale = glm::vec3(1.0f, 1.0f, 1.0f);
 	position = glm::vec3(0.0, 0.0, 0.0);
 	_material = new Material();
@@ -67,7 +67,7 @@ MeshRenderer::MeshRenderer(MeshType modelType)
 MeshRenderer::MeshRenderer(std::vector<Vertex> _vertices, std::vector<GLuint> _indices)
 {
 	componentType = ComponentType::MESH_RENDERER;
-	camera = RenderEngine::GetInstance()->GetCamera();
+	renderCamera = RenderEngine::GetInstance()->GetCamera();
 	scale = glm::vec3(1.0f, 1.0f, 1.0f);
 	position = glm::vec3(0.0, 0.0, 0.0);
 	_material = new Material();
@@ -123,7 +123,7 @@ MeshRenderer::~MeshRenderer()
 
 void MeshRenderer::Update()
 {
-	SetupShaderForLightingPass();
+	SetupShaderForLightingPass(renderCamera);
 	draw();
 }
 
@@ -169,13 +169,13 @@ void MeshRenderer::SetupShaderForShadowPass()
 	glBindTexture(GL_TEXTURE_2D, shadowMapTexture);
 }
 
-void MeshRenderer::DrawLightingPass()
+void MeshRenderer::DrawLightingPass(Camera* camera)
 {
-	SetupShaderForLightingPass();
+	SetupShaderForLightingPass(camera);
 	draw();
 }
 
-void MeshRenderer::SetupShaderForLightingPass()
+void MeshRenderer::SetupShaderForLightingPass(Camera* camera)
 {
 	// Get position and scale from Transform component
 	setPosition(gameObject->transform->position);

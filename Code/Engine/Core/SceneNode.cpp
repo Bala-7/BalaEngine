@@ -50,14 +50,14 @@ void SceneNode::Update(float deltaTime)
 	}
 }
 
-void SceneNode::Draw()
+void SceneNode::Draw(Camera* camera)
 {
 	if (gameObject && gameObject->GetRenderComponent()) 
 	{
-		gameObject->GetRenderComponent()->draw();
+		gameObject->GetRenderComponent()->draw(camera);
 	}
 	for (SceneNode* child : children) {
-		child->Draw();
+		child->Draw(camera);
 	}
 }
 

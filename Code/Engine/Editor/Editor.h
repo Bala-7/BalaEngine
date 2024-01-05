@@ -24,6 +24,7 @@ public:
 	void Initialize();
 	void Terminate();
 	void DrawEditorWindows();
+	void DrawPlayWindow();
 
 	void SetDisplayedGameObject(GameObject* go);
 

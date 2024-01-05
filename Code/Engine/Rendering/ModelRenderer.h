@@ -18,7 +18,7 @@ public:
 	void OnComponentAdded() override;
 	void DrawInspector() override;
 
-	void draw();
+	void draw(Camera* camera);
 	void setPosition(glm::vec3 _position);
 	void DrawShadows();
 	void setScale(glm::vec3 _scale);

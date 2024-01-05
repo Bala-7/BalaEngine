@@ -8,7 +8,7 @@ public:
 	SceneGraph();
 	~SceneGraph();
 	void Update(float deltaTime);
-	void Draw();
+	void Draw(Camera* camera);
 	void DrawShadows();
 	SceneNode* GetRootNode();
 

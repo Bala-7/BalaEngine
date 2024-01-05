@@ -74,6 +74,8 @@ public:
 	bool ShouldClose();
 
 	GLFWwindow* GetWindow();
+	GLFWwindow* GetPlayWindow();
+	void UseWindow(GLFWwindow* window);
 	Camera* GetCamera();
 	GLuint GetTextureID(const char* fileName);
 	GLuint GetShaderProgram();
@@ -94,7 +96,6 @@ public:
 	void SetEnvironmentLight(glm::vec3 value);
 	void SetDirectionalLightDirection(glm::vec3 value);
 
-
 	void CreateFramebuffer();
 	void CreateShadowmapFramebuffer();
 	void BindFramebuffer();
@@ -107,7 +108,8 @@ public:
 	void OnMouseInput(GLFWwindow* window, int button, int action, int mods);
 	void OnCursorPositionInput(GLFWwindow* window, double xpos, double ypos);
 
-	void RenderScene(SceneGraph* scene);
+	void RenderSceneView(SceneGraph* scene);
+	void RenderPlayView(SceneGraph* scene);
 
 	// Shadows
 	GLuint GetDepthMapTexture() { return shadowMap->GetDepthMapTexture(); }
@@ -119,6 +121,10 @@ public:
 
 	void SetLightViewProjectionMatrix(glm::mat4 newMatrix) { lightViewProjectionMatrix = newMatrix; }
 
+
+	// Play Mode
+	void StartPlayMode();
+
 private:
 
 	static RenderEngine* p_Instance;
@@ -127,7 +133,8 @@ private:
 	void InitGLEW();
 	void InitGame();
 	GLFWwindow* CreateWindow();
-	
+	GLFWwindow* CreatePlayWindow();
+
 	void LoadFont(const char* path);
 	void LoadConfigFile();
 
@@ -142,12 +149,15 @@ private:
 	const int LAYER_MAX = 10;
 
 	GLFWwindow* window;
+	GLFWwindow* playWindow;
 
-	Camera* camera;
+	Camera* sceneViewCamera;
+	Camera* playViewCamera;
 
 	// Lighting
 	glm::vec3 environmentLight;
 	glm::vec3 directionalLightDirection;
+	float directionalLightIntensity;
 	
 	const char* TEXTURES_PATH = "Assets/Textures/";
 	TextureLoader textureLoader;

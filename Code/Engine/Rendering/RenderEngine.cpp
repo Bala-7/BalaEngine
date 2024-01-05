@@ -29,6 +29,7 @@ void RenderEngine::Initialize()
 
 	InitGLFW();
 	window = CreateWindow();
+	UseWindow(window);
 	InitGLEW();
 
 	InitGame();
@@ -76,7 +77,7 @@ void RenderEngine::Terminate()
 {
 	glfwTerminate();
 
-	delete camera;
+	delete sceneViewCamera;
 }
 
 bool RenderEngine::ShouldClose()
@@ -89,9 +90,19 @@ GLFWwindow* RenderEngine::GetWindow()
 	return window;
 }
 
+GLFWwindow* RenderEngine::GetPlayWindow()
+{
+	return playWindow;
+}
+
+void RenderEngine::UseWindow(GLFWwindow* window)
+{
+	glfwMakeContextCurrent(window);
+}
+
 Camera* RenderEngine::GetCamera()
 {
-	return camera;
+	return sceneViewCamera;
 }
 
 GLuint RenderEngine::GetTextureID(const char* fileName)
@@ -204,7 +215,7 @@ void RenderEngine::InitGame()
 
 	
 	//camera = new Camera(120, 1280, 720, 0.1f, 100.0f, glm::vec3(0.0f, 0.0f, 6.0f));
-	camera = new Camera(120, 854, 480, 0.1f, 100.0f, glm::vec3(0.0f, 0.0f, 6.0f));
+	sceneViewCamera = new Camera(120, 854, 480, 0.1f, 100.0f, glm::vec3(0.0f, 0.0f, 6.0f));
 	//glm::mat4 projection = glm::ortho(0.0f, (float) config.WINDOW_SIZE_X, (float) config.WINDOW_SIZE_Y, 0.0f, -1.0f, 1.0f);
 	ShaderLoader shaderLoader;
 	shaderProgram = shaderLoader.createProgram(config.VERTEX_SHADER_PATH.c_str(), config.FRAGMENT_SHADER_PATH.c_str());
@@ -224,10 +235,26 @@ GLFWwindow* RenderEngine::CreateWindow()
 		glfwTerminate();
 		return nullptr;
 	}
-	glfwMakeContextCurrent(window);
 	glViewport(0, 0, config.WINDOW_SIZE_X, config.WINDOW_SIZE_Y);
 
 	return window;
+}
+
+
+GLFWwindow* RenderEngine::CreatePlayWindow()
+{
+	// Set window hints
+	glfwWindowHint(GLFW_RESIZABLE, GLFW_TRUE);
+
+	GLFWwindow* playWindow = glfwCreateWindow(config.WINDOW_SIZE_X, config.WINDOW_SIZE_Y, "Game", nullptr, nullptr);
+	if (window == nullptr)
+	{
+		std::cout << "Failed to create GLFW window" << std::endl;
+		glfwTerminate();
+		return nullptr;
+	}
+	glViewport(0, 0, config.WINDOW_SIZE_X, config.WINDOW_SIZE_Y);
+	return playWindow;
 }
 
 void RenderEngine::LoadFont(const char* path)
@@ -409,7 +436,7 @@ void RenderEngine::RescaleFramebuffer(float width, float height)
 }
 
 
-void RenderEngine::RenderScene(SceneGraph* scene)
+void RenderEngine::RenderSceneView(SceneGraph* scene)
 {
 	// Shadow pass
 	CalculateLightViewMatrices();
@@ -420,7 +447,22 @@ void RenderEngine::RenderScene(SceneGraph* scene)
 
 	// Light pass
 	BindFramebuffer();
-	scene->Draw();
+	scene->Draw(sceneViewCamera);
+	UnbindFramebuffer();
+}
+
+void RenderEngine::RenderPlayView(SceneGraph* scene)
+{
+	// Shadow pass
+	CalculateLightViewMatrices();
+
+	shadowMap->Bind();
+	scene->DrawShadows();
+	shadowMap->Unbind();
+
+	// Light pass
+	BindFramebuffer();
+	scene->Draw(playViewCamera);
 	UnbindFramebuffer();
 }
 
@@ -437,3 +479,10 @@ void RenderEngine::CalculateLightViewMatrices()
 	glm::mat4 lightViewMatrix = glm::lookAt(lightTarget - directionalLightDirection, lightTarget, glm::vec3(0.0f, 1.0f, 0.0f));
 	lightViewProjectionMatrix = lightProjectionMatrix * lightViewMatrix;
 }
+
+void RenderEngine::StartPlayMode()
+{
+	playWindow = CreatePlayWindow();
+	//UseWindow(playWindow);
+}
+

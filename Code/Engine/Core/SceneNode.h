@@ -14,7 +14,7 @@ public:
 	void AddChild(SceneNode* child);
 	void RemoveChild(SceneNode* child);
 	void Update(float deltaTime);
-	void Draw();
+	void Draw(Camera* camera);
 	void DrawShadows();
 	void DrawEditorWindow(int level);
 

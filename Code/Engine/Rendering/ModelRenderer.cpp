@@ -14,7 +14,7 @@ ModelRenderer::~ModelRenderer()
 
 void ModelRenderer::Update()
 {
-	draw();
+	//draw();
 }
 
 void ModelRenderer::OnComponentAdded()
@@ -43,11 +43,11 @@ void ModelRenderer::DrawInspector()
 	
 }
 
-void ModelRenderer::draw()
+void ModelRenderer::draw(Camera* camera)
 {
 	for (auto it = begin(_meshes); it != end(_meshes); ++it) 
 	{
-		it->DrawLightingPass();
+		it->DrawLightingPass(camera);
 	}
 }
 

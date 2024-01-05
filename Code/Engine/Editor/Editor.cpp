@@ -53,6 +53,13 @@ void Editor::DrawEditorWindows()
 		ImGui::EndMainMenuBar();
 	}
 
+	ImGui::Begin("Play Menu");
+	if (ImGui::Button("Play", ImVec2(65, 20))) {
+		// Handle the 'Play' button click event here
+		RenderEngine::GetInstance()->StartPlayMode();
+	}
+	ImGui::End();
+
 	ImGui::Begin("GameObject Inspector");
 	ImGui::Text("Edit object parameters");
 	ImGui::Checkbox("Auto rotate", &autoRotate);
@@ -99,6 +106,9 @@ void Editor::DrawEditorWindows()
 	
 	DrawSceneViewWindow();
 	DrawShadowMapWindow();
+
+	DrawPlayWindow();
+
 	DrawConsoleWindow();
 	ImGui::Render();
 	
@@ -324,6 +334,54 @@ void Editor::DrawSceneViewWindow()
 	
 
 
+}
+
+void Editor::DrawPlayWindow()
+{
+	int subViewportWidth = 854;
+	int subViewportHeight = 480;
+	int subViewportX = 100;
+	int subViewportY = 100;
+
+	// ImGui code for Editor window
+	ImGui::Begin("Play", nullptr, ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize);
+	// Other ImGui content...
+	const ImVec2 windowPos = ImGui::GetWindowPos();
+	const ImVec2 windowSize = ImGui::GetWindowSize();
+
+	mouseOverSceneView = IsMouseOverWindow(windowPos, windowSize);
+
+	// Render the sub-viewport content within the ImGui frame
+	ImGui::BeginChild("SubViewport", ImVec2(subViewportWidth, subViewportHeight), true);
+	{
+		// we access the ImGui window size
+		const float window_width = ImGui::GetContentRegionAvail().x;
+		const float window_height = ImGui::GetContentRegionAvail().y;
+
+		// we get the screen position of the window
+		ImVec2 pos = ImGui::GetCursorScreenPos();
+
+		// we rescale the framebuffer to the actual window size here and reset the glViewport 
+		//RenderEngine::GetInstance()->RescaleFramebuffer(window_width, window_height);
+		int fullWindowWidth, fullWindowHeight;
+		glfwGetWindowSize(RenderEngine::GetInstance()->GetWindow(), &fullWindowWidth, &fullWindowHeight);
+		//glViewport(pos.x, fullWindowHeight -pos.y-window_height, window_width, window_height);
+		glViewport(pos.x - 300, pos.y - 100, window_width, window_height);
+
+		// and here we can add our created texture as image to ImGui
+		// unfortunately we need to use the cast to void* or I didn't find another way tbh
+		ImGui::GetWindowDrawList()->AddImage(
+			(void*)RenderEngine::GetInstance()->GetFrameBufferTexture(),
+			ImVec2(pos.x, pos.y),
+			ImVec2(pos.x + window_width, pos.y + window_height),
+			ImVec2(0, 1),
+			ImVec2(1, 0)
+		);
+	}
+	ImGui::EndChild();
+
+	ImGui::End();
+	//DrawSceneViewWindow();
 }
 
 void Editor::DrawShadowMapWindow()

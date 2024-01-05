@@ -23,9 +23,9 @@ void SceneGraph::Update(float deltaTime)
 	rootNode->Update(deltaTime);
 }
 
-void SceneGraph::Draw()
+void SceneGraph::Draw(Camera* camera)
 {
-	rootNode->Draw();
+	rootNode->Draw(camera);
 }
 
 void SceneGraph::DrawShadows()
