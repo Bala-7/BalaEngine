@@ -122,6 +122,11 @@ GLuint RenderEngine::GetShadowShaderProgram()
 	return shadowShaderProgram;
 }
 
+GLuint RenderEngine::GetCubeMapShadowShaderProgram()
+{
+	return shadowCubeMapShaderProgram;
+}
+
 GLuint RenderEngine::GetTextShaderProgram()
 {
 	return textShaderProgram;
@@ -220,6 +225,7 @@ void RenderEngine::InitGame()
 	ShaderLoader shaderLoader;
 	shaderProgram = shaderLoader.createProgram(config.VERTEX_SHADER_PATH.c_str(), config.FRAGMENT_SHADER_PATH.c_str());
 	shadowShaderProgram = shaderLoader.createProgram(config.VERTEX_SHADER_SHADOW_PATH.c_str(), config.FRAGMENT_SHADER_SHADOW_PATH.c_str());
+	shadowCubeMapShaderProgram = shaderLoader.createProgram(config.VERTEX_SHADER_CM_SHADOW_PATH.c_str(), config.FRAGMENT_SHADER_CM_SHADOW_PATH.c_str(), config.GEOMETRY_SHADER_CM_SHADOW_PATH.c_str());
 	textShaderProgram = shaderLoader.createProgram(config.VERTEX_SHADER_TEXT_PATH.c_str(), config.FRAGMENT_SHADER_TEXT_PATH.c_str());
 }
 
@@ -368,6 +374,11 @@ void RenderEngine::InitializeConfigValues()
 	config.VERTEX_SHADER_SHADOW_PATH = config.configValues["VERTEX_SHADER_SHADOWS_PATH"];
 	config.FRAGMENT_SHADER_SHADOW_PATH = config.configValues["FRAGMENT_SHADER_SHADOWS_PATH"];
 
+	config.VERTEX_SHADER_CM_SHADOW_PATH = config.configValues["VERTEX_SHADER_CM_SHADOWS_PATH"];
+	config.FRAGMENT_SHADER_CM_SHADOW_PATH = config.configValues["FRAGMENT_SHADER_CM_SHADOWS_PATH"];
+	config.GEOMETRY_SHADER_CM_SHADOW_PATH = config.configValues["GEOMETRY_SHADER_CM_SHADOWS_PATH"];
+
+
 	config.VERTEX_SHADER_TEXT_PATH = config.configValues["VERTEX_SHADER_TEXT_PATH"];
 	config.FRAGMENT_SHADER_TEXT_PATH = config.configValues["FRAGMENT_SHADER_TEXT_PATH"];
 }
@@ -376,6 +387,9 @@ void RenderEngine::CreateShadowmapFramebuffer()
 {
 	shadowMap = new ShadowMapFBO();
 	shadowMap->Init();
+
+	shadowCubeMap = new ShadowCubeMapFBO();
+	shadowCubeMap->Init();
 }
 
 void RenderEngine::CreateFramebuffer()
@@ -441,9 +455,16 @@ void RenderEngine::RenderSceneView(SceneGraph* scene)
 	// Shadow pass
 	CalculateLightViewMatrices();
 
+	// Shadow map for directional light
 	shadowMap->Bind();
 	scene->DrawShadows();
 	shadowMap->Unbind();
+
+	// Shadow cubemap for point light
+	/*shadowCubeMap->Bind();
+	scene->DrawShadows();
+	shadowCubeMap->Unbind();*/
+
 
 	// Light pass
 	BindFramebuffer();
@@ -451,6 +472,7 @@ void RenderEngine::RenderSceneView(SceneGraph* scene)
 	UnbindFramebuffer();
 }
 
+// @TODO: Make the play view to be in a separate window
 void RenderEngine::RenderPlayView(SceneGraph* scene)
 {
 	// Shadow pass

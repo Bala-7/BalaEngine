@@ -166,6 +166,7 @@ MeshRenderer ModelRenderer::processMesh(aiMesh* mesh, const aiScene* scene)
 		_mesh->setTexture(RenderEngine::GetInstance()->GetTextureID("Concrete.jpg"));
 	_mesh->setProgram(RenderEngine::GetInstance()->GetShaderProgram());
 	_mesh->setShadowsProgram(RenderEngine::GetInstance()->GetShadowShaderProgram());
+	_mesh->setCubeMapShadowsProgram(RenderEngine::GetInstance()->GetCubeMapShadowShaderProgram());
 	_mesh->shader->setVec3("objectColor", glm::vec3(1.0f, 1.0f, 1.0f));
 	_mesh->shader->setVec3("lightColor", glm::vec3(1.0f, 1.0f, 1.0f));
 

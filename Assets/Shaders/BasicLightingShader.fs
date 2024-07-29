@@ -44,9 +44,12 @@ in float interpolatedDepth;
 uniform vec3 objectColor;
 uniform vec3 environmentColor;
 uniform vec3 viewPos; 
-uniform sampler2D shadowMap;
+uniform sampler2D directionalLightShadowMap;
 
 uniform Material material;
+
+uniform float pointLightsFarPlane;
+in vec4 FragPosCubeMap;
 
 // texture
 uniform sampler2D Texture;
@@ -58,7 +61,7 @@ float ShadowCalculation(vec4 fragPosLightSpace)
 	// perform perspective divide
 	vec3 projCoords = (fragPosLightSpace.xyz / fragPosLightSpace.w) * 0.5 + 0.5;
 
-	float closestDepth = texture(shadowMap, projCoords.xy).r;
+	float closestDepth = texture(directionalLightShadowMap, projCoords.xy).r;
 	float currentDepth = projCoords.z;
 	
 	float bias = 0.005;
@@ -138,6 +141,7 @@ void main()
 	
 	// Shadows
 	float shadow = ShadowCalculation(FragPosLightSpace);
+	
 	
 	// Light calculations
 	vec3 result = LightCalculation(sceneLights[0], shadow);

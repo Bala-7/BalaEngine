@@ -160,7 +160,10 @@
       <Filter>Archivos de origen\Editor\imgui</Filter>
     </ClCompile>
     <ClCompile Include="Code\Engine\Rendering\ShadowMapFBO.cpp">
-      <Filter>Archivos de origen</Filter>
+      <Filter>Archivos de origen\Engine\Rendering</Filter>
+    </ClCompile>
+    <ClCompile Include="Code\Engine\Rendering\ShadowCubeMapFBO.cpp">
+      <Filter>Archivos de origen\Engine\Rendering</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -270,7 +273,10 @@
       <Filter>Archivos de encabezado\Editor\imgui</Filter>
     </ClInclude>
     <ClInclude Include="Code\Engine\Rendering\ShadowMapFBO.h">
-      <Filter>Archivos de encabezado</Filter>
+      <Filter>Archivos de encabezado\Engine\Rendering</Filter>
+    </ClInclude>
+    <ClInclude Include="Code\Engine\Rendering\ShadowCubeMapFBO.h">
+      <Filter>Archivos de encabezado\Engine\Rendering</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

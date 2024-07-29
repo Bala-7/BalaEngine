@@ -41,12 +41,14 @@ public:
 	void DrawLightingPass(Camera* camera);
 	void draw();
 	void SetupShaderForLightingPass(Camera* camera);
-	void SetupShaderForShadowPass();
+	void SetupShaderFor2DShadowPass();
+	void SetupShaderForCubeMapShadowPass();
 	void setPosition(glm::vec3 _position);
 	void setScale(glm::vec3 _scale);
 	void setRotation(glm::vec3 _rotation);
 	void setProgram(GLuint _program);
 	void setShadowsProgram(GLuint _program);
+	void setCubeMapShadowsProgram(GLuint _program);
 	void setTexture(GLuint _textureID);
 	void setLight(Light light);
 	void setModel(std::string path);
@@ -57,6 +59,7 @@ public:
 
 	Shader* shader;
 	Shader* shadowShader;
+	Shader* cubeMapShadowShader;
 	
 	// TEMP : Shadow mapping
 	static glm::mat4 lightViewProjectionMatrix;
@@ -70,7 +73,7 @@ private:
 	glm::mat4 modelMatrix;
 	Camera* renderCamera;
 	glm::vec3 position, scale, rotation;
-	GLuint vao, vbo, ebo, texture, program, shadowsProgram;
+	GLuint vao, vbo, ebo, texture, program, shadowsProgram, cubeMapShadowsProgram;
 
 	// Model loading
 	std::string directory;

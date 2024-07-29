@@ -137,12 +137,16 @@ void MeshRenderer::OnComponentAdded()
 
 void MeshRenderer::DrawShadowPass()
 {
-	SetupShaderForShadowPass();
+	SetupShaderFor2DShadowPass();
 	draw();
+
+	/*SetupShaderForCubeMapShadowPass();
+	draw();*/
 }
 
-void MeshRenderer::SetupShaderForShadowPass()
+void MeshRenderer::SetupShaderFor2DShadowPass()
 {	
+	// OPTION 1: Shadow pass for directional light
 	// Get position and scale from Transform component
 	setPosition(gameObject->transform->position);
 	setScale(gameObject->transform->scale);
@@ -165,9 +169,48 @@ void MeshRenderer::SetupShaderForShadowPass()
 	shadowShader->setMat4("modelMatrix", modelMatrix);
 
 	glActiveTexture(GL_TEXTURE1);
-	GLuint shadowMapTexture = RenderEngine::GetInstance()->GetDepthMapTexture();
+	GLuint shadowMapTexture = RenderEngine::GetInstance()->GetDepthMapTexture(); // Uncomment this to do shadow mapping with directional light
 	glBindTexture(GL_TEXTURE_2D, shadowMapTexture);
 }
+
+void MeshRenderer::SetupShaderForCubeMapShadowPass()
+{
+	// Get position and scale from Transform component
+	setPosition(gameObject->transform->position);
+	setScale(gameObject->transform->scale);
+	setRotation(gameObject->transform->rotation);
+
+	glUseProgram(cubeMapShadowShader->ID);
+	GLfloat aspect = (GLfloat)1024 / (GLfloat)1024;
+	GLfloat near = 1.0f;
+	GLfloat far = 25.0f;
+	glm::mat4 shadowProj = glm::perspective(90.0f, aspect, near, far);
+
+	glm::vec3 lightPos = glm::vec3(0.0, 0.0, 1.0);
+	std::vector<glm::mat4> shadowTransforms;
+	shadowTransforms.push_back(shadowProj *
+		glm::lookAt(lightPos, lightPos + glm::vec3(1.0, 0.0, 0.0),
+			glm::vec3(0.0, -1.0, 0.0)));
+	shadowTransforms.push_back(shadowProj *
+		glm::lookAt(lightPos, lightPos + glm::vec3(-1.0, 0.0, 0.0),
+			glm::vec3(0.0, -1.0, 0.0)));
+	shadowTransforms.push_back(shadowProj *
+		glm::lookAt(lightPos, lightPos + glm::vec3(0.0, 1.0, 0.0),
+			glm::vec3(0.0, 0.0, 1.0)));
+	shadowTransforms.push_back(shadowProj *
+		glm::lookAt(lightPos, lightPos + glm::vec3(0.0, -1.0, 0.0),
+			glm::vec3(0.0, 0.0, -1.0)));
+	shadowTransforms.push_back(shadowProj *
+		glm::lookAt(lightPos, lightPos + glm::vec3(0.0, 0.0, 1.0),
+			glm::vec3(0.0, -1.0, 0.0)));
+	shadowTransforms.push_back(shadowProj *
+		glm::lookAt(lightPos, lightPos + glm::vec3(0.0, 0.0, -1.0),
+			glm::vec3(0.0, -1.0, 0.0)));
+
+	GLuint shadowMapTexture = RenderEngine::GetInstance()->GetDepthCubeMapTexture();  // Uncomment this to do shadow cubemapping with point light
+	glBindTexture(GL_TEXTURE_CUBE_MAP, shadowMapTexture);
+}
+
 
 void MeshRenderer::DrawLightingPass(Camera* camera)
 {
@@ -198,7 +241,7 @@ void MeshRenderer::SetupShaderForLightingPass(Camera* camera)
 	// Send the data to the shader program
 	glUseProgram(this->program);
 	
-	shader->setMat4("lightSpaceMatrix", lightViewProjectionMatrix);
+	shader->setMat4("directionalLightSpaceMatrix", lightViewProjectionMatrix);
 	shader->setMat4("vp", vp);
 	shader->setMat4("model", modelMatrix);
 	
@@ -220,7 +263,7 @@ void MeshRenderer::SetupShaderForLightingPass(Camera* camera)
 	glBindTexture(GL_TEXTURE_2D, shadowMapTexture);
 
 	shader->setInt("Texture", 0);
-	shader->setInt("shadowMap", 1);
+	shader->setInt("directionalLightShadowMap", 1);
 
 	shader->setVec3("material.ambient", _material->ambient);
 	shader->setVec3("material.diffuse", _material->diffuse);
@@ -308,6 +351,12 @@ void MeshRenderer::setShadowsProgram(GLuint _program)
 {
 	this->shadowsProgram = _program;
 	shadowShader = new Shader(_program);
+}
+
+void MeshRenderer::setCubeMapShadowsProgram(GLuint _program)
+{
+	this->cubeMapShadowsProgram = _program;
+	cubeMapShadowShader = new Shader(_program);
 }
 
 // /*MODEL LOADING 

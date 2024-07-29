@@ -23,6 +23,7 @@
 #include "Engine/Rendering/UITextRenderer.h"
 #include "Engine/Core/SceneGraph.h"
 #include "Engine/Rendering/ShadowMapFBO.h"
+#include "Engine/Rendering/ShadowCubeMapFBO.h"
 
 class RenderEngine
 {
@@ -45,6 +46,10 @@ public:
 
 		std::string VERTEX_SHADER_SHADOW_PATH;
 		std::string FRAGMENT_SHADER_SHADOW_PATH;
+
+		std::string VERTEX_SHADER_CM_SHADOW_PATH;
+		std::string FRAGMENT_SHADER_CM_SHADOW_PATH;
+		std::string GEOMETRY_SHADER_CM_SHADOW_PATH;
 	};
 
 	struct Character {
@@ -80,6 +85,7 @@ public:
 	GLuint GetTextureID(const char* fileName);
 	GLuint GetShaderProgram();
 	GLuint GetShadowShaderProgram();
+	GLuint GetCubeMapShadowShaderProgram();
 	GLuint GetTextShaderProgram();
 	std::map<char, Character> GetCharacterList();
 	void AddSpriteToRenderList(SpriteRenderer* spriteRenderer);
@@ -114,6 +120,8 @@ public:
 	// Shadows
 	GLuint GetDepthMapTexture() { return shadowMap->GetDepthMapTexture(); }
 	GLuint GetDepthMapFBO() { return shadowMap->GetDepthMapFBO(); }
+	GLuint GetDepthCubeMapTexture() { return shadowCubeMap->GetDepthMapTexture(); }
+	GLuint GetDepthCubeMapFBO() { return shadowCubeMap->GetDepthMapFBO(); }
 	glm::mat4 GetLightProjectionMatrix() { return lightProjectionMatrix; }
 	glm::mat4 GetLightViewMatrix() { return lightViewMatrix; }
 	glm::mat4 GetLightViewProjectionMatrix() { return lightViewProjectionMatrix; }
@@ -190,7 +198,9 @@ private:
 	// Shadows
 	ShadowMapFBO* shadowMap;
 	GLuint shadowShaderProgram;
-	
+	ShadowCubeMapFBO* shadowCubeMap;
+	GLuint shadowCubeMapShaderProgram;
+
 	glm::mat4 lightProjectionMatrix;
 	glm::mat4 lightViewMatrix;
 	glm::mat4 lightViewProjectionMatrix;

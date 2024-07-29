@@ -11,5 +11,10 @@ FRAGMENT_SHADER_PATH = Assets/Shaders/BasicLightingShader.fs
 VERTEX_SHADER_SHADOWS_PATH = Assets/Shaders/SimpleDepthShader.vs
 FRAGMENT_SHADER_SHADOWS_PATH = Assets/Shaders/SimpleDepthShader.fs
 
+VERTEX_SHADER_CM_SHADOWS_PATH = Assets/Shaders/CubeMapDepthShader.vs
+FRAGMENT_SHADER_CM_SHADOWS_PATH = Assets/Shaders/CubeMapDepthShader.fs
+GEOMETRY_SHADER_CM_SHADOWS_PATH = Assets/Shaders/CubeMapDepthShader.gs
+
+
 VERTEX_SHADER_TEXT_PATH = Assets/Shaders/text.vs
 FRAGMENT_SHADER_TEXT_PATH = Assets/Shaders/text.fs

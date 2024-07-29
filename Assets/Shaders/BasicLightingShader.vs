@@ -6,7 +6,7 @@ layout (location = 2) in vec2 texCoord;
 
 uniform mat4 vp;
 uniform mat4 model;
-uniform mat4 lightSpaceMatrix;
+uniform mat4 directionalLightSpaceMatrix;
 
 out vec3 Normal;
 out vec2 TexCoord;
@@ -23,5 +23,5 @@ void main()
 	Normal = mat3(transpose(inverse(model))) * aNormal;
 	
 	interpolatedDepth = gl_Position.z / gl_Position.w;
-	FragPosLightSpace = lightSpaceMatrix * vec4(FragPos, 1.0);
+	FragPosLightSpace = directionalLightSpaceMatrix * vec4(FragPos, 1.0);
 }
