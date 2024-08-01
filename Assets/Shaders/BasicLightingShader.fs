@@ -40,11 +40,17 @@ in vec2 TexCoord;
 in vec3 FragPos;
 in vec4 FragPosLightSpace;  
 in float interpolatedDepth;
+
+uniform vec3 lightPos;
+uniform float far_plane;
   
 uniform vec3 objectColor;
 uniform vec3 environmentColor;
 uniform vec3 viewPos; 
 uniform sampler2D directionalLightShadowMap;
+uniform samplerCube pointLightShadowCubeMap;
+
+uniform int debugMode;
 
 uniform Material material;
 
@@ -55,6 +61,26 @@ in vec4 FragPosCubeMap;
 uniform sampler2D Texture;
  
 out vec4 FragColor;
+
+float PointLightShadowCalculation()
+{
+	// Get vector between fragment position and light position
+	vec3 fragToLight = FragPos - lightPos;
+	
+	// Use the light to fragment vector to sample from the depth map
+	float closestDepth = texture(pointLightShadowCubeMap, fragToLight).r;
+	
+	// It is currently in linear range between [0,1]. Re-transform back to original value
+	closestDepth *= far_plane;
+	
+	// Now get current linear depth as the length between the fragment and light position
+	float currentDepth = length(fragToLight);
+	
+	// Now test for shadows
+	float bias = 0.05;
+	float shadow = currentDepth - bias > closestDepth ? 1.0 : 0.0;
+	return shadow;
+}
 
 float ShadowCalculation(vec4 fragPosLightSpace)
 {
@@ -79,7 +105,7 @@ float ShadowCalculation(vec4 fragPosLightSpace)
 	return shadow;
 }
 
-vec3 LightCalculation(Light light, float shadow)
+vec3 LightCalculation(Light light, float shadow, float pointShadow)
 {
 	// Attenuation by distance
 	float attenuation = 1.0;    
@@ -90,8 +116,15 @@ vec3 LightCalculation(Light light, float shadow)
 		attenuation = 1.0 / (light.constant + light.linear * distance + light.quadratic * (distance * distance));    
 	}
 	
+
+	
 	// Ambient light
     vec3 ambient = light.ambient * material.ambient * environmentColor * attenuation;
+	
+	if(pointShadow != 0)
+	{
+		ambient = light.ambient * vec3(1.0, 0.0, 0.0) * environmentColor * attenuation; 
+	}
 	
 	// Diffuse light
 	vec3 norm = normalize(Normal);
@@ -142,11 +175,12 @@ void main()
 	// Shadows
 	float shadow = ShadowCalculation(FragPosLightSpace);
 	
+	float pointLightShadow = PointLightShadowCalculation();
 	
 	// Light calculations
-	vec3 result = LightCalculation(sceneLights[0], shadow);
+	vec3 result = LightCalculation(sceneLights[0], shadow, pointLightShadow);
 	for(int i = 1; i < activeLights; ++i)
-		result += LightCalculation(sceneLights[i], shadow);
+		result += LightCalculation(sceneLights[i], shadow, pointLightShadow);
 	
 	
 	result *= objectColor;

@@ -106,6 +106,7 @@ void Editor::DrawEditorWindows()
 	
 	DrawSceneViewWindow();
 	DrawShadowMapWindow();
+	DrawShadowCubeMapWindow();
 
 	DrawPlayWindow();
 
@@ -435,6 +436,95 @@ void Editor::DrawShadowMapWindow()
 	ImGui::EndChild();
 
 	ImGui::End();
+}
+
+void Editor::DrawShadowCubeMapWindow()
+{
+	/*int scale = 2 / 3;
+	int subViewportWidth = 1024 * scale;
+	int subViewportHeight = 1024 * scale;
+	int subViewportX = 100;
+	int subViewportY = 100;
+
+
+	ImGui::Begin("Shadow Cubemap View", nullptr, ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize);
+
+	const ImVec2 windowPos = ImGui::GetWindowPos();
+	const ImVec2 windowSize = ImGui::GetWindowSize();
+
+	mouseOverSceneView = IsMouseOverWindow(windowPos, windowSize);
+
+	// Render the sub-viewport content within the ImGui frame
+	ImGui::BeginChild("ShadowcubemapSubViewport", ImVec2(subViewportWidth, subViewportHeight), true);
+	{
+		// we access the ImGui window size
+		const float window_width = ImGui::GetContentRegionAvail().x;
+		const float window_height = ImGui::GetContentRegionAvail().y;
+
+		ImTextureID texId = reinterpret_cast<ImTextureID>(static_cast<uintptr_t>(RenderEngine::GetInstance()->GetDepthCubeMapTexture()));
+		ImGui::Image(texId, windowSize,
+			ImVec2(0, 1),
+			ImVec2(1, 0));
+
+		// we get the screen position of the window
+		ImVec2 pos = ImGui::GetCursorScreenPos();
+
+		// we rescale the framebuffer to the actual window size here and reset the glViewport 
+		//RenderEngine::GetInstance()->RescaleDepthFramebuffer(window_width, window_height);
+		int fullWindowWidth, fullWindowHeight;
+		glfwGetWindowSize(RenderEngine::GetInstance()->GetWindow(), &fullWindowWidth, &fullWindowHeight);
+		//glViewport(pos.x, fullWindowHeight -pos.y-window_height, window_width, window_height);
+		glViewport(pos.x - 300, pos.y - 100, window_width, window_height);
+
+		// Unfold cubemap texture onto a 2D texture that we create here
+		// Assumes each cubemap face is 'n x n'
+		const int faceSize = 1024;
+
+		GLuint unfoldedTexture, fbo;
+		glGenTextures(1, &unfoldedTexture);
+		glBindTexture(GL_TEXTURE_2D, unfoldedTexture);
+		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, faceSize * 6, faceSize, 0, GL_RGB, GL_UNSIGNED_BYTE, nullptr);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+		glBindTexture(GL_TEXTURE_2D, 0);
+
+		GLuint cubemapTexture = RenderEngine::GetInstance()->GetDepthCubeMapTexture();
+		glBindTexture(GL_TEXTURE_CUBE_MAP, cubemapTexture);
+
+		// Create the framebuffer
+		glGenFramebuffers(1, &fbo);
+
+		// Bind the framebuffer
+		glBindFramebuffer(GL_FRAMEBUFFER, fbo);
+
+		for (int i = 0; i < 6; ++i) {
+			glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, unfoldedTexture, 0);
+			glViewport(faceSize * i, 0, faceSize, faceSize);
+			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+			glBindFramebuffer(GL_FRAMEBUFFER, fbo);
+
+			glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, cubemapTexture, 0);
+
+			// Render a quad that fills the entire framebuffer
+			//glBindVertexArray(screenQuadVAO);
+			glDrawArrays(GL_TRIANGLES, 0, 6);
+		}
+
+		// and here we can add our created texture as image to ImGui
+		// unfortunately we need to use the cast to void* or I didn't find another way tbh
+		ImGui::GetWindowDrawList()->AddImage(
+			(void*) unfoldedTexture,
+			ImVec2(pos.x, pos.y),
+			ImVec2(pos.x + window_width, pos.y + window_height),
+			ImVec2(0, 1),
+			ImVec2(1, 0)
+		);
+	}
+	ImGui::EndChild();
+
+	ImGui::End();*/
 }
 
 int Editor::HandleInputText(ImGuiInputTextCallbackData* data)

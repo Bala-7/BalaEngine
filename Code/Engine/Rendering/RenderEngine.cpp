@@ -455,15 +455,10 @@ void RenderEngine::RenderSceneView(SceneGraph* scene)
 	// Shadow pass
 	CalculateLightViewMatrices();
 
-	// Shadow map for directional light
+	// Shadow map
 	shadowMap->Bind();
 	scene->DrawShadows();
 	shadowMap->Unbind();
-
-	// Shadow cubemap for point light
-	/*shadowCubeMap->Bind();
-	scene->DrawShadows();
-	shadowCubeMap->Unbind();*/
 
 
 	// Light pass

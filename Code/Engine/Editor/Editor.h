@@ -53,6 +53,7 @@ private:
 	void DrawConsoleWindow();
 	void DrawSceneViewWindow();
 	void DrawShadowMapWindow();
+	void DrawShadowCubeMapWindow();
 
 	bool IsMouseOverWindow(const ImVec2& windowPos, const ImVec2& windowSize);
 

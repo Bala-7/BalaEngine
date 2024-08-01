@@ -84,14 +84,14 @@ GLuint ShaderLoader::createProgram(const char* vertexShaderFilename, const char*
 	std::string geometry_shader_code = readShader(geometryShaderFilename);
 	GLuint vertex_shader = createShader(GL_VERTEX_SHADER, vertex_shader_code, "vertex shader");
 	GLuint fragment_shader = createShader(GL_FRAGMENT_SHADER, fragment_shader_code, "fragment shader");
-	GLuint geometry_shader = createShader(GL_GEOMETRY_SHADER, fragment_shader_code, "geometry shader");
+	GLuint geometry_shader = createShader(GL_GEOMETRY_SHADER, geometry_shader_code, "geometry shader");
 	int link_result = 0;
 
 	//create the program handle, attach the shaders and link it
 	GLuint program = glCreateProgram();
 	glAttachShader(program, vertex_shader);
-	glAttachShader(program, fragment_shader);
 	glAttachShader(program, geometry_shader);
+	glAttachShader(program, fragment_shader);
 	glLinkProgram(program);
 	glGetProgramiv(program, GL_LINK_STATUS, &link_result);
 
