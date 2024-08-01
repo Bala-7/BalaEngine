@@ -121,6 +121,7 @@ public:
 	GLuint GetDepthMapTexture() { return shadowMap->GetDepthMapTexture(); }
 	GLuint GetDepthMapFBO() { return shadowMap->GetDepthMapFBO(); }
 	GLuint GetDepthCubeMapTexture() { return shadowCubeMap->GetDepthMapTexture(); }
+	GLuint GetDepthCubeMapTextureUnfolded() { return shadowCubeMap->GetDepthMapTextureUnfolded(); }
 	GLuint GetDepthCubeMapFBO() { return shadowCubeMap->GetDepthMapFBO(); }
 	glm::mat4 GetLightProjectionMatrix() { return lightProjectionMatrix; }
 	glm::mat4 GetLightViewMatrix() { return lightViewMatrix; }
@@ -200,6 +201,8 @@ private:
 	GLuint shadowShaderProgram;
 	ShadowCubeMapFBO* shadowCubeMap;
 	GLuint shadowCubeMapShaderProgram;
+
+
 
 	glm::mat4 lightProjectionMatrix;
 	glm::mat4 lightViewMatrix;

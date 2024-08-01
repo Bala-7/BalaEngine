@@ -465,6 +465,8 @@ void RenderEngine::RenderSceneView(SceneGraph* scene)
 	BindFramebuffer();
 	scene->Draw(sceneViewCamera);
 	UnbindFramebuffer();
+
+	shadowCubeMap->RenderCubemapFaceToTexture();
 }
 
 // @TODO: Make the play view to be in a separate window

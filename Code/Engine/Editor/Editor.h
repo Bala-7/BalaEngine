@@ -45,6 +45,7 @@ protected:
 private:
 	GameObject* _displayedGameObject;
 	bool mouseOverSceneView;
+	
 
 	void DrawInspector();
 

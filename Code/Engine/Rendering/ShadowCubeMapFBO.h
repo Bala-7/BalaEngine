@@ -13,11 +13,15 @@ public:
 	void Bind();
 	void Unbind();
 	GLuint GetDepthMapTexture();
+	GLuint GetDepthMapTextureUnfolded();
 	GLuint GetDepthMapFBO();
+
+	void RenderCubemapFaceToTexture();
 
 private:
 	GLuint shadowCubeMapFBO;
 	GLuint shadowCubeMapTexture;
+	GLuint unfoldedShadowCubeMapTexture;
 	const GLuint SHADOW_WIDTH = 128, SHADOW_HEIGHT = 128;
 
 	glm::mat4 lightSpaceMatrix;
