@@ -460,6 +460,10 @@ void RenderEngine::RenderSceneView(SceneGraph* scene)
 	scene->DrawShadows();
 	shadowMap->Unbind();
 
+	shadowCubeMap->Bind();
+	scene->DrawCubemapShadows();
+	shadowCubeMap->Unbind();
+
 
 	// Light pass
 	BindFramebuffer();

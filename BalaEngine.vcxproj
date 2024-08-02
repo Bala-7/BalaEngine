@@ -145,7 +145,9 @@
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
-  <PropertyGroup />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <LinkIncremental>true</LinkIncremental>
+  </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
@@ -169,7 +171,7 @@
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
-      <AdditionalLibraryDirectories>$(ProjectDir)Dependencies\glfw-3.3.2.bin.WIN64\include\;$(ProjectDir)Dependencies\glew-2.1.0\include\;$(ProjectDir)Dependencies\glfw-3.3.2.bin.WIN64\lib-vc2019;$(ProjectDir)Dependencies\glew-2.1.0\lib\Release\x64;%(AdditionalLibraryDirectories);$(ProjectDir)Dependencies\bullet\lib\win64\Rls;$(ProjectDir)Dependencies\freetype\win64;$(ProjectDir)Dependencies\irrKlang-64bit-1.6.0\lib\Winx64-visualStudio;$(ProjectDir)Dependencies\assimp\lib;</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(ProjectDir)Dependencies\glfw-3.3.2.bin.WIN64\include\;$(ProjectDir)Dependencies\glew-2.1.0\include\;$(ProjectDir)Dependencies\glfw-3.3.2.bin.WIN64\lib-vc2019;$(ProjectDir)Dependencies\glew-2.1.0\lib\Release\x64;%(AdditionalLibraryDirectories);$(ProjectDir)Dependencies\bullet\lib\win64\Rls;$(ProjectDir)Dependencies\freetype\win64;$(ProjectDir)Dependencies\irrKlang-64bit-1.6.0\lib\Winx64-visualStudio;$(ProjectDir)Dependencies\assimp\lib;$(ProjectDir)Dependencies\assimp\lib;</AdditionalLibraryDirectories>
       <AdditionalDependencies>kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)opengl32.lib;glfw3.lib;glew32s.lib;BulletCollision.lib;BulletDynamics.lib;LinearMath.lib;freetype.lib;irrKlang.lib;assimp.lib</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
@@ -196,16 +198,16 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(ProjectDir)Dependencies\imgui;$(ProjectDir)Dependencies\glew-2.1.0\include;$(ProjectDir)Dependencies\glfw-3.3.2.bin.WIN64\include;$(ProjectDir)Dependencies\stb-master;$(ProjectDir)Dependencies\bullet\include;$(ProjectDir)Dependencies\freetype\include;$(ProjectDir)Dependencies\irrKlang-64bit-1.6.0\include;;$(ProjectDir)Dependencies\imgui</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>_MBCS;%(PreprocessorDefinitions);</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>$(ProjectDir)Dependencies\assimp\include;$(ProjectDir)Dependencies\glm;$(ProjectDir)Code\;$(ProjectDir)Dependencies\imgui;$(ProjectDir)Dependencies\glew-2.1.0\include;$(ProjectDir)Dependencies\glfw-3.3.2.bin.WIN64\include;$(ProjectDir)Dependencies\stb-master;$(ProjectDir)Dependencies\bullet\include;$(ProjectDir)Dependencies\freetype\include;$(ProjectDir)Dependencies\irrKlang-64bit-1.6.0\include</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>_MBCS;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalLibraryDirectories>$(ProjectDir)Dependencies\glfw-3.3.2.bin.WIN64\include\;$(ProjectDir)Dependencies\glew-2.1.0\include\;$(ProjectDir)Dependencies\glfw-3.3.2.bin.WIN64\lib-vc2019;$(ProjectDir)Dependencies\glew-2.1.0\lib\Release\x64;%(AdditionalLibraryDirectories);$(ProjectDir)Dependencies\bullet\lib\win64\Rls;$(ProjectDir)Dependencies\freetype\win64;$(ProjectDir)Dependencies\irrKlang-64bit-1.6.0\lib\Winx64-visualStudio;</AdditionalLibraryDirectories>
-      <AdditionalDependencies>kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies);opengl32.lib;glfw3.lib;glew32s.lib;BulletCollision.lib;BulletDynamics.lib;LinearMath.lib;freetype.lib;irrKlang.lib</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(ProjectDir)Dependencies\glfw-3.3.2.bin.WIN64\include\;$(ProjectDir)Dependencies\glew-2.1.0\include\;$(ProjectDir)Dependencies\glfw-3.3.2.bin.WIN64\lib-vc2019;$(ProjectDir)Dependencies\glew-2.1.0\lib\Release\x64;%(AdditionalLibraryDirectories);$(ProjectDir)Dependencies\bullet\lib\win64\Rls;$(ProjectDir)Dependencies\freetype\win64;$(ProjectDir)Dependencies\irrKlang-64bit-1.6.0\lib\Winx64-visualStudio;$(ProjectDir)Dependencies\assimp\lib;</AdditionalLibraryDirectories>
+      <AdditionalDependencies>kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies);opengl32.lib;glfw3.lib;glew32s.lib;BulletCollision.lib;BulletDynamics.lib;LinearMath.lib;freetype.lib;irrKlang.lib;assimp.lib</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

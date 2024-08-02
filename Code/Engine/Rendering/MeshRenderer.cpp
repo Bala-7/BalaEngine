@@ -139,7 +139,10 @@ void MeshRenderer::DrawShadowPass()
 {
 	SetupShaderFor2DShadowPass();
 	draw();
+}
 
+void MeshRenderer::DrawCubemapShadowPass()
+{
 	SetupShaderForCubeMapShadowPass();
 	draw();
 }
@@ -182,10 +185,10 @@ void MeshRenderer::SetupShaderForCubeMapShadowPass()
 
 	glUseProgram(cubeMapShadowShader->ID);
 	GLfloat aspect = (GLfloat)1024 / (GLfloat)1024;
-	GLfloat near = 0.01f;
+	GLfloat near = 0.1f;
 	GLfloat far = 25.0f;
 	cubeMapShadowShader->setFloat("far_plane", far);
-	glm::mat4 shadowProj = glm::perspective(90.0f, aspect, near, far);
+	glm::mat4 shadowProj = glm::perspective(glm::radians(90.0f), aspect, near, far);
 
 	//glm::vec3 lightPos = glm::vec3(2.60, 3.10, 0.0);
 	
@@ -194,24 +197,12 @@ void MeshRenderer::SetupShaderForCubeMapShadowPass()
 	cubeMapShadowShader->setVec3("lightPos", lightPos);
 
 	std::vector<glm::mat4> shadowTransforms;
-	shadowTransforms.push_back(shadowProj *
-		glm::lookAt(lightPos, lightPos + glm::vec3(1.0, 0.0, 0.0),
-			glm::vec3(0.0, -1.0, 0.0)));
-	shadowTransforms.push_back(shadowProj *
-		glm::lookAt(lightPos, lightPos + glm::vec3(-1.0, 0.0, 0.0),
-			glm::vec3(0.0, -1.0, 0.0)));
-	shadowTransforms.push_back(shadowProj *
-		glm::lookAt(lightPos, lightPos + glm::vec3(0.0, 1.0, 0.0),
-			glm::vec3(0.0, 0.0, 1.0)));
-	shadowTransforms.push_back(shadowProj *
-		glm::lookAt(lightPos, lightPos + glm::vec3(0.0, -1.0, 0.0),
-			glm::vec3(0.0, 0.0, -1.0)));
-	shadowTransforms.push_back(shadowProj *
-		glm::lookAt(lightPos, lightPos + glm::vec3(0.0, 0.0, 1.0),
-			glm::vec3(0.0, -1.0, 0.0)));
-	shadowTransforms.push_back(shadowProj *
-		glm::lookAt(lightPos, lightPos + glm::vec3(0.0, 0.0, -1.0),
-			glm::vec3(0.0, -1.0, 0.0)));
+	shadowTransforms.push_back(shadowProj * glm::lookAt(lightPos, lightPos + glm::vec3(1.0, 0.0, 0.0), glm::vec3(0.0, -1.0, 0.0)));
+	shadowTransforms.push_back(shadowProj *	glm::lookAt(lightPos, lightPos + glm::vec3(-1.0, 0.0, 0.0), glm::vec3(0.0, -1.0, 0.0)));
+	shadowTransforms.push_back(shadowProj * glm::lookAt(lightPos, lightPos + glm::vec3(0.0, 1.0, 0.0), glm::vec3(0.0, 0.0, 1.0)));
+	shadowTransforms.push_back(shadowProj * glm::lookAt(lightPos, lightPos + glm::vec3(0.0, -1.0, 0.0), glm::vec3(0.0, 0.0, -1.0)));
+	shadowTransforms.push_back(shadowProj * glm::lookAt(lightPos, lightPos + glm::vec3(0.0, 0.0, 1.0), glm::vec3(0.0, -1.0, 0.0)));
+	shadowTransforms.push_back(shadowProj * glm::lookAt(lightPos, lightPos + glm::vec3(0.0, 0.0, -1.0), glm::vec3(0.0, -1.0, 0.0)));
 
 	for (int i = 0; i < 6; ++i)
 	{

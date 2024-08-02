@@ -478,7 +478,7 @@ void Editor::DrawShadowCubeMapWindow()
 		//glViewport(pos.x, fullWindowHeight -pos.y-window_height, window_width, window_height);
 		glViewport(pos.x - 300, pos.y - 100, window_width, window_height);
 
-		GLuint unfoldedTexture = RenderEngine::GetInstance()->GetDepthCubeMapTextureUnfolded(); // @TODO: Get texture from RenderEngine
+		GLuint unfoldedTexture = RenderEngine::GetInstance()->GetDepthCubeMapTextureUnfolded(); 
 		
 		// and here we can add our created texture as image to ImGui
 		// unfortunately we need to use the cast to void* or I didn't find another way tbh

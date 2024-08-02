@@ -21,9 +21,12 @@ public:
 private:
 	GLuint shadowCubeMapFBO;
 	GLuint shadowCubeMapTexture;
+	GLuint depthBuffer;
 	GLuint unfoldedShadowCubeMapTexture;
-	const GLuint SHADOW_WIDTH = 128, SHADOW_HEIGHT = 128;
+	const GLuint SHADOW_SIZE = 1024;
 
+
+	// Render the cubemap to a texture
 	GLuint framebufferRenderToTexture;
 	GLuint renderbufferRenderToTexture;
 

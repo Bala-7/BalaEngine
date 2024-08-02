@@ -10,6 +10,7 @@ public:
 	void Update(float deltaTime);
 	void Draw(Camera* camera);
 	void DrawShadows();
+	void DrawCubemapShadows();
 	SceneNode* GetRootNode();
 
 	void AddToSceneLights(Light* newLight);

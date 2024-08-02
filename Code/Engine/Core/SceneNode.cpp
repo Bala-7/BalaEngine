@@ -72,6 +72,17 @@ void SceneNode::DrawShadows()
 	}
 }
 
+void SceneNode::DrawCubemapShadows()
+{
+	if (gameObject && gameObject->GetRenderComponent())
+	{
+		gameObject->GetRenderComponent()->DrawCubemapShadows();
+	}
+	for (SceneNode* child : children) {
+		child->DrawCubemapShadows();
+	}
+}
+
 void SceneNode::DrawEditorWindow(int level)
 {
 	if(level == 0)

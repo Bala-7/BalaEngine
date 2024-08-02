@@ -33,6 +33,11 @@ void SceneGraph::DrawShadows()
 	rootNode->DrawShadows();
 }
 
+void SceneGraph::DrawCubemapShadows()
+{
+	rootNode->DrawCubemapShadows();
+}
+
 SceneNode* SceneGraph::GetRootNode()
 {
 	return rootNode;

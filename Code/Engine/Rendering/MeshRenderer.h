@@ -38,6 +38,7 @@ public:
 	void DrawInspector() override;
 
 	void DrawShadowPass();
+	void DrawCubemapShadowPass();
 	void DrawLightingPass(Camera* camera);
 	void draw();
 	void SetupShaderForLightingPass(Camera* camera);

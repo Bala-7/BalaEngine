@@ -16,6 +16,7 @@ public:
 	void Update(float deltaTime);
 	void Draw(Camera* camera);
 	void DrawShadows();
+	void DrawCubemapShadows();
 	void DrawEditorWindow(int level);
 
 	void GetChildNamesForEditor(int depth, std::vector<std::pair<SceneNode*, int>>& result);

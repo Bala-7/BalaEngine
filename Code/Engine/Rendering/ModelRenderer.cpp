@@ -64,6 +64,14 @@ void ModelRenderer::DrawShadows()
 	}
 }
 
+void ModelRenderer::DrawCubemapShadows()
+{
+	for (auto it = begin(_meshes); it != end(_meshes); ++it)
+	{
+		it->DrawCubemapShadowPass();
+	}
+}
+
 void ModelRenderer::setScale(glm::vec3 _scale)
 {
 	this->scale = _scale;
