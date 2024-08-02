@@ -24,6 +24,9 @@ private:
 	GLuint unfoldedShadowCubeMapTexture;
 	const GLuint SHADOW_WIDTH = 128, SHADOW_HEIGHT = 128;
 
+	GLuint framebufferRenderToTexture;
+	GLuint renderbufferRenderToTexture;
+
 	glm::mat4 lightSpaceMatrix;
 };
 

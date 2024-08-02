@@ -13,7 +13,7 @@ bool ShadowCubeMapFBO::Init()
 	glBindTexture(GL_TEXTURE_CUBE_MAP, shadowCubeMapTexture);
 	
 	for (GLuint i = 0; i < 6; ++i)
-		glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, 0, GL_DEPTH_COMPONENT, SHADOW_WIDTH, SHADOW_HEIGHT, 0, GL_DEPTH_COMPONENT, GL_FLOAT, NULL);
+		glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, 0, GL_DEPTH_COMPONENT24, SHADOW_WIDTH, SHADOW_HEIGHT, 0, GL_DEPTH_COMPONENT, GL_FLOAT, NULL);
 
 	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
@@ -21,8 +21,8 @@ bool ShadowCubeMapFBO::Init()
 	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
 	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE);
 
-	GLfloat borderColor[] = { 1.0, 1.0, 1.0, 1.0 };
-	glTexParameterfv(GL_TEXTURE_2D, GL_TEXTURE_BORDER_COLOR, borderColor);
+	/*GLfloat borderColor[] = {1.0, 1.0, 1.0, 1.0};
+	glTexParameterfv(GL_TEXTURE_2D, GL_TEXTURE_BORDER_COLOR, borderColor);*/
 
 	GLenum status = glCheckFramebufferStatus(GL_FRAMEBUFFER);
 	if (status != GL_FRAMEBUFFER_COMPLETE)
@@ -41,14 +41,24 @@ bool ShadowCubeMapFBO::Init()
 	glBindTexture(GL_TEXTURE_2D, 0);
 	//glBindRenderbuffer(GL_RENDERBUFFER, 0);
 
-	// Shadow cubemap tab
+	// unfolded texture for editor tab
+	glGenFramebuffers(1, &framebufferRenderToTexture);
+	glBindFramebuffer(GL_FRAMEBUFFER, framebufferRenderToTexture);
 	glGenTextures(1, &unfoldedShadowCubeMapTexture);
 	glBindTexture(GL_TEXTURE_2D, unfoldedShadowCubeMapTexture);
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, SHADOW_WIDTH * 6, SHADOW_WIDTH, 0, GL_RGBA, GL_UNSIGNED_BYTE, nullptr);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+
+	glGenRenderbuffers(1, &renderbufferRenderToTexture);
+	glBindRenderbuffer(GL_RENDERBUFFER, renderbufferRenderToTexture);
+	glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT24, SHADOW_WIDTH, SHADOW_WIDTH);
+	glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, renderbufferRenderToTexture);
+
+	glBindFramebuffer(GL_FRAMEBUFFER, 0);
+	glBindRenderbuffer(GL_RENDERBUFFER, 0);
 	glBindTexture(GL_TEXTURE_2D, 0);
 
 	return true;
@@ -59,7 +69,7 @@ void ShadowCubeMapFBO::Bind()
 	glEnable(GL_DEPTH_TEST);
 	glViewport(0, 0, SHADOW_WIDTH, SHADOW_HEIGHT);
 	glBindFramebuffer(GL_FRAMEBUFFER, shadowCubeMapFBO);
-	glClear(GL_DEPTH_BUFFER_BIT);
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glCullFace(GL_FRONT);
 }
 
@@ -86,28 +96,77 @@ GLuint ShadowCubeMapFBO::GetDepthMapFBO()
 
 void ShadowCubeMapFBO::RenderCubemapFaceToTexture()
 {
-	GLuint framebuffer;
-	glGenFramebuffers(1, &framebuffer);
-	glBindFramebuffer(GL_FRAMEBUFFER, framebuffer);
+	glBindFramebuffer(GL_FRAMEBUFFER, framebufferRenderToTexture);
+	glBindRenderbuffer(GL_RENDERBUFFER, renderbufferRenderToTexture);
+	
+	struct FaceCoords {
+		GLint x, y;
+	};
 
-	GLuint renderbuffer;
-	glGenRenderbuffers(1, &renderbuffer);
-	glBindRenderbuffer(GL_RENDERBUFFER, renderbuffer);
-	glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT24, SHADOW_WIDTH, SHADOW_WIDTH);
-	glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, renderbuffer);
+	FaceCoords faceCoords[6] = {
+	{0, SHADOW_WIDTH},            // +X
+	{SHADOW_WIDTH, SHADOW_WIDTH},     // -X
+	{2 * SHADOW_WIDTH, SHADOW_WIDTH}, // +Y
+	{0, 0},                   // -Y
+	{SHADOW_WIDTH, 0},            // +Z
+	{2 * SHADOW_WIDTH, 0}         // -Z
+	};
+	/*
+	for (GLuint face = 0; face < 6; ++face) {
+		//glBindFramebuffer(GL_FRAMEBUFFER, framebuffer);
+		glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_CUBE_MAP_POSITIVE_X + face, shadowCubeMapTexture, 0);
 
-	for (int i = 0; i < 6; ++i) {
-		glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, shadowCubeMapTexture, 0);
+		GLenum status = glCheckFramebufferStatus(GL_FRAMEBUFFER);
 
-		// Calculate the position on the unfolded texture
-		int xOffset = (i % 3) * SHADOW_WIDTH;
-		int yOffset = (i / 3) * SHADOW_WIDTH;
+		if (status != GL_FRAMEBUFFER_COMPLETE) {
+			std::cerr << "Framebuffer not complete!" << std::endl;
+			return;
+		}
 
-		// Bind the unfolded texture and copy the cubemap face into it
 		glBindTexture(GL_TEXTURE_2D, unfoldedShadowCubeMapTexture);
-		glCopyTexSubImage2D(GL_TEXTURE_2D, 0, xOffset, yOffset, 0, 0, SHADOW_WIDTH, SHADOW_WIDTH);
+
+		FaceCoords coords = faceCoords[face];
+		glCopyTexSubImage2D(GL_TEXTURE_2D, 0, coords.x, coords.y, 0, 0, SHADOW_WIDTH, SHADOW_WIDTH);
+	}*/
+
+	// Take only one face
+	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_CUBE_MAP_POSITIVE_X, shadowCubeMapTexture, 0);
+	GLenum status = glCheckFramebufferStatus(GL_FRAMEBUFFER);
+
+	if (status != GL_FRAMEBUFFER_COMPLETE) {
+		std::cerr << "Framebuffer not complete!" << std::endl;
+		return;
 	}
 
-	glDeleteFramebuffers(1, &framebuffer);
-	glDeleteRenderbuffers(1, &renderbuffer);
+	glBindTexture(GL_TEXTURE_2D, unfoldedShadowCubeMapTexture);
+	glCopyTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, 0, 0, SHADOW_WIDTH, SHADOW_WIDTH);
+	
+
+
+	/* //Uncomment this to draw red color into the displayed texture
+	// Define the color to fill the texture with (e.g., red color)
+	const unsigned char color[3] = { 255, 0, 0 }; // RGB for red
+
+	// Create an array to fill the texture
+	unsigned char* data = new unsigned char[SHADOW_WIDTH * SHADOW_WIDTH * 3]; // 3 bytes per pixel (RGB)
+
+	// Fill the array with the color data
+	for (int i = 0; i < SHADOW_WIDTH * SHADOW_WIDTH; ++i) {
+		data[i * 3 + 0] = color[0]; // Red
+		data[i * 3 + 1] = color[1]; // Green
+		data[i * 3 + 2] = color[2]; // Blue
+	}
+
+	// Update the texture
+	glBindTexture(GL_TEXTURE_2D, unfoldedShadowCubeMapTexture);
+	glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, SHADOW_WIDTH, SHADOW_WIDTH, GL_RGB, GL_UNSIGNED_BYTE, data);
+	glBindTexture(GL_TEXTURE_2D, 0);
+	*/
+
+	glBindFramebuffer(GL_FRAMEBUFFER, 0);
+	glBindRenderbuffer(GL_RENDERBUFFER, 0);
+
+
+	//glDeleteFramebuffers(1, &framebuffer);
+	//glDeleteRenderbuffers(1, &renderbuffer);
 }

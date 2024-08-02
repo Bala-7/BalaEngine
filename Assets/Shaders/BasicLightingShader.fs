@@ -121,10 +121,10 @@ vec3 LightCalculation(Light light, float shadow, float pointShadow)
 	// Ambient light
     vec3 ambient = light.ambient * material.ambient * environmentColor * attenuation;
 	
-	if(pointShadow != 0)
-	{
-		ambient = light.ambient * vec3(1.0, 0.0, 0.0) * environmentColor * attenuation; 
-	}
+	//if(pointShadow != 0)
+	//{
+		//ambient = light.ambient * vec3(1.0, 0.0, 0.0) * environmentColor * attenuation; 
+	//}
 	
 	// Diffuse light
 	vec3 norm = normalize(Normal);
