@@ -185,16 +185,15 @@ void MeshRenderer::SetupShaderForCubeMapShadowPass()
 
 	glUseProgram(cubeMapShadowShader->ID);
 	GLfloat aspect = (GLfloat)1024 / (GLfloat)1024;
-	GLfloat near = 0.1f;
-	GLfloat far = 25.0f;
-	cubeMapShadowShader->setFloat("far_plane", far);
-	glm::mat4 shadowProj = glm::perspective(glm::radians(90.0f), aspect, near, far);
-
-	//glm::vec3 lightPos = glm::vec3(2.60, 3.10, 0.0);
 	
 	std::vector<Light*> sceneLights = gameObject->GetNode()->GetScene()->GetSceneLights();
 	glm::vec3 lightPos = sceneLights[0]->GetGameObject()->transform->position;
+	GLfloat far = sceneLights[0]->GetFarPlane();
+	GLfloat near = sceneLights[0]->GetNearPlane();
 	cubeMapShadowShader->setVec3("lightPos", lightPos);
+	cubeMapShadowShader->setFloat("far_plane", far);
+
+	glm::mat4 shadowProj = glm::perspective(glm::radians(90.0f), aspect, near, far);
 
 	std::vector<glm::mat4> shadowTransforms;
 	shadowTransforms.push_back(shadowProj * glm::lookAt(lightPos, lightPos + glm::vec3(1.0, 0.0, 0.0), glm::vec3(0.0, -1.0, 0.0)));
@@ -268,6 +267,10 @@ void MeshRenderer::SetupShaderForLightingPass(Camera* camera)
 	shader->setVec3("objectColor", glm::vec3(1.0f, 1.0f, 1.0f));
 	shader->setVec3("environmentColor", RenderEngine::GetInstance()->GetEnvironmentLight());
 	shader->setVec3("viewPos", RenderEngine::GetInstance()->GetCamera()->getCameraPosition());
+	std::vector<Light*> sceneLights = gameObject->GetNode()->GetScene()->GetSceneLights();
+	glm::vec3 lightPos = sceneLights[0]->GetGameObject()->transform->position;
+	shader->setVec3("lightPos", lightPos);
+	shader->setFloat("far_plane", sceneLights[0]->GetFarPlane());
 
 	glActiveTexture(GL_TEXTURE0);
 	// Bind the texture object
@@ -292,7 +295,6 @@ void MeshRenderer::SetupShaderForLightingPass(Camera* camera)
 
 	
 
-	std::vector<Light*> sceneLights = gameObject->GetNode()->GetScene()->GetSceneLights();
 	int lightCount = sceneLights.size();
 	shader->setInt("activeLights", lightCount);
 	for (int i = 0; i < lightCount; ++i)

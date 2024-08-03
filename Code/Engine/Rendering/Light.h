@@ -11,7 +11,8 @@ public:
 	Light();
 	Light(LightType lightType, glm::vec3 direction, glm::vec3 ambient, glm::vec3 diffuse, glm::vec3 specular,
 		float constant, float linear, float quadratic,
-		float innerCutOff, float outerCutOff);
+		float innerCutOff, float outerCutOff,
+		float nearPlane, float farPlane);
 
 	~Light();
 
@@ -29,6 +30,9 @@ public:
 
 	float GetInnerCutOff() { return _innerCutOff; }
 	float GetOuterCutOff() { return _outerCutOff; }
+	
+	float GetNearPlane() { return _shadowNearPlane; }
+	float GetFarPlane() { return _shadowFarPlane; }
 
 	LightType GetType() { return _lightTtype; }
 
@@ -46,6 +50,10 @@ private:
 
 	float _innerCutOff;
 	float _outerCutOff;
+
+	float _shadowNearPlane;
+	float _shadowFarPlane;
+
 
 	LightType _lightTtype;
 };

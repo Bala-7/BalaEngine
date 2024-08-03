@@ -220,7 +220,7 @@ void RenderEngine::InitGame()
 
 	
 	//camera = new Camera(120, 1280, 720, 0.1f, 100.0f, glm::vec3(0.0f, 0.0f, 6.0f));
-	sceneViewCamera = new Camera(120, 854, 480, 0.1f, 100.0f, glm::vec3(0.0f, 0.0f, 6.0f));
+	sceneViewCamera = new Camera(120, 854, 480, 0.1f, 100.0f, glm::vec3(0.0f, 0.5f, 4.0f));
 	//glm::mat4 projection = glm::ortho(0.0f, (float) config.WINDOW_SIZE_X, (float) config.WINDOW_SIZE_Y, 0.0f, -1.0f, 1.0f);
 	ShaderLoader shaderLoader;
 	shaderProgram = shaderLoader.createProgram(config.VERTEX_SHADER_PATH.c_str(), config.FRAGMENT_SHADER_PATH.c_str());

@@ -15,7 +15,7 @@ Light::Light()
 	componentType = ComponentType::LIGHT;
 }
 
-Light::Light(LightType lightType, glm::vec3 direction, glm::vec3 ambient, glm::vec3 diffuse, glm::vec3 specular, float constant, float linear, float quadratic, float innerCutOff, float outerCutOff)
+Light::Light(LightType lightType, glm::vec3 direction, glm::vec3 ambient, glm::vec3 diffuse, glm::vec3 specular, float constant, float linear, float quadratic, float innerCutOff, float outerCutOff, float nearPlane, float farPlane)
 {
 	_lightTtype = lightType;
 	_direction = direction;
@@ -30,6 +30,9 @@ Light::Light(LightType lightType, glm::vec3 direction, glm::vec3 ambient, glm::v
 
 	_innerCutOff = innerCutOff;
 	_outerCutOff = outerCutOff;
+
+	_shadowNearPlane = nearPlane;
+	_shadowFarPlane = farPlane;
 }
 
 Light::~Light()
@@ -84,5 +87,15 @@ void Light::DrawInspector()
 	ImGui::Text("Quadratic");
 	ImGui::Separator();
 	ImGui::DragFloat("##Quadratic", &_quadratic, 0.1f, 0.0f, 0.0f, "%.2f");
+	ImGui::Separator();
+
+	ImGui::Text("Near plane");
+	ImGui::Separator();
+	ImGui::DragFloat("##NearPlane", &_shadowNearPlane, 0.1f, 0.0f, 0.0f, "%.2f");
+	ImGui::Separator();
+
+	ImGui::Text("Far plane");
+	ImGui::Separator();
+	ImGui::DragFloat("##FarPlane", &_shadowFarPlane, 0.1f, 0.0f, 0.0f, "%.2f");
 	ImGui::Separator();
 }

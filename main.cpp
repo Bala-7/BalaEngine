@@ -269,7 +269,8 @@ void CreateCube3D()
 		glm::vec3(0.0f, 0.0f, -1.0f),
 		glm::vec3(0.2f, 0.2f, 0.2f), glm::vec3(0.5f, 0.5f, 0.5f), glm::vec3(1.0f, 1.0f, 1.0f),
 		1.0f, 0.09f, 0.032f,
-		glm::cos(glm::radians(12.5f)), glm::cos(glm::radians(17.5f)));
+		glm::cos(glm::radians(12.5f)), glm::cos(glm::radians(17.5f)),
+		1.0f, 25.0f);
 	
 	GameObject* meshGO = new GameObject();
 	mr = new MeshRenderer(MeshType::kCube);
@@ -334,7 +335,8 @@ void CreateModel()
 		glm::vec3(0.0f, 0.0f, -1.0f),
 		glm::vec3(0.2f, 0.2f, 0.2f), glm::vec3(0.5f, 0.5f, 0.5f), glm::vec3(1.0f, 1.0f, 1.0f),
 		1.0f, 0.09f, 0.032f,
-		glm::cos(glm::radians(12.5f)), glm::cos(glm::radians(17.5f)));
+		glm::cos(glm::radians(12.5f)), glm::cos(glm::radians(17.5f)),
+		1.0f, 25.0f);
 
 	GameObject* meshGO = new GameObject();
 	modelRenderer = new ModelRenderer("Assets/Models/Samus/Samus/Samus_small.obj");
@@ -363,8 +365,9 @@ void CreateSceneGraph()
 		glm::vec3(0.0f, 0.0f, -1.0f),
 		glm::vec3(0.2f, 0.2f, 0.2f), glm::vec3(0.5f, 0.5f, 0.5f), glm::vec3(1.0f, 1.0f, 1.0f),
 		1.0f, 0.09f, 0.032f,
-		12.5f, 17.5f);
-	lightGO->transform->position = glm::vec3(-3.0f, 1.0f, 0.0f);
+		12.5f, 17.5f,
+		1.0f, 25.0f);
+	lightGO->transform->position = glm::vec3(0.0f, 1.0f, 0.2f);
 	lightGO->AddComponent(light);
 
 	// Second light
@@ -374,7 +377,8 @@ void CreateSceneGraph()
 		glm::vec3(0.0f, 0.0f, -1.0f),
 		glm::vec3(0.2f, 0.2f, 0.2f), glm::vec3(0.5f, 0.5f, 0.5f), glm::vec3(1.0f, 1.0f, 1.0f),
 		1.0f, 0.09f, 0.032f,
-		12.5f, 17.5f);
+		12.5f, 17.5f,
+		1.0f, 25.0f);
 	lightGO2->transform->position = glm::vec3(3.0f, 1.0f, 0.0f);
 	lightGO2->AddComponent(light2);
 
@@ -396,9 +400,16 @@ void CreateSceneGraph()
 	terrainGO->transform->position = glm::vec3(0.00f, -0.15f, 0.0f);
 	terrainGO->AddComponent(terrainModel);
 
+
+	GameObject* wallGO = new GameObject("Wall_1");
+	ModelRenderer* wallModel = new ModelRenderer("Assets/Models/DefaultTerrain.obj");
+	wallGO->transform->position = glm::vec3(0.00f, 2.35f, -2.5f);
+	wallGO->transform->rotation = glm::vec3(90.00f, 0.0f, 0.0f);
+	wallGO->AddComponent(wallModel);
 	
 	sceneGraph->GetRootNode()->AddChild(new SceneNode(meshGO));
 	sceneGraph->GetRootNode()->AddChild(new SceneNode(terrainGO));
+	sceneGraph->GetRootNode()->AddChild(new SceneNode(wallGO));
 
 	editor->sceneGraph = sceneGraph;
 }

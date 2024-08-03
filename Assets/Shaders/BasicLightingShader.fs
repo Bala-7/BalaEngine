@@ -62,6 +62,7 @@ uniform sampler2D Texture;
  
 out vec4 FragColor;
 
+// Returns shadow: 1.0f if the object is in light, else 0.0f
 float PointLightShadowCalculation()
 {
 	// Get vector between fragment position and light position
@@ -75,10 +76,10 @@ float PointLightShadowCalculation()
 	
 	// Now get current linear depth as the length between the fragment and light position
 	float currentDepth = length(fragToLight);
-	
+
 	// Now test for shadows
-	float bias = 0.05;
-	float shadow = currentDepth - bias > closestDepth ? 1.0 : 0.0;
+	float bias = 0.05f;
+	float shadow = currentDepth - bias > closestDepth ? 0.0 : 1.0;
 	return shadow;
 }
 
@@ -158,7 +159,14 @@ vec3 LightCalculation(Light light, float shadow, float pointShadow)
 		}
 	}
 	
-	vec3 result = (ambient + (shadow)*(diffuse + specular));
+	
+	float finalShadow = 1.0f;
+	//if(shadow == 0.0f && pointShadow == 0.0f)
+		//finalShadow = 0.0f;
+	
+	finalShadow = pointShadow;
+	
+	vec3 result = (ambient + (finalShadow) * (diffuse + specular));
 	return result;
 }
 
