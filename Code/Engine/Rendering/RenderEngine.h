@@ -39,7 +39,10 @@ public:
 		std::string SHADERS_PATH;
 
 		std::string VERTEX_SHADER_PATH;
-		std::string FRAGMENT_SHADER_PATH;
+		std::string FRAGMENT_SHADER_PATH;		
+		
+		std::string VERTEX_SHADER_PATH_SKYBOX;
+		std::string FRAGMENT_SHADER_PATH_SKYBOX;
 
 		std::string VERTEX_SHADER_TEXT_PATH;
 		std::string FRAGMENT_SHADER_TEXT_PATH;
@@ -84,6 +87,7 @@ public:
 	Camera* GetCamera();
 	GLuint GetTextureID(const char* fileName);
 	GLuint GetShaderProgram();
+	GLuint GetSkyboxShaderProgram();
 	GLuint GetShadowShaderProgram();
 	GLuint GetCubeMapShadowShaderProgram();
 	GLuint GetTextShaderProgram();
@@ -172,6 +176,7 @@ private:
 	TextureLoader textureLoader;
 	ShaderLoader shaderLoader;
 	GLuint shaderProgram;
+	GLuint skyboxShaderProgram;
 	GLuint textShaderProgram;
 	std::vector<SpriteLayer*> layerList;
 

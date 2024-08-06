@@ -9,6 +9,7 @@
 #include "glm/gtc/type_ptr.hpp"
 #include "Engine/Core/Component.h"
 #include "Engine/Rendering/Shader.h"
+#include "Engine/Rendering/RenderableComponent.h"
 
 #include <assimp/Importer.hpp>
 #include <assimp/scene.h>

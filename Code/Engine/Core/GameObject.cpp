@@ -42,12 +42,12 @@ void GameObject::DrawInspector()
 		i->DrawInspector();
 }
 
-void GameObject::SetRenderComponent(ModelRenderer* newComponent)
+void GameObject::SetRenderComponent(RenderableComponent* newComponent)
 {
 	renderComponent = newComponent;
 }
 
-ModelRenderer* GameObject::GetRenderComponent()
+RenderableComponent* GameObject::GetRenderComponent()
 {
 	return renderComponent;
 }

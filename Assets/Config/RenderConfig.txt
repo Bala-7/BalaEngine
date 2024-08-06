@@ -8,6 +8,9 @@ SHADERS_PATH = Assets/Shaders/
 VERTEX_SHADER_PATH = Assets/Shaders/BasicLightingShader.vs
 FRAGMENT_SHADER_PATH = Assets/Shaders/BasicLightingShader.fs
 
+VERTEX_SHADER_PATH_SKYBOX = Assets/Shaders/SkyboxShader.vs
+FRAGMENT_SHADER_PATH_SKYBOX = Assets/Shaders/SkyboxShader.fs
+
 VERTEX_SHADER_SHADOWS_PATH = Assets/Shaders/SimpleDepthShader.vs
 FRAGMENT_SHADER_SHADOWS_PATH = Assets/Shaders/SimpleDepthShader.fs
 

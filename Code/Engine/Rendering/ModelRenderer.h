@@ -2,7 +2,7 @@
 #include <vector>
 #include "MeshRenderer.h"
 
-class ModelRenderer : public Component
+class ModelRenderer : public RenderableComponent
 {
 public:
 	ModelRenderer(const char* path) 
@@ -18,10 +18,10 @@ public:
 	void OnComponentAdded() override;
 	void DrawInspector() override;
 
-	void draw(Camera* camera);
+	void draw(Camera* camera) override;
 	void setPosition(glm::vec3 _position);
-	void DrawShadows();
-	void DrawCubemapShadows();
+	void DrawShadows() override;
+	void DrawCubemapShadows() override;
 	void setScale(glm::vec3 _scale);
 	void setRotation(glm::vec3 _rotation);
 

@@ -19,7 +19,7 @@ void ModelRenderer::Update()
 
 void ModelRenderer::OnComponentAdded()
 {
-	gameObject->SetRenderComponent(this);
+	gameObject->SetRenderComponent((RenderableComponent*)this);
 
 	setPosition(gameObject->transform->position);
 	setScale(gameObject->transform->scale);

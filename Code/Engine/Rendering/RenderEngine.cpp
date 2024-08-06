@@ -117,6 +117,11 @@ GLuint RenderEngine::GetShaderProgram()
 	return shaderProgram;
 }
 
+GLuint RenderEngine::GetSkyboxShaderProgram()
+{
+	return skyboxShaderProgram;
+}
+
 GLuint RenderEngine::GetShadowShaderProgram()
 {
 	return shadowShaderProgram;
@@ -224,6 +229,7 @@ void RenderEngine::InitGame()
 	//glm::mat4 projection = glm::ortho(0.0f, (float) config.WINDOW_SIZE_X, (float) config.WINDOW_SIZE_Y, 0.0f, -1.0f, 1.0f);
 	ShaderLoader shaderLoader;
 	shaderProgram = shaderLoader.createProgram(config.VERTEX_SHADER_PATH.c_str(), config.FRAGMENT_SHADER_PATH.c_str());
+	skyboxShaderProgram = shaderLoader.createProgram(config.VERTEX_SHADER_PATH_SKYBOX.c_str(), config.FRAGMENT_SHADER_PATH_SKYBOX.c_str());
 	shadowShaderProgram = shaderLoader.createProgram(config.VERTEX_SHADER_SHADOW_PATH.c_str(), config.FRAGMENT_SHADER_SHADOW_PATH.c_str());
 	shadowCubeMapShaderProgram = shaderLoader.createProgram(config.VERTEX_SHADER_CM_SHADOW_PATH.c_str(), config.FRAGMENT_SHADER_CM_SHADOW_PATH.c_str(), config.GEOMETRY_SHADER_CM_SHADOW_PATH.c_str());
 	textShaderProgram = shaderLoader.createProgram(config.VERTEX_SHADER_TEXT_PATH.c_str(), config.FRAGMENT_SHADER_TEXT_PATH.c_str());
@@ -370,6 +376,9 @@ void RenderEngine::InitializeConfigValues()
 
 	config.VERTEX_SHADER_PATH = config.configValues["VERTEX_SHADER_PATH"];
 	config.FRAGMENT_SHADER_PATH = config.configValues["FRAGMENT_SHADER_PATH"];
+
+	config.VERTEX_SHADER_PATH_SKYBOX = config.configValues["VERTEX_SHADER_PATH_SKYBOX"];
+	config.FRAGMENT_SHADER_PATH_SKYBOX = config.configValues["FRAGMENT_SHADER_PATH_SKYBOX"];
 
 	config.VERTEX_SHADER_SHADOW_PATH = config.configValues["VERTEX_SHADER_SHADOWS_PATH"];
 	config.FRAGMENT_SHADER_SHADOW_PATH = config.configValues["FRAGMENT_SHADER_SHADOWS_PATH"];

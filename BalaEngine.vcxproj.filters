@@ -132,9 +132,6 @@
     <ClCompile Include="Code\Engine\Rendering\ModelRenderer.cpp">
       <Filter>Archivos de origen\Engine\Rendering</Filter>
     </ClCompile>
-    <ClCompile Include="SceneGraph.cpp">
-      <Filter>Archivos de origen\Engine\Core</Filter>
-    </ClCompile>
     <ClCompile Include="Code\Engine\Core\SceneNode.cpp">
       <Filter>Archivos de origen\Engine\Core</Filter>
     </ClCompile>
@@ -164,6 +161,18 @@
     </ClCompile>
     <ClCompile Include="Code\Engine\Rendering\ShadowCubeMapFBO.cpp">
       <Filter>Archivos de origen\Engine\Rendering</Filter>
+    </ClCompile>
+    <ClCompile Include="Code\Engine\Rendering\TexturedCubeMapFBO.cpp">
+      <Filter>Archivos de origen\Engine\Rendering</Filter>
+    </ClCompile>
+    <ClCompile Include="Code\Engine\Rendering\RenderableComponent.cpp">
+      <Filter>Archivos de origen\Engine\Rendering</Filter>
+    </ClCompile>
+    <ClCompile Include="Code\Engine\Rendering\SkyboxRenderer.cpp">
+      <Filter>Archivos de origen\Engine\Rendering</Filter>
+    </ClCompile>
+    <ClCompile Include="Code\Engine\Core\SceneGraph.cpp">
+      <Filter>Archivos de origen\Engine\Core</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -276,6 +285,15 @@
       <Filter>Archivos de encabezado\Engine\Rendering</Filter>
     </ClInclude>
     <ClInclude Include="Code\Engine\Rendering\ShadowCubeMapFBO.h">
+      <Filter>Archivos de encabezado\Engine\Rendering</Filter>
+    </ClInclude>
+    <ClInclude Include="Code\Engine\Rendering\TexturedCubeMapFBO.h">
+      <Filter>Archivos de encabezado\Engine\Rendering</Filter>
+    </ClInclude>
+    <ClInclude Include="Code\Engine\Rendering\SkyboxRenderer.h">
+      <Filter>Archivos de encabezado\Engine\Rendering</Filter>
+    </ClInclude>
+    <ClInclude Include="Code\Engine\Rendering\RenderableComponent.h">
       <Filter>Archivos de encabezado\Engine\Rendering</Filter>
     </ClInclude>
   </ItemGroup>

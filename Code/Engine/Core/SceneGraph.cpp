@@ -1,10 +1,9 @@
-#include "Code\Engine\Core\SceneGraph.h"
+#include "SceneGraph.h"
 #include "imgui.h"
 #include "imgui_impl_glfw.h"
 #include "imgui_impl_opengl3.h"
 //#include "imgui_widgets.h"
-
-#include "Code/Engine/Editor/Editor.h"
+#include "Engine/Editor/Editor.h"
 #include "Engine/Debug/Debug.h"
 
 SceneGraph::SceneGraph()

@@ -4,6 +4,7 @@
 #include "Engine/Core/Transform.h"
 #include <typeinfo>
 #include "Engine/Rendering/ModelRenderer.h"
+#include "Engine/Rendering/RenderableComponent.h"
 
 class SceneNode;
 
@@ -22,8 +23,8 @@ public:
 
 	void DrawInspector();
 
-	void SetRenderComponent(ModelRenderer* newComponent);
-	ModelRenderer* GetRenderComponent();
+	void SetRenderComponent(RenderableComponent* newComponent);
+	RenderableComponent* GetRenderComponent();
 
 	void SetSceneNode(SceneNode* newNode);
 	SceneNode* GetNode() { return node; }
@@ -35,7 +36,7 @@ protected:
 
 private:
 	std::list<Component*> components;
-	ModelRenderer* renderComponent;
+	RenderableComponent* renderComponent;
 	SceneNode* node;
 };
 

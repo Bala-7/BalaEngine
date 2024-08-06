@@ -21,6 +21,7 @@
   <ItemGroup>
     <ClCompile Include="Code\Engine\Core\Component.cpp" />
     <ClCompile Include="Code\Engine\Core\GameObject.cpp" />
+    <ClCompile Include="Code\Engine\Core\SceneGraph.cpp" />
     <ClCompile Include="Code\Engine\Core\SceneNode.cpp" />
     <ClCompile Include="Code\Engine\Core\Time.cpp" />
     <ClCompile Include="Code\Engine\Core\Transform.cpp" />
@@ -36,13 +37,16 @@
     <ClCompile Include="Code\Engine\Rendering\Model.cpp" />
     <ClCompile Include="Code\Engine\Rendering\ModelRenderer.cpp" />
     <ClCompile Include="Code\Engine\Rendering\ObjLoader.cpp" />
+    <ClCompile Include="Code\Engine\Rendering\RenderableComponent.cpp" />
     <ClCompile Include="Code\Engine\Rendering\RenderEngine.cpp" />
     <ClCompile Include="Code\Engine\Rendering\Shader.cpp" />
     <ClCompile Include="Code\Engine\Rendering\ShaderLoader.cpp" />
     <ClCompile Include="Code\Engine\Rendering\ShadowCubeMapFBO.cpp" />
     <ClCompile Include="Code\Engine\Rendering\ShadowMapFBO.cpp" />
+    <ClCompile Include="Code\Engine\Rendering\SkyboxRenderer.cpp" />
     <ClCompile Include="Code\Engine\Rendering\SpriteLayer.cpp" />
     <ClCompile Include="Code\Engine\Rendering\SpriteRenderer.cpp" />
+    <ClCompile Include="Code\Engine\Rendering\TexturedCubeMapFBO.cpp" />
     <ClCompile Include="Code\Engine\Rendering\TextureLoader.cpp" />
     <ClCompile Include="Code\Engine\Rendering\UITextRenderer.cpp" />
     <ClCompile Include="Dependencies\imgui\imgui.cpp" />
@@ -53,7 +57,6 @@
     <ClCompile Include="Dependencies\imgui\imgui_tables.cpp" />
     <ClCompile Include="Dependencies\imgui\imgui_widgets.cpp" />
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="SceneGraph.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Code\Engine\Core\Component.h" />
@@ -75,13 +78,16 @@
     <ClInclude Include="Code\Engine\Rendering\Model.h" />
     <ClInclude Include="Code\Engine\Rendering\ModelRenderer.h" />
     <ClInclude Include="Code\Engine\Rendering\ObjLoader.h" />
+    <ClInclude Include="Code\Engine\Rendering\RenderableComponent.h" />
     <ClInclude Include="Code\Engine\Rendering\RenderEngine.h" />
     <ClInclude Include="Code\Engine\Rendering\Shader.h" />
     <ClInclude Include="Code\Engine\Rendering\ShaderLoader.h" />
     <ClInclude Include="Code\Engine\Rendering\ShadowCubeMapFBO.h" />
     <ClInclude Include="Code\Engine\Rendering\ShadowMapFBO.h" />
+    <ClInclude Include="Code\Engine\Rendering\SkyboxRenderer.h" />
     <ClInclude Include="Code\Engine\Rendering\SpriteLayer.h" />
     <ClInclude Include="Code\Engine\Rendering\SpriteRenderer.h" />
+    <ClInclude Include="Code\Engine\Rendering\TexturedCubeMapFBO.h" />
     <ClInclude Include="Code\Engine\Rendering\TextureLoader.h" />
     <ClInclude Include="Code\Engine\Rendering\UITextRenderer.h" />
     <ClInclude Include="Dependencies\imgui\imconfig.h" />

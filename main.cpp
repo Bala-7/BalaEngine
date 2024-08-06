@@ -18,6 +18,8 @@
 #include "Engine/Editor/editor.h"
 #include "Engine/Core/SceneGraph.h"
 #include "Engine/Core/SceneNode.h"
+#include "Engine/Rendering/TexturedCubeMapFBO.h"
+#include "Engine/Rendering/SkyboxRenderer.h"
 
 #include "imgui.h"
 #include "imgui_impl_glfw.h"
@@ -407,9 +409,77 @@ void CreateSceneGraph()
 	wallGO->transform->rotation = glm::vec3(90.00f, 0.0f, 0.0f);
 	wallGO->AddComponent(wallModel);
 	
+	std::vector<std::string> faces
+	{
+		"Assets/Textures/skybox/right.jpg",
+		"Assets/Textures/skybox/left.jpg",
+		"Assets/Textures/skybox/top.jpg",
+		"Assets/Textures/skybox/bottom.jpg",
+		"Assets/Textures/skybox/front.jpg",
+		"Assets/Textures/skybox/back.jpg"
+	};
+
+	float skyboxVertices[] = {
+		// positions          
+		-1.0f,  1.0f, -1.0f,
+		-1.0f, -1.0f, -1.0f,
+		 1.0f, -1.0f, -1.0f,
+		 1.0f, -1.0f, -1.0f,
+		 1.0f,  1.0f, -1.0f,
+		-1.0f,  1.0f, -1.0f,
+
+		-1.0f, -1.0f,  1.0f,
+		-1.0f, -1.0f, -1.0f,
+		-1.0f,  1.0f, -1.0f,
+		-1.0f,  1.0f, -1.0f,
+		-1.0f,  1.0f,  1.0f,
+		-1.0f, -1.0f,  1.0f,
+
+		 1.0f, -1.0f, -1.0f,
+		 1.0f, -1.0f,  1.0f,
+		 1.0f,  1.0f,  1.0f,
+		 1.0f,  1.0f,  1.0f,
+		 1.0f,  1.0f, -1.0f,
+		 1.0f, -1.0f, -1.0f,
+
+		-1.0f, -1.0f,  1.0f,
+		-1.0f,  1.0f,  1.0f,
+		 1.0f,  1.0f,  1.0f,
+		 1.0f,  1.0f,  1.0f,
+		 1.0f, -1.0f,  1.0f,
+		-1.0f, -1.0f,  1.0f,
+
+		-1.0f,  1.0f, -1.0f,
+		 1.0f,  1.0f, -1.0f,
+		 1.0f,  1.0f,  1.0f,
+		 1.0f,  1.0f,  1.0f,
+		-1.0f,  1.0f,  1.0f,
+		-1.0f,  1.0f, -1.0f,
+
+		-1.0f, -1.0f, -1.0f,
+		-1.0f, -1.0f,  1.0f,
+		 1.0f, -1.0f, -1.0f,
+		 1.0f, -1.0f, -1.0f,
+		-1.0f, -1.0f,  1.0f,
+		 1.0f, -1.0f,  1.0f
+	};
+
+	TexturedCubeMapFBO* skyboxFBO = new TexturedCubeMapFBO();
+	unsigned int skyboxTexture = skyboxFBO->LoadCubemap(faces);
+
+	SkyboxRenderer* skybox = new SkyboxRenderer();
+	skybox->setTexture(skyboxTexture);
+	skybox->setProgram(RenderEngine::GetInstance()->GetSkyboxShaderProgram());
+	GameObject* skyboxGO = new GameObject("Skybox");
+	skyboxGO->transform->position = glm::vec3(0.0f, 0.0f, 0.0f);
+	skyboxGO->transform->scale = glm::vec3(1.0f, 1.0f, 1.0f);
+	skyboxGO->transform->rotation = glm::vec3(0.0f, 0.0f, 0.0f);
+	skyboxGO->AddComponent(skybox);
+
 	sceneGraph->GetRootNode()->AddChild(new SceneNode(meshGO));
 	sceneGraph->GetRootNode()->AddChild(new SceneNode(terrainGO));
 	sceneGraph->GetRootNode()->AddChild(new SceneNode(wallGO));
+	sceneGraph->GetRootNode()->AddChild(new SceneNode(skyboxGO));
 
 	editor->sceneGraph = sceneGraph;
 }
