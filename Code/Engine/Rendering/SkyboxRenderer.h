@@ -3,6 +3,7 @@
 #include "Engine/Rendering/Mesh.h"
 #include "Engine/Rendering/Camera.h"
 #include "Engine/Rendering/RenderableComponent.h"
+#include "Engine/Rendering/TexturedCubeMapFBO.h"
 #include <vector>
 #include <GL/glew.h>
 #include "glm/glm.hpp"
@@ -27,14 +28,23 @@ public:
 	void DrawCubemapShadows() override;
 
 private:
-	void setVerticesData(std::vector<Vertex>& vertices, std::vector<uint32_t>& indices);
 	void setupShaderForDraw();
 	void draw();
 	void draw(Camera* camera) override;
 
+	std::vector<std::string> faces
+	{
+		"Assets/Textures/skybox/right.jpg",
+		"Assets/Textures/skybox/left.jpg",
+		"Assets/Textures/skybox/bottom.jpg",
+		"Assets/Textures/skybox/top.jpg",
+		"Assets/Textures/skybox/front.jpg",
+		"Assets/Textures/skybox/back.jpg"
+	};
+
 	GLuint vao, vbo, ebo, texture, program;
-	std::vector<Vertex>vertices;
-	std::vector<GLuint>indices;
+
+	TexturedCubeMapFBO* skyboxFBO;
 
 	Camera* renderCamera;
 	Shader* shader;
