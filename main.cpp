@@ -396,10 +396,10 @@ void CreateSceneGraph()
 	meshGO->transform->rotation = glm::vec3(0.0f, 0.0f, 0.0f);
 	meshGO->AddComponent(modelRenderer);
 	editor->SetDisplayedGameObject(meshGO);
-	/*GameObject* meshGO = new GameObject("Cube");
-	ModelRenderer* cubeModel = new ModelRenderer("Assets/Models/Cube.obj");
-	meshGO->transform->position = glm::vec3(0.0f, 0.0f, 0.0f);
-	meshGO->AddComponent(cubeModel);*/
+
+	GameObject* fs0 = new GameObject("Firelink Shrine 1");
+	ModelRenderer* fs0MR = new ModelRenderer("Assets/Models/Firelink Shrine/m0000B2A10.obj");
+	fs0->AddComponent(fs0MR);
 
 	GameObject* terrainGO = new GameObject("Terrain");
 	ModelRenderer* terrainModel = new ModelRenderer("Assets/Models/DefaultTerrain.obj");
@@ -420,6 +420,7 @@ void CreateSceneGraph()
 	skyboxGO->AddComponent(skybox);
 
 	sceneGraph->GetRootNode()->AddChild(new SceneNode(meshGO));
+	//sceneGraph->GetRootNode()->AddChild(new SceneNode(fs0));
 	sceneGraph->GetRootNode()->AddChild(new SceneNode(terrainGO));
 	sceneGraph->GetRootNode()->AddChild(new SceneNode(wallGO));
 	sceneGraph->GetRootNode()->AddChild(new SceneNode(skyboxGO));
