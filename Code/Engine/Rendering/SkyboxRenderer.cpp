@@ -2,6 +2,16 @@
 #include "Engine/Core/GameObject.h"
 #include "Engine/Rendering/RenderEngine.h"
 
+#include "imgui.h"
+#include "imgui_impl_glfw.h"
+#include "imgui_impl_opengl3.h"
+#include "Engine/Editor/imgui_widgets.h"
+
+#include <Windows.h>
+#include <commdlg.h>
+#include <ShObjIdl.h>
+#include <Engine/Debug/Debug.h>
+
 
 SkyboxRenderer::SkyboxRenderer()
 {   
@@ -114,9 +124,7 @@ void SkyboxRenderer::setTexture(GLuint textureID)
 	texture = textureID;
 }
 
-void SkyboxRenderer::DrawInspector()
-{
-}
+
 
 void SkyboxRenderer::OnComponentAdded()
 {
@@ -182,4 +190,82 @@ void SkyboxRenderer::draw(Camera* camera)
 {
 	setupShaderForDraw();
 	draw();
+}
+
+void SkyboxRenderer::DrawInspector()
+{
+	ImGui::Separator();
+	ImGui::Text("SKYBOX");
+
+	if (ImGui::Button("Select Skybox folder"))
+	{
+		std::string selectedFolder = OpenFolderDialog();
+		if (!selectedFolder.empty())
+		{
+			// Do something with the selected folder path
+			Debug::Log("Skybox folder selected " + selectedFolder);
+			reloadTexture(selectedFolder);
+		}
+	}
+
+}
+
+std::string SkyboxRenderer::OpenFolderDialog()
+{
+	std::string folderPath = "";
+	IFileDialog* pFileDialog = nullptr;
+
+	// Create the FileOpenDialog object.
+	HRESULT hr = CoCreateInstance(CLSID_FileOpenDialog, nullptr, CLSCTX_INPROC_SERVER, IID_PPV_ARGS(&pFileDialog));
+
+	if (SUCCEEDED(hr))
+	{
+		// Set the options on the dialog.
+		DWORD dwOptions;
+		hr = pFileDialog->GetOptions(&dwOptions);
+		if (SUCCEEDED(hr))
+		{
+			pFileDialog->SetOptions(dwOptions | FOS_PICKFOLDERS);
+
+			// Show the dialog
+			hr = pFileDialog->Show(nullptr);
+			if (SUCCEEDED(hr))
+			{
+				// Get the folder name
+				IShellItem* pItem;
+				hr = pFileDialog->GetResult(&pItem);
+				if (SUCCEEDED(hr))
+				{
+					PWSTR pszFilePath = nullptr;
+					hr = pItem->GetDisplayName(SIGDN_FILESYSPATH, &pszFilePath);
+
+					if (SUCCEEDED(hr))
+					{
+						// Convert from wide string to standard string
+						char buffer[MAX_PATH];
+						wcstombs(buffer, pszFilePath, MAX_PATH);
+						folderPath = buffer;
+
+						CoTaskMemFree(pszFilePath);
+					}
+					pItem->Release();
+				}
+			}
+		}
+		pFileDialog->Release();
+	}
+
+	return folderPath;
+}
+
+void SkyboxRenderer::reloadTexture(std::string newPath)
+{
+	faces[0] = newPath + "/right.jpg";
+	faces[1] = newPath + "/left.jpg";
+	faces[2] = newPath + "/bottom.jpg";
+	faces[3] = newPath + "/top.jpg";
+	faces[4] = newPath + "/front.jpg";
+	faces[5] = newPath + "/back.jpg";
+
+	texture = skyboxFBO->LoadCubemap(faces);
 }

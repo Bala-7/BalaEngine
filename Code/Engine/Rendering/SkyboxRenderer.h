@@ -32,6 +32,10 @@ private:
 	void draw();
 	void draw(Camera* camera) override;
 
+	std::string OpenFolderDialog();
+	void reloadTexture(std::string newPath);
+
+
 	std::vector<std::string> faces
 	{
 		"Assets/Textures/skybox/right.jpg",

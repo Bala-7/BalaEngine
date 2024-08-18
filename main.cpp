@@ -72,6 +72,8 @@ int main()
 	editor = Editor::Instance();
 	editor->Initialize();
 
+	CoInitialize(nullptr);
+
 	/*Shader ourShader("Assets/Shaders/TexturedModel.vs", "Assets/Shaders/TexturedModel.fs");
 
 	Model ourModel("resources/objects/backpack/backpack.obj");*/
@@ -201,6 +203,8 @@ int main()
 		glfwSwapBuffers(window);
 
 	}
+
+	CoUninitialize();
 
 	editor->Terminate();
 
