@@ -31,10 +31,15 @@ private:
 	std::vector<MeshRenderer> _meshes;
 	glm::vec3 position, scale, rotation;
 
+	GLuint decalTextureId;
+	glm::vec3 decalPosition, decalTarget, decalOffset;
+
 	void loadModel(std::string path);
 	void processNode(aiNode* node, const aiScene* scene);
 	MeshRenderer processMesh(aiMesh* mesh, const aiScene* scene);
 	std::vector<Texture> loadMaterialTextures(aiMaterial* mat, aiTextureType type, std::string typeName);
 	unsigned int TextureFromFile(const char* path, const std::string& directory, bool gamma);
+	std::string OpenFileDialog();
+
 };
 

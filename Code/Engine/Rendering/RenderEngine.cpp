@@ -105,12 +105,21 @@ Camera* RenderEngine::GetCamera()
 	return sceneViewCamera;
 }
 
-GLuint RenderEngine::GetTextureID(const char* fileName)
+GLuint RenderEngine::GetTextureID(const char* fileName, bool fullPath)
 {
-	char* s = new char[strlen(TEXTURES_PATH) + strlen(fileName)];
-	strcpy(s, TEXTURES_PATH); strcat(s, fileName);
-	return textureLoader.getTextureID(s);
+	if (!fullPath) 
+	{
+		char* s = new char[strlen(TEXTURES_PATH) + strlen(fileName)];
+		strcpy(s, TEXTURES_PATH); strcat(s, fileName);
+		return textureLoader.getTextureID(s);
+	}
+	else
+	{
+		return textureLoader.getTextureID(fileName);
+	}
 }
+
+
 
 GLuint RenderEngine::GetShaderProgram()
 {

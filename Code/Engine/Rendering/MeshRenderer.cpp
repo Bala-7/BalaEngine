@@ -262,7 +262,21 @@ void MeshRenderer::SetupShaderForLightingPass(Camera* camera)
 	glm::vec4 fragPosLightSpace = lightViewProjectionMatrix * glm::vec4(FragPos, 1.0f);
 	glm::vec3 projCoords = glm::vec3(fragPosLightSpace.x, fragPosLightSpace.y, fragPosLightSpace.z) / fragPosLightSpace.w;
 
-
+	// decal
+	if (decalTexture != 0) 
+	{
+		//glm::vec3 decalPosition = glm::vec3(0.0, 3.0, -2.4);
+		//glm::vec3 decalTarget = glm::vec3(0.0, 0.0, -1.0);
+		glm::vec3 decalUp = glm::vec3(0.0, 1.0, 0.0);
+		glm::mat4 decalProjection = glm::ortho(-1.0f, 1.0f, -1.0f, 1.0f, 0.1f, 10.0f);
+		glm::mat4 decalView = glm::lookAt(decalPosition + decalOffset, decalTarget + decalOffset, decalUp);
+		glm::mat4 decalVP = decalProjection * decalView;
+		shader->setMat4("decalVP", decalVP);
+		shader->setBool("enableDecal", true);
+	}
+	else
+		shader->setBool("enableDecal", false);
+	// \decal
 
 	shader->setVec3("objectColor", glm::vec3(1.0f, 1.0f, 1.0f));
 	shader->setVec3("environmentColor", RenderEngine::GetInstance()->GetEnvironmentLight());
@@ -283,10 +297,15 @@ void MeshRenderer::SetupShaderForLightingPass(Camera* camera)
 	GLuint shadowCubeMapTexture = RenderEngine::GetInstance()->GetDepthCubeMapTexture();
 	glBindTexture(GL_TEXTURE_CUBE_MAP, shadowCubeMapTexture);
 
+	if (decalTexture != 0) {
+		glActiveTexture(GL_TEXTURE3);
+		glBindTexture(GL_TEXTURE_2D, decalTexture);
+	}
 
 	shader->setInt("Texture", 0);
 	shader->setInt("directionalLightShadowMap", 1);
 	shader->setInt("pointLightShadowCubeMap", 2);
+	shader->setInt("decalTexture", 3);
 
 	shader->setVec3("material.ambient", _material->ambient);
 	shader->setVec3("material.diffuse", _material->diffuse);
@@ -336,6 +355,26 @@ void MeshRenderer::draw()
 void MeshRenderer::setTexture(GLuint textureID) 
 {
 	texture = textureID;
+}
+
+void MeshRenderer::setDecalTexture(GLuint textureID)
+{
+	decalTexture = textureID;
+}
+
+void MeshRenderer::setDecalPosition(glm::vec3 position)
+{
+	decalPosition = position;
+}
+
+void MeshRenderer::setDecalTarget(glm::vec3 target)
+{
+	decalTarget = target;
+}
+
+void MeshRenderer::setDecalOffset(glm::vec3 offset)
+{
+	decalOffset = offset;
 }
 
 void MeshRenderer::setLight(Light light)

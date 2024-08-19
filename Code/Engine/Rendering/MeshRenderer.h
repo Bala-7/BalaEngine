@@ -52,6 +52,10 @@ public:
 	void setShadowsProgram(GLuint _program);
 	void setCubeMapShadowsProgram(GLuint _program);
 	void setTexture(GLuint _textureID);
+	void setDecalTexture(GLuint _textureID);
+	void setDecalPosition(glm::vec3 position);
+	void setDecalTarget(glm::vec3 target);
+	void setDecalOffset(glm::vec3 offset);
 	void setLight(Light light);
 	void setModel(std::string path);
 
@@ -75,7 +79,8 @@ private:
 	glm::mat4 modelMatrix;
 	Camera* renderCamera;
 	glm::vec3 position, scale, rotation;
-	GLuint vao, vbo, ebo, texture, program, shadowsProgram, cubeMapShadowsProgram;
+	GLuint vao, vbo, ebo, texture, program, shadowsProgram, cubeMapShadowsProgram, decalTexture;
+	glm::vec3 decalPosition, decalTarget, decalOffset;
 
 	// Model loading
 	std::string directory;

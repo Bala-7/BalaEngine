@@ -8,6 +8,13 @@
 #include "Engine/Editor/imgui_widgets.h"
 
 #include "stb_image.h"
+
+#include <Windows.h>
+#include <commdlg.h>
+#include <ShObjIdl.h>
+#include <Engine/Debug/Debug.h>
+
+
 ModelRenderer::~ModelRenderer()
 {
 }
@@ -25,6 +32,8 @@ void ModelRenderer::OnComponentAdded()
 	setScale(gameObject->transform->scale);
 	setRotation(gameObject->transform->rotation);
 
+	decalPosition = glm::vec3(0.0f);
+
 	for (auto it = begin(_meshes); it != end(_meshes); ++it) 
 	{
 		it->SetGameObject(gameObject);
@@ -40,6 +49,39 @@ void ModelRenderer::DrawInspector()
 	strcpy(modelNameText, "Model name: ");
 	strcat(modelNameText, _modelName.c_str());
 	ImGui::Text(modelNameText);
+	ImGui::Separator();
+
+	if (ImGui::Button("Select Decal"))
+	{
+		std::string selectedFile = OpenFileDialog();
+		if (!selectedFile.empty())
+		{
+			Debug::Log("Selected file: " + selectedFile);
+			// You can now use the selected file path in your application
+			decalTextureId = RenderEngine::GetInstance()->GetTextureID(selectedFile.c_str(), true);
+			for (auto it = begin(_meshes); it != end(_meshes); ++it)
+			{
+				it->setDecalTexture(decalTextureId);
+			}
+		}
+	}
+
+	if (decalTextureId != 0)
+	{
+		ImGui::Text("Decal Position");
+		nimgui::draw_vec3_widget("Decal Position", decalPosition);
+		ImGui::Text("Decal Target");
+		nimgui::draw_vec3_widget("Decal Target", decalTarget);
+		ImGui::Text("Decal Offset");
+		nimgui::draw_vec3_widget("Decal Offset", decalOffset);
+		for (auto it = begin(_meshes); it != end(_meshes); ++it)
+		{
+			it->setDecalPosition(decalPosition);
+			it->setDecalTarget(decalTarget);
+			it->setDecalOffset(decalOffset);
+		}
+		ImGui::Image((void*)(intptr_t)decalTextureId, ImVec2(256, 256));
+	}
 	
 }
 
@@ -235,4 +277,29 @@ unsigned int ModelRenderer::TextureFromFile(const char* path, const std::string&
 	}
 
 	return textureID;
+}
+
+std::string ModelRenderer::OpenFileDialog()
+{
+	// Configure the OPENFILENAME structure
+	OPENFILENAME ofn;
+	char fileName[MAX_PATH] = "";
+	ZeroMemory(&ofn, sizeof(ofn));
+	ofn.lStructSize = sizeof(OPENFILENAME);
+	ofn.hwndOwner = NULL;  // If using SDL, you may need to pass the correct window handle
+	ofn.lpstrFilter = "All Files\0*.*\0Text Files\0*.TXT\0";
+	ofn.lpstrFile = fileName;
+	ofn.nMaxFile = MAX_PATH;
+	ofn.Flags = OFN_EXPLORER | OFN_FILEMUSTEXIST | OFN_HIDEREADONLY;
+	ofn.lpstrDefExt = "";
+
+	std::string filePath;
+
+	// Open the file dialog and get the result
+	if (GetOpenFileName(&ofn))
+	{
+		filePath = fileName;
+	}
+
+	return filePath;
 }

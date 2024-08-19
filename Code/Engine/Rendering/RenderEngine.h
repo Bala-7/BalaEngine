@@ -85,7 +85,7 @@ public:
 	GLFWwindow* GetPlayWindow();
 	void UseWindow(GLFWwindow* window);
 	Camera* GetCamera();
-	GLuint GetTextureID(const char* fileName);
+	GLuint GetTextureID(const char* fileName, bool fullPath = false);
 	GLuint GetShaderProgram();
 	GLuint GetSkyboxShaderProgram();
 	GLuint GetShadowShaderProgram();

@@ -37,6 +37,7 @@ uniform int activeLights;
 
 in vec3 Normal;  
 in vec2 TexCoord;
+in vec4 DecalCoords;
 in vec3 FragPos;
 in vec4 FragPosLightSpace;  
 in float interpolatedDepth;
@@ -44,6 +45,7 @@ in float interpolatedDepth;
 uniform vec3 lightPos;
 uniform float far_plane;
   
+uniform bool enableDecal;  
 uniform vec3 objectColor;
 uniform vec3 environmentColor;
 uniform vec3 viewPos; 
@@ -59,6 +61,8 @@ in vec4 FragPosCubeMap;
 
 // texture
 uniform sampler2D Texture;
+uniform sampler2D decalTexture;
+
  
 out vec4 FragColor;
 
@@ -192,5 +196,30 @@ void main()
 	
 	
 	result *= objectColor;
-    FragColor = vec4(result, 1.0) * texture(Texture, TexCoord);
+    
+	vec4 finalColor = vec4(result, 1.0) * texture(Texture, TexCoord);
+	
+	// Decal
+	if(enableDecal)
+	{
+		vec3 projCoords = DecalCoords.xyz / DecalCoords.w;
+		projCoords = projCoords * 0.5 + 0.5; // Transform to [0, 1] range
+
+		// Check if the projected coordinates are within the texture bounds
+		if (projCoords.x >= 0.0 && projCoords.x <= 1.0 &&
+			projCoords.y >= 0.0 && projCoords.y <= 1.0 &&
+			projCoords.z >= 0.0 && projCoords.z <= 1.0)
+		{
+			vec4 decalColor = texture(decalTexture, projCoords.xy);
+			FragColor = mix(finalColor, decalColor, decalColor.a);
+		}
+		else
+		{
+			FragColor = finalColor;
+		}
+	}
+	else
+	{
+		FragColor = finalColor;
+	}	
 }
