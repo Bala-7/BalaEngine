@@ -178,6 +178,7 @@ int main()
 
 		renderEngine->UseWindow(window);
 		renderEngine->RenderSceneView(sceneGraph);
+		renderEngine->RenderPlayView(sceneGraph);
 		editor->DrawEditorWindows();
 
 		/* Test for drawing shadowmap framebuffer onto a quad. */

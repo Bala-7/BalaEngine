@@ -16,6 +16,9 @@ public:
 	glm::vec3 getCameraPosition();
 
 
+	void setYaw(float newYaw) { yaw = newYaw; }
+	void setPitch(float newPitch) { pitch = newPitch; }
+
 	//void MouseControl(GLfloat xChange, GLfloat yChange);
 
 	void Update();

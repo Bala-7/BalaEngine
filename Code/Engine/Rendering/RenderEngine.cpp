@@ -235,6 +235,8 @@ void RenderEngine::InitGame()
 	
 	//camera = new Camera(120, 1280, 720, 0.1f, 100.0f, glm::vec3(0.0f, 0.0f, 6.0f));
 	sceneViewCamera = new Camera(120, 854, 480, 0.1f, 100.0f, glm::vec3(0.0f, 0.5f, 4.0f));
+	playViewCamera = new Camera(120, 854, 480, 0.1f, 100.0f, glm::vec3(1.0f, 1.0f, 4.0f));
+	playViewCamera->setYaw(10.0f);
 	//glm::mat4 projection = glm::ortho(0.0f, (float) config.WINDOW_SIZE_X, (float) config.WINDOW_SIZE_Y, 0.0f, -1.0f, 1.0f);
 	ShaderLoader shaderLoader;
 	shaderProgram = shaderLoader.createProgram(config.VERTEX_SHADER_PATH.c_str(), config.FRAGMENT_SHADER_PATH.c_str());
@@ -433,15 +435,35 @@ void RenderEngine::CreateFramebuffer()
 	if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
 		std::cout << "ERROR::FRAMEBUFFER:: Framebuffer is not complete!\n";
 
+	// Play window framebuffer
+	glGenFramebuffers(1, &playWindowFBO);
+	glBindFramebuffer(GL_FRAMEBUFFER, playWindowFBO);
+
+
+	glGenTextures(1, &playWindowTexture);
+	glBindTexture(GL_TEXTURE_2D, playWindowTexture);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, WIDTH, HEIGHT, 0, GL_RGB, GL_UNSIGNED_BYTE, NULL);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, playWindowTexture, 0);
+
+	glGenRenderbuffers(1, &playWindowRBO);
+	glBindRenderbuffer(GL_RENDERBUFFER, playWindowRBO);
+	glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH24_STENCIL8, WIDTH, HEIGHT);
+	glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_RENDERBUFFER, playWindowRBO);
+
+	if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
+		std::cout << "ERROR::FRAMEBUFFER:: Framebuffer is not complete!\n";
+
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 	glBindTexture(GL_TEXTURE_2D, 0);
 	glBindRenderbuffer(GL_RENDERBUFFER, 0);
 }
 
 // here we bind our framebuffer
-void RenderEngine::BindFramebuffer()
+void RenderEngine::BindFramebuffer(GLuint fbo)
 {
-	glBindFramebuffer(GL_FRAMEBUFFER, FBO);
+	glBindFramebuffer(GL_FRAMEBUFFER, fbo);
 	glViewport(0, 0, 854, 480);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glClearColor(0.0, 0.0, 0.0, 1.0);
@@ -484,7 +506,7 @@ void RenderEngine::RenderSceneView(SceneGraph* scene)
 
 
 	// Light pass
-	BindFramebuffer();
+	BindFramebuffer(FBO);
 	scene->Draw(sceneViewCamera);
 	UnbindFramebuffer();
 
@@ -502,7 +524,7 @@ void RenderEngine::RenderPlayView(SceneGraph* scene)
 	shadowMap->Unbind();
 
 	// Light pass
-	BindFramebuffer();
+	BindFramebuffer(playWindowFBO);
 	scene->Draw(playViewCamera);
 	UnbindFramebuffer();
 }

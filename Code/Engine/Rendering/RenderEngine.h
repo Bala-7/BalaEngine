@@ -108,11 +108,12 @@ public:
 
 	void CreateFramebuffer();
 	void CreateShadowmapFramebuffer();
-	void BindFramebuffer();
+	void BindFramebuffer(GLuint fbo);
 	void UnbindFramebuffer();
 	void RescaleFramebuffer(float width, float height);
 
 	GLuint GetFrameBufferTexture() { return texture_id; }
+	GLuint GetPlayWindowFrameBufferTexture() { return playWindowTexture; }
 	
 	void OnKeyboardInput(GLFWwindow* window, int key, int scancode, int action, int mode);
 	void OnMouseInput(GLFWwindow* window, int button, int action, int mods);
@@ -188,10 +189,15 @@ private:
 	FT_Library ft;
 	FT_Face ftFace;
 
-	// Framebuffer display
+	// Framebuffer display for Debug window
 	GLuint FBO;
 	GLuint RBO;
 	GLuint texture_id;
+
+	// Framebuffer display for Play window
+	GLuint playWindowFBO;
+	GLuint playWindowRBO;
+	GLuint playWindowTexture;
 
 	// Input
 	bool isShiftKeyPressed = false;

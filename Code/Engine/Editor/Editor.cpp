@@ -374,7 +374,7 @@ void Editor::DrawPlayWindow()
 		// and here we can add our created texture as image to ImGui
 		// unfortunately we need to use the cast to void* or I didn't find another way tbh
 		ImGui::GetWindowDrawList()->AddImage(
-			(void*)RenderEngine::GetInstance()->GetFrameBufferTexture(),
+			(void*)RenderEngine::GetInstance()->GetPlayWindowFrameBufferTexture(),
 			ImVec2(pos.x, pos.y),
 			ImVec2(pos.x + window_width, pos.y + window_height),
 			ImVec2(0, 1),
