@@ -352,7 +352,7 @@ void Editor::DrawPlayWindow()
 	const ImVec2 windowPos = ImGui::GetWindowPos();
 	const ImVec2 windowSize = ImGui::GetWindowSize();
 
-	mouseOverSceneView = IsMouseOverWindow(windowPos, windowSize);
+	//mouseOverSceneView = IsMouseOverWindow(windowPos, windowSize);
 
 	// Render the sub-viewport content within the ImGui frame
 	ImGui::BeginChild("SubViewport", ImVec2(subViewportWidth, subViewportHeight), true);
@@ -401,7 +401,7 @@ void Editor::DrawShadowMapWindow()
 	const ImVec2 windowPos = ImGui::GetWindowPos();
 	const ImVec2 windowSize = ImGui::GetWindowSize();
 
-	mouseOverSceneView = IsMouseOverWindow(windowPos, windowSize);
+	//mouseOverSceneView = IsMouseOverWindow(windowPos, windowSize);
 
 	// Render the sub-viewport content within the ImGui frame
 	ImGui::BeginChild("ShadowSubViewport", ImVec2(subViewportWidth, subViewportHeight), true);
@@ -454,7 +454,7 @@ void Editor::DrawShadowCubeMapWindow()
 	const ImVec2 windowPos = ImGui::GetWindowPos();
 	const ImVec2 windowSize = ImGui::GetWindowSize();
 
-	mouseOverSceneView = IsMouseOverWindow(windowPos, windowSize);
+	//mouseOverSceneView = IsMouseOverWindow(windowPos, windowSize);
 
 	// Render the sub-viewport content within the ImGui frame
 	ImGui::BeginChild("ShadowcubemapSubViewport", ImVec2(subViewportWidth, subViewportHeight), true);

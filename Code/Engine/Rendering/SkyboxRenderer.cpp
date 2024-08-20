@@ -139,12 +139,12 @@ void SkyboxRenderer::DrawCubemapShadows()
 {
 }
 
-void SkyboxRenderer::setupShaderForDraw()
+void SkyboxRenderer::setupShaderForDraw(Camera* camera)
 {
 	glDepthMask(GL_FALSE);
 	// Get position and scale from Transform component
 	//setPosition(gameObject->transform->position);
-	setPosition(renderCamera->getCameraPosition());
+	setPosition(camera->getCameraPosition());
 	setScale(gameObject->transform->scale);
 	setRotation(gameObject->transform->rotation);
 
@@ -160,7 +160,7 @@ void SkyboxRenderer::setupShaderForDraw()
 
 	glm::vec3 FragPos = glm::vec3(modelMatrix * glm::vec4(position, 1.0f));
 
-	glm::mat4 vp = renderCamera->getProjectionMatrix() * renderCamera->getViewMatrix();
+	glm::mat4 vp = camera->getProjectionMatrix() * camera->getViewMatrix();
 
 	glUseProgram(shader->ID);
 
@@ -188,7 +188,7 @@ void SkyboxRenderer::draw()
 
 void SkyboxRenderer::draw(Camera* camera)
 {
-	setupShaderForDraw();
+	setupShaderForDraw(camera);
 	draw();
 }
 
