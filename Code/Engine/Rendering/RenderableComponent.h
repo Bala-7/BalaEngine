@@ -10,6 +10,7 @@ public:
 
 	virtual void DrawShadows() = 0;
 	virtual void DrawCubemapShadows()= 0;
+	virtual void DrawPickingColor()= 0;
 
 
 	virtual void draw(Camera* camera) = 0;

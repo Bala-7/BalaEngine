@@ -35,6 +35,12 @@ public:
 		int WINDOW_SIZE_Y;
 		int FPS_MAX;
 
+		int SCENE_VIEW_SIZE_X;
+		int SCENE_VIEW_SIZE_Y;
+
+		int PLAY_VIEW_SIZE_X;
+		int PLAY_VIEW_SIZE_Y;
+
 		std::string FONTS_PATH;
 		std::string SHADERS_PATH;
 
@@ -49,6 +55,9 @@ public:
 
 		std::string VERTEX_SHADER_SHADOW_PATH;
 		std::string FRAGMENT_SHADER_SHADOW_PATH;
+
+		std::string VERTEX_SHADER_PICKING_PATH;
+		std::string FRAGMENT_SHADER_PICKING_PATH;
 
 		std::string VERTEX_SHADER_CM_SHADOW_PATH;
 		std::string FRAGMENT_SHADER_CM_SHADOW_PATH;
@@ -89,6 +98,7 @@ public:
 	GLuint GetShaderProgram();
 	GLuint GetSkyboxShaderProgram();
 	GLuint GetShadowShaderProgram();
+	GLuint GetPickingShaderProgram();
 	GLuint GetCubeMapShadowShaderProgram();
 	GLuint GetTextShaderProgram();
 	std::map<char, Character> GetCharacterList();
@@ -108,12 +118,14 @@ public:
 
 	void CreateFramebuffer();
 	void CreateShadowmapFramebuffer();
+	void CreateObjectPickingFramebuffer();
 	void BindFramebuffer(GLuint fbo);
 	void UnbindFramebuffer();
 	void RescaleFramebuffer(float width, float height);
 
 	GLuint GetFrameBufferTexture() { return texture_id; }
 	GLuint GetPlayWindowFrameBufferTexture() { return playWindowTexture; }
+	GLuint GetObjectPickingTexture() { return pickingTexture; }
 	
 	void OnKeyboardInput(GLFWwindow* window, int key, int scancode, int action, int mode);
 	void OnMouseInput(GLFWwindow* window, int button, int action, int mods);
@@ -135,6 +147,8 @@ public:
 
 	void SetLightViewProjectionMatrix(glm::mat4 newMatrix) { lightViewProjectionMatrix = newMatrix; }
 
+	// Object picking
+	GLuint GetPickingTexture() { return pickingTexture; }
 
 	// Play Mode
 	void StartPlayMode();
@@ -189,7 +203,7 @@ private:
 	FT_Library ft;
 	FT_Face ftFace;
 
-	// Framebuffer display for Debug window
+	// Framebuffer display for Scene window
 	GLuint FBO;
 	GLuint RBO;
 	GLuint texture_id;
@@ -213,6 +227,8 @@ private:
 	ShadowCubeMapFBO* shadowCubeMap;
 	GLuint shadowCubeMapShaderProgram;
 
+	// Object picking in Scene View
+	GLuint pickingFBO, pickingTexture, pickingDepthBuffer, pickingShaderProgram;
 
 
 	glm::mat4 lightProjectionMatrix;

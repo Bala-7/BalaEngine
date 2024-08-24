@@ -40,10 +40,12 @@ public:
 
 	void DrawShadowPass();
 	void DrawCubemapShadowPass();
+	void DrawPickingColorPass();
 	void DrawLightingPass(Camera* camera);
 	void draw();
 	void SetupShaderForLightingPass(Camera* camera);
 	void SetupShaderFor2DShadowPass();
+	void SetupShaderForPickingColorPass();
 	void SetupShaderForCubeMapShadowPass();
 	void setPosition(glm::vec3 _position);
 	void setScale(glm::vec3 _scale);
@@ -51,6 +53,7 @@ public:
 	void setProgram(GLuint _program);
 	void setShadowsProgram(GLuint _program);
 	void setCubeMapShadowsProgram(GLuint _program);
+	void setPickingProgram(GLuint _program);
 	void setTexture(GLuint _textureID);
 	void setDecalTexture(GLuint _textureID);
 	void setDecalPosition(glm::vec3 position);
@@ -66,6 +69,7 @@ public:
 	Shader* shader;
 	Shader* shadowShader;
 	Shader* cubeMapShadowShader;
+	Shader* pickingShader;
 	
 	// TEMP : Shadow mapping
 	static glm::mat4 lightViewProjectionMatrix;
@@ -79,7 +83,7 @@ private:
 	glm::mat4 modelMatrix;
 	Camera* renderCamera;
 	glm::vec3 position, scale, rotation;
-	GLuint vao, vbo, ebo, texture, program, shadowsProgram, cubeMapShadowsProgram, decalTexture;
+	GLuint vao, vbo, ebo, texture, program, shadowsProgram, cubeMapShadowsProgram, decalTexture, pickingProgram;
 	glm::vec3 decalPosition, decalTarget, decalOffset;
 
 	// Model loading

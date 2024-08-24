@@ -37,6 +37,11 @@ void SceneGraph::DrawCubemapShadows()
 	rootNode->DrawCubemapShadows();
 }
 
+void SceneGraph::DrawPicking()
+{
+	rootNode->DrawPicking();
+}
+
 SceneNode* SceneGraph::GetRootNode()
 {
 	return rootNode;

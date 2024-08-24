@@ -22,6 +22,7 @@ public:
 	void setPosition(glm::vec3 _position);
 	void DrawShadows() override;
 	void DrawCubemapShadows() override;
+	void DrawPickingColor() override;
 	void setScale(glm::vec3 _scale);
 	void setRotation(glm::vec3 _rotation);
 
@@ -41,5 +42,6 @@ private:
 	unsigned int TextureFromFile(const char* path, const std::string& directory, bool gamma);
 	std::string OpenFileDialog();
 
+	glm::vec3 GetPickingColor(int i);
 };
 

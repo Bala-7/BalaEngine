@@ -11,6 +11,7 @@ public:
 	void Draw(Camera* camera);
 	void DrawShadows();
 	void DrawCubemapShadows();
+	void DrawPicking();
 	SceneNode* GetRootNode();
 
 	void AddToSceneLights(Light* newLight);

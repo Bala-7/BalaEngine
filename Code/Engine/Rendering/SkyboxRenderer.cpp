@@ -139,6 +139,10 @@ void SkyboxRenderer::DrawCubemapShadows()
 {
 }
 
+void SkyboxRenderer::DrawPickingColor()
+{
+}
+
 void SkyboxRenderer::setupShaderForDraw(Camera* camera)
 {
 	glDepthMask(GL_FALSE);

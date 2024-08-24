@@ -26,6 +26,7 @@ public:
 
 	void DrawShadows() override;
 	void DrawCubemapShadows() override;
+	void DrawPickingColor() override;
 
 private:
 	void setupShaderForDraw(Camera* camera);

@@ -53,6 +53,7 @@ private:
 	void DrawLightingWindow();
 	void DrawConsoleWindow();
 	void DrawSceneViewWindow();
+	void DrawObjectPickingWindow();
 	void DrawShadowMapWindow();
 	void DrawShadowCubeMapWindow();
 

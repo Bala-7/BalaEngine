@@ -114,6 +114,14 @@ void ModelRenderer::DrawCubemapShadows()
 	}
 }
 
+void ModelRenderer::DrawPickingColor()
+{
+	for (auto it = begin(_meshes); it != end(_meshes); ++it)
+	{
+		it->DrawPickingColorPass();
+	}
+}
+
 void ModelRenderer::setScale(glm::vec3 _scale)
 {
 	this->scale = _scale;
@@ -217,6 +225,7 @@ MeshRenderer ModelRenderer::processMesh(aiMesh* mesh, const aiScene* scene)
 	_mesh->setProgram(RenderEngine::GetInstance()->GetShaderProgram());
 	_mesh->setShadowsProgram(RenderEngine::GetInstance()->GetShadowShaderProgram());
 	_mesh->setCubeMapShadowsProgram(RenderEngine::GetInstance()->GetCubeMapShadowShaderProgram());
+	_mesh->setPickingProgram(RenderEngine::GetInstance()->GetPickingShaderProgram());
 	_mesh->shader->setVec3("objectColor", glm::vec3(1.0f, 1.0f, 1.0f));
 	_mesh->shader->setVec3("lightColor", glm::vec3(1.0f, 1.0f, 1.0f));
 
@@ -302,4 +311,9 @@ std::string ModelRenderer::OpenFileDialog()
 	}
 
 	return filePath;
+}
+
+glm::vec3 ModelRenderer::GetPickingColor(int i)
+{
+	return glm::vec3(1.0, 0.0, 0.0);
 }

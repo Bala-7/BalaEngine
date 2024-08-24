@@ -83,6 +83,17 @@ void SceneNode::DrawCubemapShadows()
 	}
 }
 
+void SceneNode::DrawPicking()
+{
+	if (gameObject && gameObject->GetRenderComponent())
+	{
+		gameObject->GetRenderComponent()->DrawPickingColor();
+	}
+	for (SceneNode* child : children) {
+		child->DrawPicking();
+	}
+}
+
 void SceneNode::DrawEditorWindow(int level)
 {
 	if(level == 0)

@@ -40,6 +40,8 @@ void RenderEngine::Initialize()
 
 	CreateShadowmapFramebuffer();	
 
+	CreateObjectPickingFramebuffer();
+
 	Debug::Log("Render Engine initialized!");
 }
 
@@ -134,6 +136,11 @@ GLuint RenderEngine::GetSkyboxShaderProgram()
 GLuint RenderEngine::GetShadowShaderProgram()
 {
 	return shadowShaderProgram;
+}
+
+GLuint RenderEngine::GetPickingShaderProgram()
+{
+	return pickingShaderProgram;
 }
 
 GLuint RenderEngine::GetCubeMapShadowShaderProgram()
@@ -234,8 +241,8 @@ void RenderEngine::InitGame()
 
 	
 	//camera = new Camera(120, 1280, 720, 0.1f, 100.0f, glm::vec3(0.0f, 0.0f, 6.0f));
-	sceneViewCamera = new Camera(120, 854, 480, 0.1f, 100.0f, glm::vec3(0.0f, 0.5f, 4.0f));
-	playViewCamera = new Camera(120, 854, 480, 0.1f, 100.0f, glm::vec3(-5.0f, 5.0f, 10.0f));
+	sceneViewCamera = new Camera(120, config.SCENE_VIEW_SIZE_X, config.SCENE_VIEW_SIZE_Y, 0.1f, 100.0f, glm::vec3(0.0f, 0.5f, 4.0f));
+	playViewCamera = new Camera(120, config.PLAY_VIEW_SIZE_X, config.PLAY_VIEW_SIZE_Y, 0.1f, 100.0f, glm::vec3(-5.0f, 5.0f, 10.0f));
 	playViewCamera->setYaw(-60.0f);
 	playViewCamera->setPitch(-20.0f);
 	playViewCamera->Update();
@@ -245,6 +252,7 @@ void RenderEngine::InitGame()
 	skyboxShaderProgram = shaderLoader.createProgram(config.VERTEX_SHADER_PATH_SKYBOX.c_str(), config.FRAGMENT_SHADER_PATH_SKYBOX.c_str());
 	shadowShaderProgram = shaderLoader.createProgram(config.VERTEX_SHADER_SHADOW_PATH.c_str(), config.FRAGMENT_SHADER_SHADOW_PATH.c_str());
 	shadowCubeMapShaderProgram = shaderLoader.createProgram(config.VERTEX_SHADER_CM_SHADOW_PATH.c_str(), config.FRAGMENT_SHADER_CM_SHADOW_PATH.c_str(), config.GEOMETRY_SHADER_CM_SHADOW_PATH.c_str());
+	pickingShaderProgram = shaderLoader.createProgram(config.VERTEX_SHADER_PICKING_PATH.c_str(), config.FRAGMENT_SHADER_PICKING_PATH.c_str());
 	textShaderProgram = shaderLoader.createProgram(config.VERTEX_SHADER_TEXT_PATH.c_str(), config.FRAGMENT_SHADER_TEXT_PATH.c_str());
 }
 
@@ -384,6 +392,12 @@ void RenderEngine::InitializeConfigValues()
 	config.WINDOW_SIZE_X = std::stoi(config.configValues["RESOLUTION_X"]);
 	config.WINDOW_SIZE_Y = std::stoi(config.configValues["RESOLUTION_Y"]);
 
+	config.SCENE_VIEW_SIZE_X = std::stoi(config.configValues["SCENE_VIEW_SIZE_X"]);
+	config.SCENE_VIEW_SIZE_Y = std::stoi(config.configValues["SCENE_VIEW_SIZE_Y"]);
+
+	config.PLAY_VIEW_SIZE_X = std::stoi(config.configValues["PLAY_VIEW_SIZE_X"]);
+	config.PLAY_VIEW_SIZE_Y = std::stoi(config.configValues["PLAY_VIEW_SIZE_Y"]);
+
 	config.FONTS_PATH = config.configValues["FONTS_PATH"];
 	config.SHADERS_PATH = config.configValues["SHADERS_PATH"];
 
@@ -395,6 +409,9 @@ void RenderEngine::InitializeConfigValues()
 
 	config.VERTEX_SHADER_SHADOW_PATH = config.configValues["VERTEX_SHADER_SHADOWS_PATH"];
 	config.FRAGMENT_SHADER_SHADOW_PATH = config.configValues["FRAGMENT_SHADER_SHADOWS_PATH"];
+
+	config.VERTEX_SHADER_PICKING_PATH = config.configValues["VERTEX_SHADER_PICKING_PATH"];
+	config.FRAGMENT_SHADER_PICKING_PATH = config.configValues["FRAGMENT_SHADER_PICKING_PATH"];
 
 	config.VERTEX_SHADER_CM_SHADOW_PATH = config.configValues["VERTEX_SHADER_CM_SHADOWS_PATH"];
 	config.FRAGMENT_SHADER_CM_SHADOW_PATH = config.configValues["FRAGMENT_SHADER_CM_SHADOWS_PATH"];
@@ -414,24 +431,50 @@ void RenderEngine::CreateShadowmapFramebuffer()
 	shadowCubeMap->Init();
 }
 
+void RenderEngine::CreateObjectPickingFramebuffer()
+{
+	// Create a framebuffer object
+	glGenFramebuffers(1, &pickingFBO);
+	glBindFramebuffer(GL_FRAMEBUFFER, pickingFBO);
+
+
+	// Create a texture to store the color information
+	glGenTextures(1, &pickingTexture);
+	glBindTexture(GL_TEXTURE_2D, pickingTexture);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, config.SCENE_VIEW_SIZE_X, config.SCENE_VIEW_SIZE_Y, 0, GL_RGB, GL_UNSIGNED_BYTE, NULL);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, pickingTexture, 0);
+
+	// Create a renderbuffer object to store the depth information
+	glGenRenderbuffers(1, &pickingDepthBuffer);
+	glBindRenderbuffer(GL_RENDERBUFFER, pickingDepthBuffer);
+	glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT, config.SCENE_VIEW_SIZE_X, config.SCENE_VIEW_SIZE_Y);
+	glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, pickingDepthBuffer);
+
+	// Check framebuffer completeness
+	if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE) {
+		Debug::LogError("Framebuffer is not complete!");
+	}
+	glBindFramebuffer(GL_FRAMEBUFFER, 0);
+}
+
 void RenderEngine::CreateFramebuffer()
 {
 	glGenFramebuffers(1, &FBO);
 	glBindFramebuffer(GL_FRAMEBUFFER, FBO);
 
-	int WIDTH = 854;
-	int HEIGHT = 480;
 
 	glGenTextures(1, &texture_id);
 	glBindTexture(GL_TEXTURE_2D, texture_id);
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, WIDTH, HEIGHT, 0, GL_RGB, GL_UNSIGNED_BYTE, NULL);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, config.SCENE_VIEW_SIZE_X, config.SCENE_VIEW_SIZE_Y, 0, GL_RGB, GL_UNSIGNED_BYTE, NULL);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, texture_id, 0);
 
 	glGenRenderbuffers(1, &RBO);
 	glBindRenderbuffer(GL_RENDERBUFFER, RBO);
-	glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH24_STENCIL8, WIDTH, HEIGHT);
+	glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH24_STENCIL8, config.SCENE_VIEW_SIZE_X, config.SCENE_VIEW_SIZE_Y);
 	glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_RENDERBUFFER, RBO);
 
 	if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
@@ -444,14 +487,14 @@ void RenderEngine::CreateFramebuffer()
 
 	glGenTextures(1, &playWindowTexture);
 	glBindTexture(GL_TEXTURE_2D, playWindowTexture);
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, WIDTH, HEIGHT, 0, GL_RGB, GL_UNSIGNED_BYTE, NULL);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, config.PLAY_VIEW_SIZE_X, config.PLAY_VIEW_SIZE_Y, 0, GL_RGB, GL_UNSIGNED_BYTE, NULL);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, playWindowTexture, 0);
 
 	glGenRenderbuffers(1, &playWindowRBO);
 	glBindRenderbuffer(GL_RENDERBUFFER, playWindowRBO);
-	glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH24_STENCIL8, WIDTH, HEIGHT);
+	glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH24_STENCIL8, config.PLAY_VIEW_SIZE_X, config.PLAY_VIEW_SIZE_Y);
 	glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_RENDERBUFFER, playWindowRBO);
 
 	if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
@@ -510,6 +553,11 @@ void RenderEngine::RenderSceneView(SceneGraph* scene)
 	// Light pass
 	BindFramebuffer(FBO);
 	scene->Draw(sceneViewCamera);
+	UnbindFramebuffer();
+
+	// Object picking pass
+	BindFramebuffer(pickingFBO);
+	scene->DrawPicking();
 	UnbindFramebuffer();
 
 	shadowCubeMap->RenderCubemapFaceToTexture();

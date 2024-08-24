@@ -57,6 +57,9 @@ GLfloat lastX;
 GLfloat lastY;
 GLfloat xChange;
 GLfloat yChange;
+bool mouseLeftButtonPressed = false;
+double mouseButtonX;
+double mouseButtonY;
 bool mouseFirstMoved = true;
 
 int main()
@@ -85,6 +88,7 @@ int main()
 	glfwSetKeyCallback(window, key_callback);	// Input callback
 	//glfwSetMouseButtonCallback(window, mouseButtonCallback);
 	glfwSetCursorPosCallback(window, cursorPositionCallback);
+	//glfwSetMouseButtonCallback(window, mouseButtonCallback);
 
 	// RendererInitialization();	// Triangle renderer
 
@@ -239,7 +243,11 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
 // GLFW callback for mouse button events
 void mouseButtonCallback(GLFWwindow* window, int button, int action, int mods) 
 {
-	
+	if (button == GLFW_MOUSE_BUTTON_LEFT)
+	{
+		glfwGetCursorPos(window, &mouseButtonX, &mouseButtonY);
+		mouseLeftButtonPressed = (action == GLFW_PRESS);
+	}
 }
 
 // GLFW callback for mouse movement events

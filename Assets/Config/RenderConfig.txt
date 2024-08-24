@@ -2,6 +2,12 @@ RESOLUTION_X = 1480
 RESOLUTION_Y = 900
 FPS_MAX = 60
 
+SCENE_VIEW_SIZE_X = 854
+SCENE_VIEW_SIZE_Y = 480
+
+PLAY_VIEW_SIZE_X = 854
+PLAY_VIEW_SIZE_Y = 480
+
 FONTS_PATH = Assets/Fonts/
 SHADERS_PATH = Assets/Shaders/
 
@@ -13,6 +19,9 @@ FRAGMENT_SHADER_PATH_SKYBOX = Assets/Shaders/SkyboxShader.fs
 
 VERTEX_SHADER_SHADOWS_PATH = Assets/Shaders/SimpleDepthShader.vs
 FRAGMENT_SHADER_SHADOWS_PATH = Assets/Shaders/SimpleDepthShader.fs
+
+VERTEX_SHADER_PICKING_PATH = Assets/Shaders/ObjectPickingShader.vs
+FRAGMENT_SHADER_PICKING_PATH = Assets/Shaders/ObjectPickingShader.fs
 
 VERTEX_SHADER_CM_SHADOWS_PATH = Assets/Shaders/CubeMapDepthShader.vs
 FRAGMENT_SHADER_CM_SHADOWS_PATH = Assets/Shaders/CubeMapDepthShader.fs

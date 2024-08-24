@@ -147,6 +147,12 @@ void MeshRenderer::DrawCubemapShadowPass()
 	draw();
 }
 
+void MeshRenderer::DrawPickingColorPass() 
+{
+	SetupShaderForPickingColorPass();
+	draw();
+}
+
 void MeshRenderer::SetupShaderFor2DShadowPass()
 {	
 	// OPTION 1: Shadow pass for directional light
@@ -174,6 +180,37 @@ void MeshRenderer::SetupShaderFor2DShadowPass()
 	GLuint shadowMapTexture = RenderEngine::GetInstance()->GetDepthMapTexture();
 	glActiveTexture(GL_TEXTURE1);
 	glBindTexture(GL_TEXTURE_2D, shadowMapTexture);
+}
+
+void MeshRenderer::SetupShaderForPickingColorPass()
+{
+	setPosition(gameObject->transform->position);
+	setScale(gameObject->transform->scale);
+	setRotation(gameObject->transform->rotation);
+
+	glUseProgram(pickingShader->ID);
+	pickingShader->setVec3("pickingColor", glm::vec3(1.0f, 0.5f, 0.5f));
+	
+	// Set the VP matrix
+	// vp matrix is the multiplied view and projection amtrices
+	Camera* sceneViewCamera = RenderEngine::GetInstance()->GetCamera();
+	glm::mat4 vp = sceneViewCamera->getProjectionMatrix() * sceneViewCamera->getViewMatrix();
+
+	// Set the model matrix
+	glm::mat4 translationMatrix = glm::translate(glm::mat4(1.0f), position);
+	glm::mat4 scaleMatrix = glm::scale(glm::mat4(1.0f), scale);
+	glm::mat4 rotateMatrix = glm::rotate(translationMatrix, glm::radians(rotation.x), glm::vec3(1.0, 0.0, 0.0));
+	rotateMatrix = glm::rotate(rotateMatrix, glm::radians(rotation.y), glm::vec3(0.0, 1.0, 0.0));
+	rotateMatrix = glm::rotate(rotateMatrix, glm::radians(rotation.z), glm::vec3(0.0, 0.0, 1.0));
+
+	//modelMatrix = glm::mat4(1.0f);
+	modelMatrix = translationMatrix * rotateMatrix * scaleMatrix;
+	pickingShader->setMat4("model", modelMatrix);
+	pickingShader->setMat4("vp", vp);
+
+	GLuint pickingTexture = RenderEngine::GetInstance()->GetPickingTexture();
+	glActiveTexture(GL_TEXTURE4);
+	glBindTexture(GL_TEXTURE_2D, pickingTexture);
 }
 
 void MeshRenderer::SetupShaderForCubeMapShadowPass()
@@ -418,6 +455,12 @@ void MeshRenderer::setCubeMapShadowsProgram(GLuint _program)
 {
 	this->cubeMapShadowsProgram = _program;
 	cubeMapShadowShader = new Shader(_program);
+}
+
+void MeshRenderer::setPickingProgram(GLuint _program)
+{
+	this->pickingProgram = _program;
+	pickingShader = new Shader(_program);
 }
 
 // /*MODEL LOADING 

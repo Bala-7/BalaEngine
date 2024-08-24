@@ -17,6 +17,7 @@ public:
 	void Draw(Camera* camera);
 	void DrawShadows();
 	void DrawCubemapShadows();
+	void DrawPicking();
 	void DrawEditorWindow(int level);
 
 	void GetChildNamesForEditor(int depth, std::vector<std::pair<SceneNode*, int>>& result);

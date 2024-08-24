@@ -36,6 +36,7 @@
     <ClCompile Include="Code\Engine\Rendering\MeshRenderer.cpp" />
     <ClCompile Include="Code\Engine\Rendering\Model.cpp" />
     <ClCompile Include="Code\Engine\Rendering\ModelRenderer.cpp" />
+    <ClCompile Include="Code\Engine\Rendering\ObjectPicking.cpp" />
     <ClCompile Include="Code\Engine\Rendering\ObjLoader.cpp" />
     <ClCompile Include="Code\Engine\Rendering\RenderableComponent.cpp" />
     <ClCompile Include="Code\Engine\Rendering\RenderEngine.cpp" />
@@ -77,6 +78,7 @@
     <ClInclude Include="Code\Engine\Rendering\MeshRenderer.h" />
     <ClInclude Include="Code\Engine\Rendering\Model.h" />
     <ClInclude Include="Code\Engine\Rendering\ModelRenderer.h" />
+    <ClInclude Include="Code\Engine\Rendering\ObjectPicking.h" />
     <ClInclude Include="Code\Engine\Rendering\ObjLoader.h" />
     <ClInclude Include="Code\Engine\Rendering\RenderableComponent.h" />
     <ClInclude Include="Code\Engine\Rendering\RenderEngine.h" />
