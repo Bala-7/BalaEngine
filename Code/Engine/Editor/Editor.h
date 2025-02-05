@@ -44,6 +44,7 @@ protected:
 
 private:
 	GameObject* _displayedGameObject;
+	GameObject* _selectedGameObject;
 	bool mouseOverSceneView;
 	
 
@@ -58,10 +59,16 @@ private:
 	void DrawShadowCubeMapWindow();
 
 	bool IsMouseOverWindow(const ImVec2& windowPos, const ImVec2& windowSize);
+	void HandleMouseClickInSceneView();
+
+	int ReadPixelID(int x, int y);
+	int GetObjectIndexFromColor(glm::vec3 color);
 
 	static int HandleInputText(ImGuiInputTextCallbackData* data);
 	static std::string ImWcharToString(ImWchar imWchar);
 	
+	int selectedItemIndex;
+
 	// Adding GameObjects
 	bool showNewNodeTextField = false;
 	bool showNewChildTextField = false;

@@ -26,12 +26,13 @@ public:
 
 	void DrawShadows() override;
 	void DrawCubemapShadows() override;
-	void DrawPickingColor() override;
+	void DrawPickingColor(int index) override;
 
 private:
 	void setupShaderForDraw(Camera* camera);
 	void draw();
 	void draw(Camera* camera) override;
+	void drawOutline(Camera* camera) override;
 
 	std::string OpenFolderDialog();
 	void reloadTexture(std::string newPath);

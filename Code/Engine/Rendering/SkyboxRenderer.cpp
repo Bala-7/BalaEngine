@@ -139,7 +139,7 @@ void SkyboxRenderer::DrawCubemapShadows()
 {
 }
 
-void SkyboxRenderer::DrawPickingColor()
+void SkyboxRenderer::DrawPickingColor(int index)
 {
 }
 
@@ -194,6 +194,10 @@ void SkyboxRenderer::draw(Camera* camera)
 {
 	setupShaderForDraw(camera);
 	draw();
+}
+
+void SkyboxRenderer::drawOutline(Camera* camera)
+{
 }
 
 void SkyboxRenderer::DrawInspector()

@@ -9,6 +9,7 @@ public:
 	~SceneGraph();
 	void Update(float deltaTime);
 	void Draw(Camera* camera);
+	void DrawOutline(Camera* camera);
 	void DrawShadows();
 	void DrawCubemapShadows();
 	void DrawPicking();

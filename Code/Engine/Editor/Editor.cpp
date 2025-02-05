@@ -2,7 +2,7 @@
 
 #include "Engine/Rendering/RenderEngine.h"
 #include "Engine/Debug/Debug.h"
-
+#include <algorithm>
 
 void Editor::Initialize()
 {
@@ -150,7 +150,6 @@ void Editor::DrawSceneGraphWindow()
 	std::vector<std::pair<SceneNode*, int>> itemsVector;
 	sceneGraph->GetRootNode()->GetChildNamesForEditor(0, itemsVector);
 	
-	static int selectedItemIndex = -1;
 	int previousDepth = 0;
 	for (size_t i = 0; i < itemsVector.size(); ++i)
 	{
@@ -290,6 +289,67 @@ bool Editor::IsMouseOverWindow(const ImVec2& windowPos, const ImVec2& windowSize
 		mousePos.y >= windowPos.y && mousePos.y <= (windowPos.y + windowSize.y);
 }
 
+void Editor::HandleMouseClickInSceneView()
+{
+	ImGuiIO& io = ImGui::GetIO();
+	if (ImGui::IsMouseClicked(0) && io.MousePos.x >= 0 && io.MousePos.y >= 0)
+	{
+		int mouseX = static_cast<int>(io.MousePos.x);
+		int mouseY = static_cast<int>(io.MousePos.y);
+
+		ImVec2 windowPos = ImGui::GetWindowPos();
+		ImVec2 mousePosInWindow = ImVec2(mouseX - windowPos.x, mouseY - windowPos.y);
+		ImVec2 windowSize = ImGui::GetContentRegionAvail();
+
+		RenderEngine::Config config = RenderEngine::GetInstance()->GetConfiguration();
+
+		if (mousePosInWindow.x >= 0 && mousePosInWindow.y >= 0 &&
+			mousePosInWindow.x < std::min((int)windowSize.x, config.SCENE_VIEW_SIZE_X) && mousePosInWindow.y < std::min((int)windowSize.y, config.SCENE_VIEW_SIZE_Y))
+		{
+			// Proceed only if the mouse is within the ImGui window
+			//Debug::Log("Mouse within the scene view texture.");
+			int selectedObjectID = ReadPixelID(mousePosInWindow.x, mousePosInWindow.y);
+			selectedItemIndex = selectedObjectID - 1; // @TODO: Remove this hardcoded value
+			//Debug::Log("Selected item with index: " + std::to_string(selectedObjectID));
+			if(selectedItemIndex >= 0)
+			{
+				if(_selectedGameObject) _selectedGameObject->OnEditorUnSelect();
+				GameObject* newSelectedGO = RenderEngine::GetInstance()->GetRenderedItem(selectedItemIndex);
+				_selectedGameObject = newSelectedGO;
+				_selectedGameObject->OnEditorSelect();
+				Debug::Log("Selected item: " + newSelectedGO->name + " with index: " + std::to_string(selectedItemIndex));
+			}
+			else if (selectedItemIndex == -1)
+			{
+				if (_selectedGameObject) _selectedGameObject->OnEditorUnSelect();
+				_selectedGameObject = nullptr;
+			}
+		}
+	}
+}
+int Editor::ReadPixelID(int x, int y) {
+	glBindFramebuffer(GL_FRAMEBUFFER, RenderEngine::GetInstance()->GetPickingFBO());
+	glReadBuffer(GL_COLOR_ATTACHMENT0);
+
+	RenderEngine::Config config = RenderEngine::GetInstance()->GetConfiguration();
+
+	unsigned char data[3];
+	glReadPixels(x, config.SCENE_VIEW_SIZE_Y - y, 1, 1, GL_RGB, GL_UNSIGNED_BYTE, data);
+	glBindFramebuffer(GL_FRAMEBUFFER, 0);
+
+	glm::vec3 color(data[0] / 255.0f, data[1] / 255.0f, data[2] / 255.0f);
+	return GetObjectIndexFromColor(color);
+}
+
+int Editor::GetObjectIndexFromColor(glm::vec3 color)
+{
+	int r = static_cast<int>(color.r * 255.0f);
+	int g = static_cast<int>(color.g * 255.0f);
+	int b = static_cast<int>(color.b * 255.0f);
+	return r + (g << 8) + (b << 16);
+}
+
+
 void Editor::DrawSceneViewWindow()
 {
 	int subViewportWidth = 854;
@@ -304,6 +364,7 @@ void Editor::DrawSceneViewWindow()
 	const ImVec2 windowSize = ImGui::GetWindowSize();
 
 	mouseOverSceneView = IsMouseOverWindow(windowPos, windowSize);
+	HandleMouseClickInSceneView();
 
 	// Render the sub-viewport content within the ImGui frame
 	ImGui::BeginChild("SubViewport", ImVec2(subViewportWidth, subViewportHeight), true);

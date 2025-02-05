@@ -47,6 +47,9 @@ public:
 		std::string VERTEX_SHADER_PATH;
 		std::string FRAGMENT_SHADER_PATH;		
 		
+		std::string VERTEX_SHADER_PATH_OUTLINE;
+		std::string FRAGMENT_SHADER_PATH_OUTLINE;
+
 		std::string VERTEX_SHADER_PATH_SKYBOX;
 		std::string FRAGMENT_SHADER_PATH_SKYBOX;
 
@@ -148,7 +151,26 @@ public:
 	void SetLightViewProjectionMatrix(glm::mat4 newMatrix) { lightViewProjectionMatrix = newMatrix; }
 
 	// Object picking
+	GLuint GetOutlineShaderProgram();
 	GLuint GetPickingTexture() { return pickingTexture; }
+	GLuint GetPickingFBO() { return pickingFBO; }
+	void StartObjectPicking() { renderedItems.clear(); objectIndex = 1; }
+	void IncrementObjectPickingIndex() 
+	{ 
+		objectIndex++; 
+	}
+	int GetCurrentObjectPickingIndex() 
+	{ 
+		return objectIndex; 
+	}
+	void AddToRenderedItems(GameObject* go) 
+	{ 
+		renderedItems.push_back(go); 
+	}
+	GameObject* GetRenderedItem(int index) 
+	{ 
+		return renderedItems[index]; 
+	}
 
 	// Play Mode
 	void StartPlayMode();
@@ -228,7 +250,9 @@ private:
 	GLuint shadowCubeMapShaderProgram;
 
 	// Object picking in Scene View
-	GLuint pickingFBO, pickingTexture, pickingDepthBuffer, pickingShaderProgram;
+	GLuint pickingFBO, pickingTexture, pickingDepthBuffer, pickingShaderProgram, outlineShaderProgram;
+	int objectIndex;
+	std::vector<GameObject*> renderedItems;
 
 
 	glm::mat4 lightProjectionMatrix;

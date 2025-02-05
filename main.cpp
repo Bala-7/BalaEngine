@@ -158,6 +158,8 @@ int main()
 		if(keys[GLFW_KEY_LEFT_SHIFT])
 			renderEngine->GetCamera()->OnMouseMovement(xChange, yChange, frameTime);
 		
+
+
 		xChange = 0.0f;
 		yChange = 0.0f;
 
@@ -436,3 +438,5 @@ void CreateSceneGraph()
 
 	editor->sceneGraph = sceneGraph;
 }
+
+

@@ -57,6 +57,16 @@ void GameObject::SetSceneNode(SceneNode* newNode)
 	node = newNode;
 }
 
+void GameObject::OnEditorSelect()
+{
+	isSelectedInEditor = true;
+}
+
+void GameObject::OnEditorUnSelect()
+{
+	isSelectedInEditor = false;
+}
+
 Component* GameObject::GetComponent(Component::ComponentType type)
 {
 	for (auto const& component : components)

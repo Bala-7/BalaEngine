@@ -31,10 +31,16 @@ public:
 
 	Transform* transform;
 	std::string name;
+
+	void OnEditorSelect();
+	void OnEditorUnSelect();
+	bool IsSelectedInEditor() { return isSelectedInEditor; };
+
 protected:
 	
 
 private:
+	bool isSelectedInEditor = false;
 	std::list<Component*> components;
 	RenderableComponent* renderComponent;
 	SceneNode* node;

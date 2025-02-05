@@ -2,6 +2,7 @@
 #include "imgui.h"
 #include "imgui_impl_glfw.h"
 #include "imgui_impl_opengl3.h"
+#include <Engine/Rendering/RenderEngine.h>
 //#include "imgui_widgets.h"
 
 SceneNode::SceneNode()
@@ -61,6 +62,17 @@ void SceneNode::Draw(Camera* camera)
 	}
 }
 
+void SceneNode::DrawOutline(Camera* camera)
+{
+	if (gameObject && gameObject->GetRenderComponent())
+	{
+		gameObject->GetRenderComponent()->drawOutline(camera);
+	}
+	for (SceneNode* child : children) {
+		child->DrawOutline(camera);
+	}
+}
+
 void SceneNode::DrawShadows()
 {
 	if (gameObject && gameObject->GetRenderComponent())
@@ -87,7 +99,9 @@ void SceneNode::DrawPicking()
 {
 	if (gameObject && gameObject->GetRenderComponent())
 	{
-		gameObject->GetRenderComponent()->DrawPickingColor();
+		RenderEngine::GetInstance()->AddToRenderedItems(gameObject);
+		gameObject->GetRenderComponent()->DrawPickingColor(RenderEngine::GetInstance()->GetCurrentObjectPickingIndex());
+		RenderEngine::GetInstance()->IncrementObjectPickingIndex();
 	}
 	for (SceneNode* child : children) {
 		child->DrawPicking();

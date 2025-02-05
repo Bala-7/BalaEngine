@@ -19,10 +19,11 @@ public:
 	void DrawInspector() override;
 
 	void draw(Camera* camera) override;
+	void drawOutline(Camera* camera) override;
 	void setPosition(glm::vec3 _position);
 	void DrawShadows() override;
 	void DrawCubemapShadows() override;
-	void DrawPickingColor() override;
+	void DrawPickingColor(int index) override;
 	void setScale(glm::vec3 _scale);
 	void setRotation(glm::vec3 _rotation);
 

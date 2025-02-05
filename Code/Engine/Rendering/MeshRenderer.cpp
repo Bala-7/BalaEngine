@@ -147,9 +147,9 @@ void MeshRenderer::DrawCubemapShadowPass()
 	draw();
 }
 
-void MeshRenderer::DrawPickingColorPass() 
+void MeshRenderer::DrawPickingColorPass(int index) 
 {
-	SetupShaderForPickingColorPass();
+	SetupShaderForPickingColorPass(index);
 	draw();
 }
 
@@ -182,14 +182,15 @@ void MeshRenderer::SetupShaderFor2DShadowPass()
 	glBindTexture(GL_TEXTURE_2D, shadowMapTexture);
 }
 
-void MeshRenderer::SetupShaderForPickingColorPass()
+void MeshRenderer::SetupShaderForPickingColorPass(int index)
 {
 	setPosition(gameObject->transform->position);
 	setScale(gameObject->transform->scale);
 	setRotation(gameObject->transform->rotation);
 
 	glUseProgram(pickingShader->ID);
-	pickingShader->setVec3("pickingColor", glm::vec3(1.0f, 0.5f, 0.5f));
+	glm::vec3 pickingColor = GetPickingColor(index);
+	pickingShader->setVec3("pickingColor", pickingColor);
 	
 	// Set the VP matrix
 	// vp matrix is the multiplied view and projection amtrices
@@ -264,8 +265,51 @@ void MeshRenderer::SetupShaderForCubeMapShadowPass()
 
 void MeshRenderer::DrawLightingPass(Camera* camera)
 {
+	// @TODO: Move this code to an appropriate place. This is for outlining the object
+	//glStencilFunc(GL_ALWAYS, 1, 0xFF); // Always pass stencil test, write reference value 1
+	//glStencilOp(GL_KEEP, GL_KEEP, GL_REPLACE); // Replace stencil buffer value with reference on depth pass
+	//glStencilMask(0xFF); // Enable writing to the stencil buffer
+	//glDepthMask(GL_TRUE); // Enable writing to the depth buffer
+	// \TODO
+
 	SetupShaderForLightingPass(camera);
 	draw();
+}
+
+void MeshRenderer::DrawOutlinePass(Camera* camera)
+{
+	//glStencilFunc(GL_NOTEQUAL, 1, 0xFF); // Render only where stencil value is not 1
+	//glStencilMask(0x00); // Disable writing to the stencil buffer
+	//glDepthMask(GL_FALSE); // Disable writing to the depth buffer
+
+	if (this->gameObject->IsSelectedInEditor()) 
+	{
+		SetupShaderForOutlinePass(camera);
+		draw();
+	}
+	
+
+	// Restore Depth and Stencil Masks
+	//glDepthMask(GL_TRUE);
+	//glStencilMask(0xFF);
+}
+void MeshRenderer::SetupShaderForOutlinePass(Camera* camera)
+{
+	// Get position and scale from Transform component
+	setPosition(gameObject->transform->position);
+	setScale(gameObject->transform->scale);
+	setRotation(gameObject->transform->rotation);
+	
+	float outlineScale = 1.01f;
+	glUseProgram(outlineShader->ID);
+	glm::mat4 scaledModel = glm::scale(modelMatrix, glm::vec3(outlineScale)); // Scale up the object
+	
+	// vp matrix is the multiplied view and projection amtrices
+	glm::mat4 vp = camera->getProjectionMatrix() * camera->getViewMatrix();
+
+	outlineShader->setVec3("cameraPos", camera->getCameraPosition());
+	outlineShader->setMat4("vp", vp);
+	outlineShader->setMat4("model", modelMatrix);
 }
 
 void MeshRenderer::SetupShaderForLightingPass(Camera* camera)
@@ -463,6 +507,12 @@ void MeshRenderer::setPickingProgram(GLuint _program)
 	pickingShader = new Shader(_program);
 }
 
+void MeshRenderer::setOutlineProgram(GLuint _program)
+{
+	this->outlineShaderProgram = _program;
+	outlineShader = new Shader(_program);
+}
+
 // /*MODEL LOADING 
 
 void MeshRenderer::loadModel(std::string path)
@@ -606,6 +656,17 @@ unsigned int MeshRenderer::TextureFromFile(const char* path, const std::string& 
 
 	return textureID;
 }
+
+glm::vec3 MeshRenderer::GetPickingColor(int index)
+{
+	// Function to convert object index to a unique color
+	return glm::vec3(
+		((index & 0x000000FF) >> 0) / 255.0f,
+		((index & 0x0000FF00) >> 8) / 255.0f,
+		((index & 0x00FF0000) >> 16) / 255.0f);
+}
+
+
 
 
 

@@ -93,6 +93,14 @@ void ModelRenderer::draw(Camera* camera)
 	}
 }
 
+void ModelRenderer::drawOutline(Camera* camera)
+{
+	for (auto it = begin(_meshes); it != end(_meshes); ++it)
+	{
+		it->DrawOutlinePass(camera);
+	}
+}
+
 void ModelRenderer::setPosition(glm::vec3 _position)
 {
 	this->position = _position;
@@ -114,11 +122,11 @@ void ModelRenderer::DrawCubemapShadows()
 	}
 }
 
-void ModelRenderer::DrawPickingColor()
+void ModelRenderer::DrawPickingColor(int index)
 {
 	for (auto it = begin(_meshes); it != end(_meshes); ++it)
 	{
-		it->DrawPickingColorPass();
+		it->DrawPickingColorPass(index);
 	}
 }
 
@@ -225,6 +233,7 @@ MeshRenderer ModelRenderer::processMesh(aiMesh* mesh, const aiScene* scene)
 	_mesh->setProgram(RenderEngine::GetInstance()->GetShaderProgram());
 	_mesh->setShadowsProgram(RenderEngine::GetInstance()->GetShadowShaderProgram());
 	_mesh->setCubeMapShadowsProgram(RenderEngine::GetInstance()->GetCubeMapShadowShaderProgram());
+	_mesh->setOutlineProgram(RenderEngine::GetInstance()->GetOutlineShaderProgram());
 	_mesh->setPickingProgram(RenderEngine::GetInstance()->GetPickingShaderProgram());
 	_mesh->shader->setVec3("objectColor", glm::vec3(1.0f, 1.0f, 1.0f));
 	_mesh->shader->setVec3("lightColor", glm::vec3(1.0f, 1.0f, 1.0f));

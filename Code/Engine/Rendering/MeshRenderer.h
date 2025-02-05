@@ -40,12 +40,14 @@ public:
 
 	void DrawShadowPass();
 	void DrawCubemapShadowPass();
-	void DrawPickingColorPass();
+	void DrawPickingColorPass(int index);
 	void DrawLightingPass(Camera* camera);
+	void DrawOutlinePass(Camera* camera);
 	void draw();
 	void SetupShaderForLightingPass(Camera* camera);
+	void SetupShaderForOutlinePass(Camera* camera);
 	void SetupShaderFor2DShadowPass();
-	void SetupShaderForPickingColorPass();
+	void SetupShaderForPickingColorPass(int index);
 	void SetupShaderForCubeMapShadowPass();
 	void setPosition(glm::vec3 _position);
 	void setScale(glm::vec3 _scale);
@@ -54,6 +56,7 @@ public:
 	void setShadowsProgram(GLuint _program);
 	void setCubeMapShadowsProgram(GLuint _program);
 	void setPickingProgram(GLuint _program);
+	void setOutlineProgram(GLuint _program);
 	void setTexture(GLuint _textureID);
 	void setDecalTexture(GLuint _textureID);
 	void setDecalPosition(glm::vec3 position);
@@ -70,6 +73,7 @@ public:
 	Shader* shadowShader;
 	Shader* cubeMapShadowShader;
 	Shader* pickingShader;
+	Shader* outlineShader;
 	
 	// TEMP : Shadow mapping
 	static glm::mat4 lightViewProjectionMatrix;
@@ -83,7 +87,7 @@ private:
 	glm::mat4 modelMatrix;
 	Camera* renderCamera;
 	glm::vec3 position, scale, rotation;
-	GLuint vao, vbo, ebo, texture, program, shadowsProgram, cubeMapShadowsProgram, decalTexture, pickingProgram;
+	GLuint vao, vbo, ebo, texture, program, shadowsProgram, cubeMapShadowsProgram, decalTexture, pickingProgram, outlineShaderProgram;
 	glm::vec3 decalPosition, decalTarget, decalOffset;
 
 	// Model loading
@@ -98,6 +102,8 @@ private:
 	std::vector<Texture> loadMaterialTextures(aiMaterial* mat, aiTextureType type, std::string typeName);
 	unsigned int TextureFromFile(const char* path, const std::string& directory, bool gamma);
 
-	
+	// Object picking
+	glm::vec3 GetPickingColor(int index);
+
 };
 

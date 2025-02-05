@@ -148,6 +148,11 @@ GLuint RenderEngine::GetCubeMapShadowShaderProgram()
 	return shadowCubeMapShaderProgram;
 }
 
+GLuint RenderEngine::GetOutlineShaderProgram()
+{
+	return outlineShaderProgram;
+}
+
 GLuint RenderEngine::GetTextShaderProgram()
 {
 	return textShaderProgram;
@@ -236,6 +241,7 @@ void RenderEngine::InitGame()
 {
 	// Enable Depth Test, so only pixels in the front are drawn
 	glEnable(GL_DEPTH_TEST);
+	glEnable(GL_STENCIL_TEST);
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
@@ -249,6 +255,7 @@ void RenderEngine::InitGame()
 	//glm::mat4 projection = glm::ortho(0.0f, (float) config.WINDOW_SIZE_X, (float) config.WINDOW_SIZE_Y, 0.0f, -1.0f, 1.0f);
 	ShaderLoader shaderLoader;
 	shaderProgram = shaderLoader.createProgram(config.VERTEX_SHADER_PATH.c_str(), config.FRAGMENT_SHADER_PATH.c_str());
+	outlineShaderProgram = shaderLoader.createProgram(config.VERTEX_SHADER_PATH_OUTLINE.c_str(), config.FRAGMENT_SHADER_PATH_OUTLINE.c_str());
 	skyboxShaderProgram = shaderLoader.createProgram(config.VERTEX_SHADER_PATH_SKYBOX.c_str(), config.FRAGMENT_SHADER_PATH_SKYBOX.c_str());
 	shadowShaderProgram = shaderLoader.createProgram(config.VERTEX_SHADER_SHADOW_PATH.c_str(), config.FRAGMENT_SHADER_SHADOW_PATH.c_str());
 	shadowCubeMapShaderProgram = shaderLoader.createProgram(config.VERTEX_SHADER_CM_SHADOW_PATH.c_str(), config.FRAGMENT_SHADER_CM_SHADOW_PATH.c_str(), config.GEOMETRY_SHADER_CM_SHADOW_PATH.c_str());
@@ -404,6 +411,9 @@ void RenderEngine::InitializeConfigValues()
 	config.VERTEX_SHADER_PATH = config.configValues["VERTEX_SHADER_PATH"];
 	config.FRAGMENT_SHADER_PATH = config.configValues["FRAGMENT_SHADER_PATH"];
 
+	config.VERTEX_SHADER_PATH_OUTLINE = config.configValues["VERTEX_SHADER_PATH_OUTLINE"];
+	config.FRAGMENT_SHADER_PATH_OUTLINE = config.configValues["FRAGMENT_SHADER_PATH_OUTLINE"];
+
 	config.VERTEX_SHADER_PATH_SKYBOX = config.configValues["VERTEX_SHADER_PATH_SKYBOX"];
 	config.FRAGMENT_SHADER_PATH_SKYBOX = config.configValues["FRAGMENT_SHADER_PATH_SKYBOX"];
 
@@ -461,6 +471,7 @@ void RenderEngine::CreateObjectPickingFramebuffer()
 
 void RenderEngine::CreateFramebuffer()
 {
+	// Scene window framebuffer
 	glGenFramebuffers(1, &FBO);
 	glBindFramebuffer(GL_FRAMEBUFFER, FBO);
 
@@ -477,8 +488,13 @@ void RenderEngine::CreateFramebuffer()
 	glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH24_STENCIL8, config.SCENE_VIEW_SIZE_X, config.SCENE_VIEW_SIZE_Y);
 	glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_RENDERBUFFER, RBO);
 
-	if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
+	GLint stencil;
+	glGetFramebufferAttachmentParameteriv(GL_FRAMEBUFFER, GL_STENCIL_ATTACHMENT, GL_FRAMEBUFFER_ATTACHMENT_OBJECT_TYPE, &stencil);
+	printf("Stencil Attachment: %d\n", stencil);
+
+	if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE || stencil != GL_RENDERBUFFER)
 		std::cout << "ERROR::FRAMEBUFFER:: Framebuffer is not complete!\n";
+
 
 	// Play window framebuffer
 	glGenFramebuffers(1, &playWindowFBO);
@@ -510,8 +526,7 @@ void RenderEngine::BindFramebuffer(GLuint fbo)
 {
 	glBindFramebuffer(GL_FRAMEBUFFER, fbo);
 	glViewport(0, 0, 854, 480);
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	glClearColor(0.0, 0.0, 0.0, 1.0);
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
 }
 
 // here we unbind our framebuffer
@@ -537,6 +552,8 @@ void RenderEngine::RescaleFramebuffer(float width, float height)
 
 void RenderEngine::RenderSceneView(SceneGraph* scene)
 {
+	//glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
+
 	// Shadow pass
 	CalculateLightViewMatrices();
 
@@ -549,16 +566,56 @@ void RenderEngine::RenderSceneView(SceneGraph* scene)
 	scene->DrawCubemapShadows();
 	shadowCubeMap->Unbind();
 
-
+	
 	// Light pass
 	BindFramebuffer(FBO);
+	glEnable(GL_STENCIL_TEST);
+	glStencilOp(GL_KEEP, GL_KEEP, GL_REPLACE);
+	glStencilMask(0xFF);
+	glStencilFunc(GL_ALWAYS, 1, 0xFF);
+	
+	
 	scene->Draw(sceneViewCamera);
+
+	// Debugging
+	/* This is okay
+	GLint stencil = 0;
+	glGetFramebufferAttachmentParameteriv(GL_FRAMEBUFFER, GL_STENCIL_ATTACHMENT, GL_FRAMEBUFFER_ATTACHMENT_OBJECT_TYPE, &stencil);
+	printf("Stencil Attachment: %d\n", stencil);*/
+
+	/* This is also okay
+	GLint stencilBits = 0;
+	glGetIntegerv(GL_STENCIL_BITS, &stencilBits);
+	printf("Stencil Buffer Bits: %d\n", stencilBits);
+
+	GLint stencilValue = -1;
+	glReadPixels(300, 300, 1, 1, GL_STENCIL_INDEX, GL_INT, &stencilValue);
+	printf("Stencil Value at (%d, %d): %d\n", 300, 300, stencilValue);*/
+
+	// \Debugging\
+
+	// Outline render pass
+	glStencilFunc(GL_EQUAL, 1, 0xFF);
+	glStencilMask(0x00);
+	glEnable(GL_DEPTH_TEST);
+	//glEnable(GL_POLYGON_OFFSET_FILL);
+	//glPolygonOffset(1.0f, 1.0f); // Push fragments back
+	glEnable(GL_CULL_FACE);
+	glCullFace(GL_FRONT); // Render only back faces
+	scene->DrawOutline(sceneViewCamera);
+	glCullFace(GL_BACK);  // Restore normal culling
+	//glDisable(GL_POLYGON_OFFSET_FILL);
+	glStencilMask(0xFF);
+	glStencilFunc(GL_ALWAYS, 0, 0xFF);
+	glEnable(GL_DEPTH_TEST);
 	UnbindFramebuffer();
 
 	// Object picking pass
 	BindFramebuffer(pickingFBO);
 	scene->DrawPicking();
 	UnbindFramebuffer();
+
+	
 
 	shadowCubeMap->RenderCubemapFaceToTexture();
 }

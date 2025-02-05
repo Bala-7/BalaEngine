@@ -5,6 +5,7 @@
 //#include "imgui_widgets.h"
 #include "Engine/Editor/Editor.h"
 #include "Engine/Debug/Debug.h"
+#include <Engine/Rendering/RenderEngine.h>
 
 SceneGraph::SceneGraph()
 {
@@ -27,6 +28,11 @@ void SceneGraph::Draw(Camera* camera)
 	rootNode->Draw(camera);
 }
 
+void SceneGraph::DrawOutline(Camera* camera)
+{
+	rootNode->DrawOutline(camera);
+}
+
 void SceneGraph::DrawShadows()
 {
 	rootNode->DrawShadows();
@@ -39,6 +45,7 @@ void SceneGraph::DrawCubemapShadows()
 
 void SceneGraph::DrawPicking()
 {
+	RenderEngine::GetInstance()->StartObjectPicking();
 	rootNode->DrawPicking();
 }
 
