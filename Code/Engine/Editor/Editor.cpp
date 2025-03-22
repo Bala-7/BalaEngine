@@ -12,6 +12,8 @@ void Editor::Initialize()
 	ImGuiIO& io = ImGui::GetIO(); (void)io;
 	io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;
 
+	ImGui::LoadIniSettingsFromDisk("custom_layout.ini");
+
 	ImGui::StyleColorsDark();
 	ImGui_ImplGlfw_InitForOpenGL(RenderEngine::GetInstance()->GetWindow(), true);
 	ImGui_ImplOpenGL3_Init("#version 450");
@@ -22,6 +24,7 @@ void Editor::Initialize()
 
 void Editor::Terminate()
 {
+	ImGui::SaveIniSettingsToDisk("custom_layout.ini");
 	ImGui_ImplOpenGL3_Shutdown();
 	ImGui_ImplGlfw_Shutdown();
 	ImGui::DestroyContext();
@@ -55,12 +58,13 @@ void Editor::DrawEditorWindows()
 		ImGui::EndMainMenuBar();
 	}
 
+	/* // @TODO: Introduce this when the gameplay engine is working
 	ImGui::Begin("Play Menu");
 	if (ImGui::Button("Play", ImVec2(65, 20))) {
 		// Handle the 'Play' button click event here
 		RenderEngine::GetInstance()->StartPlayMode();
 	}
-	ImGui::End();
+	ImGui::End();*/
 
 	ImGui::Begin("GameObject Inspector");
 	ImGui::Text("Edit object parameters");
@@ -105,7 +109,7 @@ void Editor::DrawEditorWindows()
 	ImGui::End();
 
 	DrawLightingWindow();
-	
+	DrawEnginePerformanceWindow();
 	DrawSceneViewWindow();
 	DrawShadowMapWindow();
 	DrawShadowCubeMapWindow();
@@ -244,6 +248,20 @@ void Editor::DrawSceneGraphWindow()
 	ImGui::End();
 }
 
+void Editor::DrawEnginePerformanceWindow()
+{
+	float renderSceneMS = RenderEngine::GetInstance()->GetSceneViewTimeMS();
+	float sceneViewFPS = 1000.0f / renderSceneMS;
+	float renderPlayMS = RenderEngine::GetInstance()->GetPlayViewTimeMS();
+	float playViewFPS = 1000.0f / renderPlayMS;
+	ImGui::Begin("Performance");
+	ImGui::Text("Scene View FPS: %.2f", sceneViewFPS);
+	ImGui::Text("Play View FPS: %.2f", playViewFPS);
+	ImGui::Text("Render Scene View time (ms): %.2f", renderSceneMS);
+	ImGui::Text("Render Play View time (ms): %.2f", renderPlayMS);
+	ImGui::Text("Render Editor windows time (ms): ");
+	ImGui::End();
+}
 
 void Editor::DrawLightingWindow()
 {
@@ -315,9 +333,12 @@ void Editor::HandleMouseClickInSceneView()
 			{
 				if(_selectedGameObject) _selectedGameObject->OnEditorUnSelect();
 				GameObject* newSelectedGO = RenderEngine::GetInstance()->GetRenderedItem(selectedItemIndex);
-				_selectedGameObject = newSelectedGO;
-				_selectedGameObject->OnEditorSelect();
-				Debug::Log("Selected item: " + newSelectedGO->name + " with index: " + std::to_string(selectedItemIndex));
+				if (newSelectedGO)
+				{
+					_selectedGameObject = newSelectedGO;
+					_selectedGameObject->OnEditorSelect();
+					Debug::Log("Selected item: " + newSelectedGO->name + " with index: " + std::to_string(selectedItemIndex));
+				}
 			}
 			else if (selectedItemIndex == -1)
 			{

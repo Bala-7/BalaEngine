@@ -8,6 +8,11 @@ ShadowCubeMapFBO::ShadowCubeMapFBO()
 
 bool ShadowCubeMapFBO::Init()
 {
+	GLenum error = glGetError();
+	if (error != GL_NO_ERROR) {
+		std::cerr << "OpenGL Error before glGenTextures: " << error << std::endl;
+	}
+
 	// Previous version from here to bottom
 	glGenFramebuffers(1, &shadowCubeMapFBO);
 	glGenTextures(1, &shadowCubeMapTexture);

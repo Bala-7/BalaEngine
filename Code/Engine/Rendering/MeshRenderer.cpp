@@ -225,6 +225,8 @@ void MeshRenderer::SetupShaderForCubeMapShadowPass()
 	GLfloat aspect = (GLfloat)1024 / (GLfloat)1024;
 	
 	std::vector<Light*> sceneLights = gameObject->GetNode()->GetScene()->GetSceneLights();
+	if (sceneLights.size() <= 0)
+		return;
 	glm::vec3 lightPos = sceneLights[0]->GetGameObject()->transform->position;
 	GLfloat far = sceneLights[0]->GetFarPlane();
 	GLfloat near = sceneLights[0]->GetNearPlane();
@@ -363,10 +365,14 @@ void MeshRenderer::SetupShaderForLightingPass(Camera* camera)
 	shader->setVec3("environmentColor", RenderEngine::GetInstance()->GetEnvironmentLight());
 	shader->setVec3("viewPos", RenderEngine::GetInstance()->GetCamera()->getCameraPosition());
 	std::vector<Light*> sceneLights = gameObject->GetNode()->GetScene()->GetSceneLights();
-	glm::vec3 lightPos = sceneLights[0]->GetGameObject()->transform->position;
-	shader->setVec3("lightPos", lightPos);
-	shader->setFloat("far_plane", sceneLights[0]->GetFarPlane());
-
+	if (sceneLights.size() > 0) 
+	{
+		glm::vec3 lightPos = sceneLights[0]->GetGameObject()->transform->position;
+		shader->setVec3("lightPos", lightPos);
+		shader->setFloat("far_plane", sceneLights[0]->GetFarPlane());
+	}
+		
+	
 	glActiveTexture(GL_TEXTURE0);
 	// Bind the texture object
 	glBindTexture(GL_TEXTURE_2D, texture);

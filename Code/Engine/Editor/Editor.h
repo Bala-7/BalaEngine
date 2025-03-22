@@ -51,6 +51,7 @@ private:
 	void DrawInspector();
 
 	void DrawSceneGraphWindow();
+	void DrawEnginePerformanceWindow();
 	void DrawLightingWindow();
 	void DrawConsoleWindow();
 	void DrawSceneViewWindow();

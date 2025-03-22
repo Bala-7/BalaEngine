@@ -24,6 +24,11 @@
 #include "Engine/Core/SceneGraph.h"
 #include "Engine/Rendering/ShadowMapFBO.h"
 #include "Engine/Rendering/ShadowCubeMapFBO.h"
+#include "Engine/Rendering/RenderPass/RPLightPass.h"
+#include "Engine/Rendering/RenderPass/RPShadowCubeMapPass.h"
+#include "RenderPass/RPShadowMapPass.h"
+#include "RenderPass/RPOutlinePass.h"
+#include "RenderPass/RPObjectPickingPass.h"
 
 class RenderEngine
 {
@@ -119,16 +124,14 @@ public:
 	void SetEnvironmentLight(glm::vec3 value);
 	void SetDirectionalLightDirection(glm::vec3 value);
 
-	void CreateFramebuffer();
-	void CreateShadowmapFramebuffer();
-	void CreateObjectPickingFramebuffer();
+	void InitializeRenderPasses();
 	void BindFramebuffer(GLuint fbo);
 	void UnbindFramebuffer();
 	void RescaleFramebuffer(float width, float height);
 
-	GLuint GetFrameBufferTexture() { return texture_id; }
-	GLuint GetPlayWindowFrameBufferTexture() { return playWindowTexture; }
-	GLuint GetObjectPickingTexture() { return pickingTexture; }
+	GLuint GetFrameBufferTexture() { return sceneViewLightPass->GetTextureID(); }
+	GLuint GetPlayWindowFrameBufferTexture() { return playViewLightPass->GetTextureID(); }
+	GLuint GetObjectPickingTexture() { return pickingPass->GetPickingTexture();}
 	
 	void OnKeyboardInput(GLFWwindow* window, int key, int scancode, int action, int mode);
 	void OnMouseInput(GLFWwindow* window, int button, int action, int mods);
@@ -138,11 +141,11 @@ public:
 	void RenderPlayView(SceneGraph* scene);
 
 	// Shadows
-	GLuint GetDepthMapTexture() { return shadowMap->GetDepthMapTexture(); }
-	GLuint GetDepthMapFBO() { return shadowMap->GetDepthMapFBO(); }
-	GLuint GetDepthCubeMapTexture() { return shadowCubeMap->GetDepthMapTexture(); }
-	GLuint GetDepthCubeMapTextureUnfolded() { return shadowCubeMap->GetDepthMapTextureUnfolded(); }
-	GLuint GetDepthCubeMapFBO() { return shadowCubeMap->GetDepthMapFBO(); }
+	GLuint GetDepthMapTexture() { return shadowPass->GetShadowMapFBO()->GetDepthMapTexture(); }
+	GLuint GetDepthMapFBO() { return shadowPass->GetShadowMapFBO()->GetDepthMapFBO(); }
+	GLuint GetDepthCubeMapTexture() { return shadowCMPass->GetCubeMapFBO()->GetDepthMapTexture(); }
+	GLuint GetDepthCubeMapTextureUnfolded() { return shadowCMPass->GetCubeMapFBO()->GetDepthMapTextureUnfolded(); }
+	GLuint GetDepthCubeMapFBO() { return shadowCMPass->GetCubeMapFBO()->GetDepthMapFBO(); }
 	glm::mat4 GetLightProjectionMatrix() { return lightProjectionMatrix; }
 	glm::mat4 GetLightViewMatrix() { return lightViewMatrix; }
 	glm::mat4 GetLightViewProjectionMatrix() { return lightViewProjectionMatrix; }
@@ -152,8 +155,8 @@ public:
 
 	// Object picking
 	GLuint GetOutlineShaderProgram();
-	GLuint GetPickingTexture() { return pickingTexture; }
-	GLuint GetPickingFBO() { return pickingFBO; }
+	GLuint GetPickingTexture() { return pickingPass->GetPickingTexture(); }
+	GLuint GetPickingFBO() { return pickingPass->GetFBO(); }
 	void StartObjectPicking() { renderedItems.clear(); objectIndex = 1; }
 	void IncrementObjectPickingIndex() 
 	{ 
@@ -175,6 +178,12 @@ public:
 	// Play Mode
 	void StartPlayMode();
 
+	// Performance
+	float GetSceneViewTimeMS() { return sceneViewTimeMS; }
+	float GetPlayViewTimeMS() { return playViewTimeMS; }
+
+	
+
 private:
 
 	static RenderEngine* p_Instance;
@@ -190,6 +199,7 @@ private:
 
 	void ParseValue(std::string name, std::string value);
 	void InitializeConfigValues();
+	int InitializeMaxFPSConfigValues();
 
 	Config config;
 	//const int MAX_FPS = 60;
@@ -244,13 +254,11 @@ private:
 
 
 	// Shadows
-	ShadowMapFBO* shadowMap;
 	GLuint shadowShaderProgram;
-	ShadowCubeMapFBO* shadowCubeMap;
 	GLuint shadowCubeMapShaderProgram;
 
 	// Object picking in Scene View
-	GLuint pickingFBO, pickingTexture, pickingDepthBuffer, pickingShaderProgram, outlineShaderProgram;
+	GLuint pickingShaderProgram, outlineShaderProgram;
 	int objectIndex;
 	std::vector<GameObject*> renderedItems;
 
@@ -258,6 +266,22 @@ private:
 	glm::mat4 lightProjectionMatrix;
 	glm::mat4 lightViewMatrix;
 	glm::mat4 lightViewProjectionMatrix;
+
+
+	// Performance
+	float sceneViewTimeMS;
+	float playViewTimeMS;
+	
+	// RenderPasses
+	RPLightPass* sceneViewLightPass;
+	RPLightPass* playViewLightPass;
+	RPShadowMapPass* shadowPass;
+	RPShadowCubeMapPass* shadowCMPass;
+	RPOutlinePass* outlinePass;
+	RPObjectPickingPass* pickingPass;
+
+	std::vector<RenderPass*> sceneViewRenderPasses;
+	std::vector<RenderPass*> playViewRenderPasses;
 };
 
 #endif

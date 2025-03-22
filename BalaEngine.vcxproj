@@ -40,6 +40,12 @@
     <ClCompile Include="Code\Engine\Rendering\ObjLoader.cpp" />
     <ClCompile Include="Code\Engine\Rendering\RenderableComponent.cpp" />
     <ClCompile Include="Code\Engine\Rendering\RenderEngine.cpp" />
+    <ClCompile Include="Code\Engine\Rendering\RenderPass\RenderPass.cpp" />
+    <ClCompile Include="Code\Engine\Rendering\RenderPass\RPLightPass.cpp" />
+    <ClCompile Include="Code\Engine\Rendering\RenderPass\RPObjectPickingPass.cpp" />
+    <ClCompile Include="Code\Engine\Rendering\RenderPass\RPOutlinePass.cpp" />
+    <ClCompile Include="Code\Engine\Rendering\RenderPass\RPShadowCubeMapPass.cpp" />
+    <ClCompile Include="Code\Engine\Rendering\RenderPass\RPShadowMapPass.cpp" />
     <ClCompile Include="Code\Engine\Rendering\Shader.cpp" />
     <ClCompile Include="Code\Engine\Rendering\ShaderLoader.cpp" />
     <ClCompile Include="Code\Engine\Rendering\ShadowCubeMapFBO.cpp" />
@@ -82,6 +88,12 @@
     <ClInclude Include="Code\Engine\Rendering\ObjLoader.h" />
     <ClInclude Include="Code\Engine\Rendering\RenderableComponent.h" />
     <ClInclude Include="Code\Engine\Rendering\RenderEngine.h" />
+    <ClInclude Include="Code\Engine\Rendering\RenderPass\RenderPass.h" />
+    <ClInclude Include="Code\Engine\Rendering\RenderPass\RPLightPass.h" />
+    <ClInclude Include="Code\Engine\Rendering\RenderPass\RPObjectPickingPass.h" />
+    <ClInclude Include="Code\Engine\Rendering\RenderPass\RPOutlinePass.h" />
+    <ClInclude Include="Code\Engine\Rendering\RenderPass\RPShadowCubeMapPass.h" />
+    <ClInclude Include="Code\Engine\Rendering\RenderPass\RPShadowMapPass.h" />
     <ClInclude Include="Code\Engine\Rendering\Shader.h" />
     <ClInclude Include="Code\Engine\Rendering\ShaderLoader.h" />
     <ClInclude Include="Code\Engine\Rendering\ShadowCubeMapFBO.h" />

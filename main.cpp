@@ -39,6 +39,7 @@ void cursorPositionCallback(GLFWwindow* window, double xpos, double ypos);
 void CreateCube3D();
 void CreateSprites2D();
 void CreateModel();
+void CreateThousandModelSceneGraph();
 void CreateSceneGraph();
 
 RenderEngine* renderEngine;
@@ -83,7 +84,8 @@ int main()
 
 	//CreateCube3D();
 	//CreateSprites2D();
-	CreateSceneGraph();
+	//CreateSceneGraph();
+	CreateThousandModelSceneGraph();
 
 	glfwSetKeyCallback(window, key_callback);	// Input callback
 	//glfwSetMouseButtonCallback(window, mouseButtonCallback);
@@ -186,7 +188,6 @@ int main()
 		renderEngine->RenderSceneView(sceneGraph);
 		renderEngine->RenderPlayView(sceneGraph);
 		editor->DrawEditorWindows();
-
 		/* Test for drawing shadowmap framebuffer onto a quad. */
 		/*glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT);
@@ -368,6 +369,71 @@ void CreateModel()
 	//model = new Model("Assets/Models/example.obj");
 
 
+}
+
+void CreateThousandModelSceneGraph()
+{
+	sceneGraph = new SceneGraph();
+
+	// Light
+	GameObject* lightGO = new GameObject("Point Light");
+	sceneGraph->GetRootNode()->AddChild(new SceneNode(lightGO));
+	ModelRenderer* lightModel = new ModelRenderer("Assets/Models/Lightbulb/Lightbulb.obj");
+	light = new Light(Light::LightType::Point,
+		glm::vec3(0.0f, 0.0f, -1.0f),
+		glm::vec3(0.2f, 0.2f, 0.2f), glm::vec3(0.5f, 0.5f, 0.5f), glm::vec3(1.0f, 1.0f, 1.0f),
+		1.0f, 0.09f, 0.032f,
+		12.5f, 17.5f,
+		1.0f, 25.0f);
+	lightGO->transform->position = glm::vec3(0.0f, 1.0f, 0.2f);
+	lightGO->AddComponent(light);
+
+	// 3D Model
+	for (int i = 0; i < 1; ++i)
+	{
+		for (int j = 0; j < 5; ++j)
+		{
+			GameObject* meshGO = new GameObject("Samus Model");
+			modelRenderer = new ModelRenderer("Assets/Models/Samus/Samus/Samus_small.obj");
+			meshGO->transform->position = glm::vec3((float)i, (float)j, 0.0f);
+			meshGO->transform->scale = glm::vec3(1.0f, 1.0f, 1.0f);
+			meshGO->transform->rotation = glm::vec3(0.0f, 0.0f, 0.0f);
+			meshGO->AddComponent(modelRenderer);
+
+			sceneGraph->GetRootNode()->AddChild(new SceneNode(meshGO));
+		}
+	}
+	
+
+	GameObject* fs0 = new GameObject("Firelink Shrine 1");
+	ModelRenderer* fs0MR = new ModelRenderer("Assets/Models/Firelink Shrine/m0000B2A10.obj");
+	fs0->AddComponent(fs0MR);
+
+	GameObject* terrainGO = new GameObject("Terrain");
+	ModelRenderer* terrainModel = new ModelRenderer("Assets/Models/DefaultTerrain.obj");
+	terrainGO->transform->position = glm::vec3(0.00f, -0.15f, 0.0f);
+	terrainGO->AddComponent(terrainModel);
+
+
+	GameObject* wallGO = new GameObject("Wall_1");
+	ModelRenderer* wallModel = new ModelRenderer("Assets/Models/DefaultTerrain.obj");
+	wallGO->transform->position = glm::vec3(0.00f, 2.35f, -2.5f);
+	wallGO->transform->rotation = glm::vec3(90.00f, 0.0f, 0.0f);
+	wallGO->AddComponent(wallModel);
+
+
+	SkyboxRenderer* skybox = new SkyboxRenderer();
+	skybox->setProgram(RenderEngine::GetInstance()->GetSkyboxShaderProgram());
+	GameObject* skyboxGO = new GameObject("Skybox");
+	skyboxGO->AddComponent(skybox);
+
+	
+	//sceneGraph->GetRootNode()->AddChild(new SceneNode(fs0));
+	sceneGraph->GetRootNode()->AddChild(new SceneNode(terrainGO));
+	sceneGraph->GetRootNode()->AddChild(new SceneNode(wallGO));
+	sceneGraph->GetRootNode()->AddChild(new SceneNode(skyboxGO));
+
+	editor->sceneGraph = sceneGraph;
 }
 
 void CreateSceneGraph()

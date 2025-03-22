@@ -36,11 +36,12 @@ void RenderEngine::Initialize()
 
 	LoadFont("Assets/Fonts/Arial.ttf");
 
-	CreateFramebuffer();
+	
+	InitializeRenderPasses();
+	
+	
 
-	CreateShadowmapFramebuffer();	
-
-	CreateObjectPickingFramebuffer();
+	
 
 	Debug::Log("Render Engine initialized!");
 }
@@ -395,7 +396,7 @@ void RenderEngine::ParseValue(std::string name, std::string value)
 
 void RenderEngine::InitializeConfigValues()
 {
-	config.FPS_MAX = std::stoi(config.configValues["FPS_MAX"]);
+	config.FPS_MAX = InitializeMaxFPSConfigValues();
 	config.WINDOW_SIZE_X = std::stoi(config.configValues["RESOLUTION_X"]);
 	config.WINDOW_SIZE_Y = std::stoi(config.configValues["RESOLUTION_Y"]);
 
@@ -432,89 +433,44 @@ void RenderEngine::InitializeConfigValues()
 	config.FRAGMENT_SHADER_TEXT_PATH = config.configValues["FRAGMENT_SHADER_TEXT_PATH"];
 }
 
-void RenderEngine::CreateShadowmapFramebuffer()
+// Returns the value of the config file if it is between 1 and 144. Otherwise returns 144
+int RenderEngine::InitializeMaxFPSConfigValues()
 {
-	shadowMap = new ShadowMapFBO();
-	shadowMap->Init();
-
-	shadowCubeMap = new ShadowCubeMapFBO();
-	shadowCubeMap->Init();
+	int maxFPSinConfig = std::stoi(config.configValues["FPS_MAX"]);
+	return (maxFPSinConfig > 0) ? std::min(maxFPSinConfig, 144) : 144;
 }
 
-void RenderEngine::CreateObjectPickingFramebuffer()
-{
-	// Create a framebuffer object
-	glGenFramebuffers(1, &pickingFBO);
-	glBindFramebuffer(GL_FRAMEBUFFER, pickingFBO);
 
-
-	// Create a texture to store the color information
-	glGenTextures(1, &pickingTexture);
-	glBindTexture(GL_TEXTURE_2D, pickingTexture);
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, config.SCENE_VIEW_SIZE_X, config.SCENE_VIEW_SIZE_Y, 0, GL_RGB, GL_UNSIGNED_BYTE, NULL);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, pickingTexture, 0);
-
-	// Create a renderbuffer object to store the depth information
-	glGenRenderbuffers(1, &pickingDepthBuffer);
-	glBindRenderbuffer(GL_RENDERBUFFER, pickingDepthBuffer);
-	glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT, config.SCENE_VIEW_SIZE_X, config.SCENE_VIEW_SIZE_Y);
-	glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, pickingDepthBuffer);
-
-	// Check framebuffer completeness
-	if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE) {
-		Debug::LogError("Framebuffer is not complete!");
-	}
-	glBindFramebuffer(GL_FRAMEBUFFER, 0);
-}
-
-void RenderEngine::CreateFramebuffer()
+void RenderEngine::InitializeRenderPasses()
 {
 	// Scene window framebuffer
-	glGenFramebuffers(1, &FBO);
-	glBindFramebuffer(GL_FRAMEBUFFER, FBO);
+	sceneViewLightPass = new RPLightPass();
+	sceneViewLightPass->SetViewSize(config.SCENE_VIEW_SIZE_X, config.SCENE_VIEW_SIZE_Y);
+	sceneViewLightPass->CreateBuffers();
+	shadowPass = new RPShadowMapPass();
+	shadowPass->CreateBuffers();
 
+	shadowCMPass = new RPShadowCubeMapPass();
+	shadowCMPass->CreateBuffers();
 
-	glGenTextures(1, &texture_id);
-	glBindTexture(GL_TEXTURE_2D, texture_id);
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, config.SCENE_VIEW_SIZE_X, config.SCENE_VIEW_SIZE_Y, 0, GL_RGB, GL_UNSIGNED_BYTE, NULL);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, texture_id, 0);
+	outlinePass = new RPOutlinePass();
 
-	glGenRenderbuffers(1, &RBO);
-	glBindRenderbuffer(GL_RENDERBUFFER, RBO);
-	glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH24_STENCIL8, config.SCENE_VIEW_SIZE_X, config.SCENE_VIEW_SIZE_Y);
-	glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_RENDERBUFFER, RBO);
+	pickingPass = new RPObjectPickingPass();
+	pickingPass->CreateBuffers();
 
-	GLint stencil;
-	glGetFramebufferAttachmentParameteriv(GL_FRAMEBUFFER, GL_STENCIL_ATTACHMENT, GL_FRAMEBUFFER_ATTACHMENT_OBJECT_TYPE, &stencil);
-	printf("Stencil Attachment: %d\n", stencil);
-
-	if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE || stencil != GL_RENDERBUFFER)
-		std::cout << "ERROR::FRAMEBUFFER:: Framebuffer is not complete!\n";
-
+	sceneViewRenderPasses.push_back(static_cast<RenderPass*>(sceneViewLightPass));
+	sceneViewRenderPasses.push_back(static_cast<RenderPass*>(shadowPass));
+	sceneViewRenderPasses.push_back(static_cast<RenderPass*>(shadowCMPass));
+	sceneViewRenderPasses.push_back(static_cast<RenderPass*>(outlinePass));
+	sceneViewRenderPasses.push_back(static_cast<RenderPass*>(pickingPass));
 
 	// Play window framebuffer
-	glGenFramebuffers(1, &playWindowFBO);
-	glBindFramebuffer(GL_FRAMEBUFFER, playWindowFBO);
+	playViewLightPass = new RPLightPass();
+	playViewLightPass->SetViewSize(config.PLAY_VIEW_SIZE_X, config.PLAY_VIEW_SIZE_Y);
+	playViewLightPass->CreateBuffers();
 
-
-	glGenTextures(1, &playWindowTexture);
-	glBindTexture(GL_TEXTURE_2D, playWindowTexture);
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, config.PLAY_VIEW_SIZE_X, config.PLAY_VIEW_SIZE_Y, 0, GL_RGB, GL_UNSIGNED_BYTE, NULL);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, playWindowTexture, 0);
-
-	glGenRenderbuffers(1, &playWindowRBO);
-	glBindRenderbuffer(GL_RENDERBUFFER, playWindowRBO);
-	glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH24_STENCIL8, config.PLAY_VIEW_SIZE_X, config.PLAY_VIEW_SIZE_Y);
-	glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_RENDERBUFFER, playWindowRBO);
-
-	if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
-		std::cout << "ERROR::FRAMEBUFFER:: Framebuffer is not complete!\n";
+	playViewRenderPasses.push_back(static_cast<RenderPass*>(playViewLightPass));
+	playViewRenderPasses.push_back(static_cast<RenderPass*>(shadowPass));
 
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 	glBindTexture(GL_TEXTURE_2D, 0);
@@ -552,32 +508,18 @@ void RenderEngine::RescaleFramebuffer(float width, float height)
 
 void RenderEngine::RenderSceneView(SceneGraph* scene)
 {
-	//glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
+	auto sceneViewStart = Time::Now();
 
-	// Shadow pass
 	CalculateLightViewMatrices();
 
-	// Shadow map
-	shadowMap->Bind();
-	scene->DrawShadows();
-	shadowMap->Unbind();
+	for (auto renderPass : sceneViewRenderPasses)
+	{
+		renderPass->PrepareForRender();
+		renderPass->Render(scene, sceneViewCamera);
+		renderPass->Unbind();
+	}
 
-	shadowCubeMap->Bind();
-	scene->DrawCubemapShadows();
-	shadowCubeMap->Unbind();
-
-	
-	// Light pass
-	BindFramebuffer(FBO);
-	glEnable(GL_STENCIL_TEST);
-	glStencilOp(GL_KEEP, GL_KEEP, GL_REPLACE);
-	glStencilMask(0xFF);
-	glStencilFunc(GL_ALWAYS, 1, 0xFF);
-	
-	
-	scene->Draw(sceneViewCamera);
-
-	// Debugging
+	/**/ //Debugging
 	/* This is okay
 	GLint stencil = 0;
 	glGetFramebufferAttachmentParameteriv(GL_FRAMEBUFFER, GL_STENCIL_ATTACHMENT, GL_FRAMEBUFFER_ATTACHMENT_OBJECT_TYPE, &stencil);
@@ -592,48 +534,29 @@ void RenderEngine::RenderSceneView(SceneGraph* scene)
 	glReadPixels(300, 300, 1, 1, GL_STENCIL_INDEX, GL_INT, &stencilValue);
 	printf("Stencil Value at (%d, %d): %d\n", 300, 300, stencilValue);*/
 
-	// \Debugging\
+	/**/ // \Debugging\
 
-	// Outline render pass
-	glStencilFunc(GL_EQUAL, 1, 0xFF);
-	glStencilMask(0x00);
-	glEnable(GL_DEPTH_TEST);
-	//glEnable(GL_POLYGON_OFFSET_FILL);
-	//glPolygonOffset(1.0f, 1.0f); // Push fragments back
-	glEnable(GL_CULL_FACE);
-	glCullFace(GL_FRONT); // Render only back faces
-	scene->DrawOutline(sceneViewCamera);
-	glCullFace(GL_BACK);  // Restore normal culling
-	//glDisable(GL_POLYGON_OFFSET_FILL);
-	glStencilMask(0xFF);
-	glStencilFunc(GL_ALWAYS, 0, 0xFF);
-	glEnable(GL_DEPTH_TEST);
-	UnbindFramebuffer();
-
-	// Object picking pass
-	BindFramebuffer(pickingFBO);
-	scene->DrawPicking();
-	UnbindFramebuffer();
-
-	
-
-	shadowCubeMap->RenderCubemapFaceToTexture();
+	auto sceneViewEnd = Time::Now();
+	sceneViewTimeMS = (sceneViewEnd.count() - sceneViewStart.count()) / 1000.0f;
 }
 
 // @TODO: Make the play view to be in a separate window
 void RenderEngine::RenderPlayView(SceneGraph* scene)
 {
+	auto playViewStart = Time::Now();
 	// Shadow pass
 	CalculateLightViewMatrices();
 
-	shadowMap->Bind();
-	scene->DrawShadows();
-	shadowMap->Unbind();
+	for (auto renderPass : playViewRenderPasses)
+	{
+		renderPass->PrepareForRender();
+		renderPass->Render(scene, playViewCamera);
+		renderPass->Unbind();
+	}
 
-	// Light pass
-	BindFramebuffer(playWindowFBO);
-	scene->Draw(playViewCamera);
-	UnbindFramebuffer();
+
+	auto playViewEnd = Time::Now();
+	playViewTimeMS = (playViewEnd.count() - playViewStart.count()) / 1000.0f;
 }
 
 void RenderEngine::CalculateLightViewMatrices()
